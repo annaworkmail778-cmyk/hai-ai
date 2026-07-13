@@ -1,0 +1,517 @@
+/* ── CreationScene — cinematic "creation of HAI" sequence ─────────────
+   Timeline (seconds from mount):
+   0.0  fade from black, camera push-in begins, machine ambience loops
+   1.5  holographic particles ramp in (JS clock in CreationScene.tsx)
+   3.0  energy surge crescendos inside the chamber
+   4.6  visor cover lifts — eyes flicker on in baby pink
+   5.9  HAI_AI chest logo blooms, shimmer sweeps across it
+   7.3  title card rises
+   8.6  replay control appears
+   13   push-in settles into an endless micro-drift
+*/
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(55% 45% at 50% 48%, rgba(233, 155, 176, 0.07) 0%, transparent 70%),
+    #030104;
+}
+
+.frame {
+  position: relative;
+  width: min(100%, calc(100dvh * 0.73));
+  aspect-ratio: 584 / 800;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+/* ── camera rig ──────────────────────────────────────────── */
+
+.camera,
+.cameraStill {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 46%;
+}
+
+.camera {
+  animation: push 13s cubic-bezier(0.33, 0, 0.15, 1) forwards;
+  will-change: transform;
+}
+
+@keyframes push {
+  from { transform: scale(1.02) translateY(0.6%); }
+  to   { transform: scale(1.24) translateY(-1.1%); }
+}
+
+.drift {
+  position: absolute;
+  inset: 0;
+  animation: drift 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes drift {
+  0%, 100% { transform: scale(1) translate(0, 0); }
+  33%      { transform: scale(1.008) translate(-0.3%, 0.22%); }
+  66%      { transform: scale(1.004) translate(0.28%, -0.18%); }
+}
+
+.art {
+  object-fit: cover;
+  filter: saturate(1.06) contrast(1.04) brightness(0.99);
+}
+
+/* every overlay is decorative and must never catch the pointer */
+.frame :is(div, svg, canvas) {
+  pointer-events: none;
+}
+
+/* ── chamber energy ──────────────────────────────────────── */
+
+.arc {
+  position: absolute;
+  left: 33%;
+  right: 33%;
+  top: 33%;
+  bottom: 26%;
+  background: radial-gradient(45% 40% at 50% 42%, rgba(255, 190, 215, 0.55) 0%, transparent 70%);
+  mix-blend-mode: screen;
+}
+
+.arcA { animation: arcFlicker 3.4s steps(1, end) infinite; }
+.arcB { animation: arcFlicker 5.2s steps(1, end) -1.7s infinite reverse; }
+
+@keyframes arcFlicker {
+  0%, 100% { opacity: 0.04; }
+  7%   { opacity: 0.16; }
+  11%  { opacity: 0.05; }
+  23%  { opacity: 0.2; }
+  29%  { opacity: 0.07; }
+  41%  { opacity: 0.13; }
+  55%  { opacity: 0.03; }
+  68%  { opacity: 0.18; }
+  80%  { opacity: 0.06; }
+}
+
+/* one-shot crescendo that hands over to the eye ignition */
+.surge {
+  position: absolute;
+  left: 32%;
+  right: 32%;
+  top: 32%;
+  bottom: 25%;
+  background: radial-gradient(48% 44% at 50% 45%, rgba(255, 205, 225, 0.85) 0%, transparent 72%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: arcSurge 1.6s steps(1, end) 3s forwards;
+}
+
+@keyframes arcSurge {
+  0%   { opacity: 0; }
+  10%  { opacity: 0.22; }
+  16%  { opacity: 0.07; }
+  32%  { opacity: 0.38; }
+  40%  { opacity: 0.12; }
+  58%  { opacity: 0.55; }
+  72%  { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* ── ring, base and floor glows ──────────────────────────── */
+
+.ringGlow {
+  position: absolute;
+  left: 32%;
+  top: 30.5%;
+  width: 36%;
+  height: 8.5%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 170, 195, 0.5) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: ringPulse 3.2s ease-in-out infinite;
+}
+
+.baseGlow {
+  position: absolute;
+  left: 30%;
+  top: 69.5%;
+  width: 40%;
+  height: 8%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 160, 190, 0.38) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: ringPulse 3.2s ease-in-out -1.6s infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.72; transform: scale(1.04); }
+}
+
+.floorMirror {
+  position: absolute;
+  left: 22%;
+  top: 78%;
+  width: 56%;
+  height: 16%;
+  background: radial-gradient(50% 50% at 50% 40%, rgba(230, 120, 160, 0.2) 0%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: ringPulse 6.4s ease-in-out -0.8s infinite;
+}
+
+.floorSweep {
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  top: 76%;
+  bottom: 0;
+  background: linear-gradient(100deg, transparent 42%, rgba(255, 220, 232, 0.07) 50%, transparent 58%);
+  mix-blend-mode: screen;
+  animation: sweepX 14s ease-in-out infinite alternate;
+}
+
+@keyframes sweepX {
+  from { transform: translateX(-32%); }
+  to   { transform: translateX(32%); }
+}
+
+/* ── holo side panels ────────────────────────────────────── */
+
+.panelL,
+.panelR {
+  position: absolute;
+  top: 38%;
+  height: 32%;
+  overflow: hidden;
+}
+
+.panelL { left: 15%; width: 25%; }
+.panelR { left: 60%; width: 28%; }
+
+.panelTint {
+  position: absolute;
+  inset: 0;
+  background: rgba(140, 235, 235, 0.06);
+  mix-blend-mode: screen;
+  animation: panelFlicker 6.2s steps(1, end) infinite;
+}
+
+.panelR .panelTint { animation-duration: 7.4s; animation-delay: -2.9s; }
+
+@keyframes panelFlicker {
+  0%, 100% { opacity: 0.2; }
+  12% { opacity: 0.85; }
+  16% { opacity: 0.3; }
+  38% { opacity: 0.7; }
+  44% { opacity: 0.25; }
+  71% { opacity: 0.9; }
+  78% { opacity: 0.35; }
+}
+
+.panelScan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8%;
+  background: linear-gradient(180deg, transparent 0%, rgba(150, 240, 240, 0.22) 50%, transparent 100%);
+  mix-blend-mode: screen;
+  animation: scanY 7s linear infinite;
+}
+
+.panelR .panelScan { animation-duration: 8.5s; animation-delay: -3.5s; }
+
+@keyframes scanY {
+  0%   { transform: translateY(-110%); opacity: 0; }
+  8%   { opacity: 0.7; }
+  92%  { opacity: 0.7; }
+  100% { transform: translateY(1300%); opacity: 0; }
+}
+
+/* ── machine life: status lights + claw sparks ───────────── */
+
+.redLight {
+  position: absolute;
+  width: 1.6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 90, 90, 0.9) 0%, rgba(255, 60, 60, 0.25) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  animation: redPulse 3.8s ease-in-out infinite;
+}
+
+@keyframes redPulse {
+  0%, 100% { opacity: 0.25; transform: scale(0.9); }
+  50%      { opacity: 0.75; transform: scale(1.1); }
+}
+
+.spark {
+  position: absolute;
+  width: 2%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 235, 242, 0.95) 0%, rgba(242, 190, 203, 0.5) 40%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: sparkPop 7s ease-in-out infinite;
+}
+
+@keyframes sparkPop {
+  0%, 88%, 100% { opacity: 0; transform: scale(0.4); }
+  92%           { opacity: 0.9; transform: scale(1.15); }
+  96%           { opacity: 0.2; transform: scale(0.8); }
+}
+
+/* ── face ignition (SVG overlay) ─────────────────────────── */
+
+.fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.visorCover {
+  animation: coverOff 0.9s ease 4.6s forwards;
+}
+
+.eyes {
+  opacity: 0;
+  animation: igniteEyes 1.4s ease-out 4.65s forwards;
+}
+
+@keyframes igniteEyes {
+  0%   { opacity: 0; }
+  8%   { opacity: 0.5; }
+  14%  { opacity: 0.12; }
+  26%  { opacity: 0.75; }
+  34%  { opacity: 0.3; }
+  50%  { opacity: 0.95; }
+  62%  { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.eyeBloom {
+  animation: eyeBreathe 4.2s ease-in-out 6.2s infinite;
+}
+
+@keyframes eyeBreathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.85; }
+}
+
+.faceFlash {
+  position: absolute;
+  left: 35%;
+  top: 44%;
+  width: 30%;
+  height: 16%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255, 205, 224, 0.75) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: bloomFlash 2.2s ease-out 4.75s forwards;
+}
+
+@keyframes bloomFlash {
+  0%   { opacity: 0; }
+  12%  { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+/* ── chest logo ignition ─────────────────────────────────── */
+
+.logoCover {
+  position: absolute;
+  left: 46.2%;
+  top: 58.55%;
+  width: 8.2%;
+  height: 2.7%;
+  border-radius: 50% / 42%;
+  background: #b98f96;
+  filter: blur(3px);
+  opacity: 0.92;
+  animation: coverOff 0.8s ease 5.9s forwards;
+}
+
+@keyframes coverOff {
+  to { opacity: 0; }
+}
+
+.logoBloom {
+  position: absolute;
+  left: 42.3%;
+  top: 56.9%;
+  width: 16%;
+  height: 6%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(233, 155, 176, 0.8) 0%, transparent 68%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: logoOn 0.8s ease 5.9s forwards, logoBreathe 4s ease-in-out 7s infinite;
+}
+
+@keyframes logoOn {
+  from { opacity: 0; }
+  to   { opacity: 0.55; }
+}
+
+@keyframes logoBreathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.78; }
+}
+
+.logoShimmer {
+  position: absolute;
+  left: 46.5%;
+  top: 58.9%;
+  width: 7.6%;
+  height: 2%;
+  overflow: hidden;
+  border-radius: 40%;
+}
+
+.logoShimmer::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 42%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 245, 250, 0.5) 50%, transparent 100%);
+  transform: translateX(-130%) skewX(-18deg);
+  animation: shimmerX 1s ease-in-out 6.3s forwards;
+}
+
+@keyframes shimmerX {
+  from { transform: translateX(-130%) skewX(-18deg); }
+  to   { transform: translateX(320%) skewX(-18deg); }
+}
+
+/* ── full-frame finishing layers ─────────────────────────── */
+
+.particles,
+.grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.grain {
+  mix-blend-mode: overlay;
+  opacity: 0.05;
+}
+
+.grade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(30, 8, 20, 0.2) 0%, transparent 26%, transparent 68%, rgba(10, 4, 10, 0.32) 100%),
+    radial-gradient(80% 60% at 50% 46%, transparent 60%, rgba(24, 6, 16, 0.14) 100%);
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 46%, transparent 58%, rgba(5, 2, 4, 0.52) 100%);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  animation: coverOff 1.5s ease 0.05s forwards;
+}
+
+/* ── title card ──────────────────────────────────────────── */
+
+.title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6.5%;
+  display: grid;
+  gap: 0.6rem;
+  justify-items: center;
+  text-align: center;
+  opacity: 0;
+  animation: titleIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 7.3s forwards;
+}
+
+@keyframes titleIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wordmark {
+  font-family: var(--font-sora), system-ui, sans-serif;
+  font-size: clamp(0.6rem, 1.4vmin, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em; /* recenters letter-spaced text */
+  text-transform: uppercase;
+  color: rgba(251, 234, 239, 0.82);
+  animation: trackIn 2.2s cubic-bezier(0.22, 1, 0.36, 1) 7.3s both;
+}
+
+@keyframes trackIn {
+  from { letter-spacing: 0.6em; text-indent: 0.6em; }
+  to   { letter-spacing: 0.42em; text-indent: 0.42em; }
+}
+
+.tagline {
+  font-family: var(--font-sora), system-ui, sans-serif;
+  font-size: clamp(1.05rem, 3.2vmin, 1.5rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: #fdf6f8;
+  text-shadow: 0 0 24px rgba(233, 155, 176, 0.55);
+}
+
+/* ── replay control ──────────────────────────────────────── */
+
+.replay {
+  position: absolute;
+  right: 3.5%;
+  top: 3.5%;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  min-height: 2.1rem;
+  line-height: 1;
+  border-radius: 9999px;
+  border: 1px solid rgba(242, 190, 203, 0.4);
+  background: rgba(30, 10, 20, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font-sora), system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(251, 234, 239, 0.85);
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+  animation: coverOn 0.8s ease 8.6s forwards;
+  transition: border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.replay:hover {
+  border-color: rgba(242, 190, 203, 0.65);
+  color: #fdf6f8;
+  transform: translateY(-1px);
+}
+
+@keyframes coverOn {
+  to { opacity: 1; }
+}
+
+/* ── static fallback (prefers-reduced-motion) ────────────── */
+
+.staticEyes { opacity: 1; }
+.staticTitle { opacity: 1; animation: none; }
+.staticReplayHidden { display: none; }

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none">
+  <!-- Body glow -->
+  <ellipse cx="100" cy="200" rx="55" ry="12" fill="#FBC7D4" opacity="0.25"/>
+  <!-- Body -->
+  <rect x="45" y="110" width="110" height="90" rx="36" fill="white" stroke="#FBC7D4" stroke-width="2.5"/>
+  <rect x="50" y="115" width="100" height="80" rx="32" fill="url(#bodyGrad)"/>
+  <!-- Body accent stripe -->
+  <rect x="68" y="155" width="64" height="8" rx="4" fill="white" opacity="0.6"/>
+  <!-- HAI-AI text -->
+  <text x="100" y="151" text-anchor="middle" font-family="Georgia, serif" font-size="11" font-weight="600" fill="#D4A373" letter-spacing="1">HAI-AI</text>
+  <!-- Left arm -->
+  <rect x="20" y="122" width="28" height="52" rx="14" fill="white" stroke="#FBC7D4" stroke-width="2"/>
+  <rect x="23" y="125" width="22" height="46" rx="11" fill="url(#armGrad)"/>
+  <!-- Left hand -->
+  <circle cx="34" cy="176" r="10" fill="white" stroke="#FBC7D4" stroke-width="2"/>
+  <circle cx="34" cy="176" r="7" fill="#FBC7D4"/>
+  <!-- Right arm -->
+  <rect x="152" y="122" width="28" height="52" rx="14" fill="white" stroke="#FBC7D4" stroke-width="2"/>
+  <rect x="155" y="125" width="22" height="46" rx="11" fill="url(#armGrad)"/>
+  <!-- Right hand -->
+  <circle cx="166" cy="176" r="10" fill="white" stroke="#FBC7D4" stroke-width="2"/>
+  <circle cx="166" cy="176" r="7" fill="#FBC7D4"/>
+  <!-- Neck -->
+  <rect x="84" y="100" width="32" height="20" rx="8" fill="white" stroke="#FBC7D4" stroke-width="1.5"/>
+  <rect x="87" y="103" width="26" height="14" rx="6" fill="url(#bodyGrad)" opacity="0.7"/>
+  <!-- Head -->
+  <ellipse cx="100" cy="72" rx="56" ry="52" fill="white" stroke="#FBC7D4" stroke-width="2.5"/>
+  <ellipse cx="100" cy="72" rx="52" ry="48" fill="url(#headGrad)"/>
+  <!-- Screen/face -->
+  <rect x="62" y="50" width="76" height="44" rx="16" fill="#1a1a2e"/>
+  <rect x="65" y="53" width="70" height="38" rx="13" fill="url(#screenGrad)"/>
+  <!-- Eyes (happy arcs) -->
+  <path d="M 80 75 Q 88 65 96 75" stroke="#FBC7D4" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M 104 75 Q 112 65 120 75" stroke="#FBC7D4" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Cheek glows -->
+  <circle cx="70" cy="80" r="7" fill="#FBC7D4" opacity="0.5"/>
+  <circle cx="130" cy="80" r="7" fill="#FBC7D4" opacity="0.5"/>
+  <!-- Smile -->
+  <path d="M 88 84 Q 100 94 112 84" stroke="#FBC7D4" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Left antenna -->
+  <line x1="76" y1="24" x2="68" y2="6" stroke="#D4A373" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="68" cy="6" r="5" fill="#D4A373"/>
+  <circle cx="68" cy="6" r="3" fill="#F5E6D3"/>
+  <!-- Right antenna -->
+  <line x1="124" y1="24" x2="132" y2="6" stroke="#D4A373" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="132" cy="6" r="5" fill="#D4A373"/>
+  <circle cx="132" cy="6" r="3" fill="#F5E6D3"/>
+  <!-- Head ear dots (rose gold accents) -->
+  <circle cx="46" cy="68" r="6" fill="#D4A373" opacity="0.8"/>
+  <circle cx="154" cy="68" r="6" fill="#D4A373" opacity="0.8"/>
+  <!-- Gradient defs -->
+  <defs>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0F2"/>
+      <stop offset="100%" stop-color="#FBC7D4" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDFB"/>
+      <stop offset="100%" stop-color="#FFF0F2"/>
+    </linearGradient>
+    <linearGradient id="armGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0F2"/>
+      <stop offset="100%" stop-color="#FBC7D4" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d0d1f"/>
+      <stop offset="100%" stop-color="#1a1040"/>
+    </linearGradient>
+  </defs>
+</svg>

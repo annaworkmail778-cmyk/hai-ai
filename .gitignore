@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# parallel preview dev server (NEXT_DIST_DIR)
+/.next-preview/
