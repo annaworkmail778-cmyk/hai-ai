@@ -32,6 +32,25 @@ export const en = {
     telegram: "Telegram",
     tiktok: "TikTok",
   },
+  cinema: {
+    eyebrow: "The Story of HAI",
+    scrollHint: "Keep scrolling",
+    act1: {
+      kicker: "The Lab",
+      title: "Born in our lab",
+      sub: "Every HAI receptionist is engineered, trained, and tested before it ever meets a customer.",
+    },
+    act2: {
+      kicker: "The Journey",
+      title: "Deployed in days, not months",
+      sub: "No hardware, no code on your side — HAI travels to your business at full speed.",
+    },
+    act3: {
+      kicker: "Your Salon",
+      title: "At home where your clients are",
+      sub: "From first hello to fully booked, HAI settles in and gets to work — 24/7.",
+    },
+  },
   about: {
     badge: "About HAI_AI Systems",
     titleA: "Say hello to your new",
