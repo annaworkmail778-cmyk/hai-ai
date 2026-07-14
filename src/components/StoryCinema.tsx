@@ -5,7 +5,9 @@ import { useI18n } from "@/lib/i18n";
 
 const FRAME_COUNT = 110;
 const EDGE_CROP = 0.03; // hide screen-recording edges
-const src = (i: number) => `/cinema/frame_${String(i).padStart(3, "0")}.jpg`;
+/** Large screens get the 2× enhanced set (public/cinema-hd), phones the lighter one. */
+const frameDir = () =>
+  Math.min(window.devicePixelRatio || 1, 2) * window.innerWidth > 900 ? "/cinema-hd" : "/cinema";
 
 /** Story acts as progress ranges (frame boundaries: lab 0–52, flight 53–94, salon 95–109). */
 const ACTS = [
@@ -40,6 +42,8 @@ export default function StoryCinema() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
     const want = frameRef.current;
     let img: HTMLImageElement | null = null;
     for (let d = 0; d < FRAME_COUNT; d++) {
@@ -64,13 +68,14 @@ export default function StoryCinema() {
   const startLoading = () => {
     if (startedRef.current) return;
     startedRef.current = true;
+    const dir = frameDir();
     const load = (i: number) =>
       new Promise<void>((resolve) => {
         if (framesRef.current[i]) return resolve();
         const img = new Image();
         img.onload = () => { if (i === frameRef.current || !ready) draw(); resolve(); };
         img.onerror = () => resolve();
-        img.src = src(i);
+        img.src = `${dir}/frame_${String(i).padStart(3, "0")}.jpg`;
         framesRef.current[i] = img;
       });
     (async () => {
