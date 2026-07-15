@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import DemoScroll from "@/components/DemoScroll";
 import Hero from "@/components/Hero";
 import StoryCinema from "@/components/StoryCinema";
 import About from "@/components/About";
@@ -20,6 +21,7 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
+      <DemoScroll />
       <Navbar />
       <main>
         <Hero />
