@@ -3,11 +3,11 @@
 import { useEffect } from "react";
 
 const DELAY_MS = 1000;
-const DURATION_MS = 15000;
+const DURATION_MS = 30000;
 
 /**
  * Hands-free page tour for demo recordings: wait 1s after load, then smoothly
- * scroll top → bottom over 15s with user input blocked, stop at the bottom.
+ * scroll top → bottom over 30s with user input blocked, stop at the bottom.
  * Activates ONLY when the URL contains `?demo`, so real visitors are never
  * affected. Runs once — no loop; interaction is restored when it finishes.
  */
