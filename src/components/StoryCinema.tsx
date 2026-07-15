@@ -5,9 +5,16 @@ import { useI18n } from "@/lib/i18n";
 
 const FRAME_COUNT = 110;
 const EDGE_CROP = 0.03; // hide screen-recording edges
-/** Large screens get the 2× enhanced set (public/cinema-hd), phones the lighter one. */
-const frameDir = () =>
-  Math.min(window.devicePixelRatio || 1, 2) * window.innerWidth > 900 ? "/cinema-hd" : "/cinema";
+/** Pick the frame set by how much the SD frame would be upscaled to cover this
+ *  viewport. Portrait phones crop into the landscape frame heavily, so they
+ *  need the 2× enhanced set (public/cinema-hd) just as much as big desktops. */
+const frameDir = () => {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const sdW = 754 * (1 - EDGE_CROP * 2);
+  const sdH = 422 * (1 - EDGE_CROP * 2);
+  const upscale = Math.max((window.innerWidth * dpr) / sdW, (window.innerHeight * dpr) / sdH);
+  return upscale > 1.15 ? "/cinema-hd" : "/cinema";
+};
 
 /** Story acts as progress ranges (frame boundaries: lab 0–52, flight 53–94, salon 95–109). */
 const ACTS = [
