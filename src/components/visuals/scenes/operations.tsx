@@ -1,7 +1,7 @@
-import { Bars, Canvas, Chart, Panel, Pill, T, palette } from "../primitives";
+import { Bars, Canvas, Chart, Panel, Pill, T, palette, type SceneProps } from "../primitives";
 
 /** Cover — the operations room: one live view of orders, stages and risk. */
-export function OpsDashboardScene({ label }: { label?: string }) {
+export function OpsDashboardScene({ label, focus }: SceneProps) {
   const p = palette.dark;
   const kpis: Array<[string, string, boolean?]> = [
     ["Orders today", "128"],
@@ -19,7 +19,7 @@ export function OpsDashboardScene({ label }: { label?: string }) {
     ["#44098", "Design", "Thu"],
   ];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={90} y={100} w={1420} h={800} p={p}>
         {/* Sidebar */}
         <rect x={0} y={0} width={200} height={800} rx={6} fill={p.panel2} />
@@ -103,7 +103,7 @@ export function OpsDashboardScene({ label }: { label?: string }) {
 }
 
 /** Gallery — stage timeline: where each order is, and what is about to slip. */
-export function OpsTimelineScene({ label }: { label?: string }) {
+export function OpsTimelineScene({ label, focus }: SceneProps) {
   const p = palette.light;
   const orders = [
     { id: "#44120", segs: [[0, 1.2], [1.2, 2.4], [2.4, 4.6]] },
@@ -116,7 +116,7 @@ export function OpsTimelineScene({ label }: { label?: string }) {
   const dayW = 150;
   const x0 = 290;
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={140} w={1380} h={720} p={p} fill={p.raised}>
         <T x={36} y={52} size={20} color={p.text} weight={500}>
           Production timeline

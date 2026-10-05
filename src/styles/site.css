@@ -219,6 +219,9 @@
 .site h3,
 .site h4 {
   text-wrap: balance;
+  /* Safety net for long words (Armenian compounds, future titles) on narrow screens:
+     breaks only a word that cannot fit on a line of its own. */
+  overflow-wrap: break-word;
 }
 .site p {
   text-wrap: pretty;

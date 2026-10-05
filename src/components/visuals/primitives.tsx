@@ -42,12 +42,20 @@ export type Palette = (typeof palette)[Tone];
 
 export const MONO = "var(--font-geist-mono), var(--font-armenian), ui-monospace, monospace";
 
-/** Root SVG: covers its container (like object-fit: cover). */
-export function Canvas({ children, label }: { children: ReactNode; label?: string }) {
+/** Which part of a composition stays in frame when a narrow container crops it. */
+export type Focus = "left" | "center" | "right";
+
+/** Props shared by every scene component. */
+export type SceneProps = { label?: string; focus?: Focus };
+
+const ALIGN: Record<Focus, string> = { left: "xMinYMid", center: "xMidYMid", right: "xMaxYMid" };
+
+/** Root SVG: covers its container (like object-fit: cover), cropped towards `focus`. */
+export function Canvas({ children, label, focus = "center" }: { children: ReactNode; label?: string; focus?: Focus }) {
   return (
     <svg
       viewBox="0 0 1600 1000"
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio={`${ALIGN[focus]} slice`}
       className="absolute inset-0 h-full w-full"
       role={label ? "img" : undefined}
       aria-label={label}

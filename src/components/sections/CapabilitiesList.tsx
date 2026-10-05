@@ -15,24 +15,32 @@ import { CapabilityRows, type CapabilityRow } from "./CapabilityRows";
 export function CapabilitiesList({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const t = dict.capabilities;
 
+  // Several capabilities share a related project: render each preview once.
+  const previewSlugs: string[] = [];
+  const previews: React.ReactNode[] = [];
+
   const rows: CapabilityRow[] = capabilityOrder.map((id) => {
     const item = t.items[id];
     const project = getProjectsByCapability(id)[0];
+    let previewIndex: number | undefined;
+    if (project) {
+      previewIndex = previewSlugs.indexOf(project.slug);
+      if (previewIndex === -1) {
+        previewIndex = previewSlugs.push(project.slug) - 1;
+        previews.push(<ProjectVisual key={project.slug} visual={project.coverImage} locale={locale} sizes="24rem" />);
+      }
+    }
     return {
       id,
       name: item.name,
       summary: item.summary,
       points: item.points,
+      previewIndex,
       relatedLabel: dict.solutions.labels.related,
       related: project
         ? { title: projectContent(project, locale).title, href: localePath(locale, `/work/${project.slug}`) }
         : undefined,
     };
-  });
-
-  const previews = capabilityOrder.map((id) => {
-    const project = getProjectsByCapability(id)[0];
-    return project ? <ProjectVisual key={id} visual={project.coverImage} locale={locale} sizes="24rem" /> : null;
   });
 
   return (

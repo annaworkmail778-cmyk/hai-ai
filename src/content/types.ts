@@ -33,6 +33,8 @@ export type Visual =
       kind: "composition";
       id: CompositionId;
       alt: LocalizedText;
+      /** Part kept in frame when a portrait slot crops the 16:10 composition. Default "center". */
+      focus?: "left" | "center" | "right";
     };
 
 export type GalleryLayout =

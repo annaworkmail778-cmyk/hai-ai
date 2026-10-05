@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { Tone } from "./primitives";
+import type { Focus, Tone } from "./primitives";
 import { FlowScene, type FlowSpec } from "./scenes/flow";
 import { LeadConversationScene, LeadPipelineScene } from "./scenes/lead";
 import { FloorplanScene, RealEstatePhonesScene, UnitMatrixScene } from "./scenes/realestate";
@@ -125,28 +125,28 @@ const webFlow: FlowSpec = {
   caption: "Content architecture · one model, three languages, every page",
 };
 
-type Composition = { tone: Tone; render: (label?: string) => ReactElement };
+type Composition = { tone: Tone; render: (label?: string, focus?: Focus) => ReactElement };
 
 /** Every coded composition, by id. Reference these ids from project files. */
 export const compositions = {
-  "lead-pipeline": { tone: "dark", render: (l) => <LeadPipelineScene label={l} /> },
-  "lead-conversation": { tone: "dark", render: (l) => <LeadConversationScene label={l} /> },
-  "lead-flow": { tone: "dark", render: (l) => <FlowScene spec={leadFlow} label={l} /> },
-  "realestate-plan": { tone: "light", render: (l) => <FloorplanScene label={l} /> },
-  "realestate-matrix": { tone: "dark", render: (l) => <UnitMatrixScene label={l} /> },
-  "realestate-mobile": { tone: "light", render: (l) => <RealEstatePhonesScene label={l} /> },
-  "booking-calendar": { tone: "dark", render: (l) => <CalendarScene label={l} /> },
-  "booking-mobile": { tone: "light", render: (l) => <BookingPhonesScene label={l} /> },
-  "booking-flow": { tone: "dark", render: (l) => <FlowScene spec={bookingFlow} label={l} /> },
-  "ops-dashboard": { tone: "dark", render: (l) => <OpsDashboardScene label={l} /> },
-  "ops-timeline": { tone: "light", render: (l) => <OpsTimelineScene label={l} /> },
-  "ops-flow": { tone: "dark", render: (l) => <FlowScene spec={opsFlow} label={l} /> },
-  "support-inbox": { tone: "dark", render: (l) => <SupportInboxScene label={l} /> },
-  "support-knowledge": { tone: "light", render: (l) => <KnowledgeScene label={l} /> },
-  "support-flow": { tone: "dark", render: (l) => <FlowScene spec={supportFlow} label={l} /> },
-  "web-editorial": { tone: "light", render: (l) => <EditorialSiteScene label={l} /> },
-  "web-system": { tone: "dark", render: (l) => <DesignSystemScene label={l} /> },
-  "web-flow": { tone: "light", render: (l) => <FlowScene spec={webFlow} label={l} /> },
+  "lead-pipeline": { tone: "dark", render: (l, f) => <LeadPipelineScene label={l} focus={f} /> },
+  "lead-conversation": { tone: "dark", render: (l, f) => <LeadConversationScene label={l} focus={f} /> },
+  "lead-flow": { tone: "dark", render: (l, f) => <FlowScene spec={leadFlow} label={l} focus={f} /> },
+  "realestate-plan": { tone: "light", render: (l, f) => <FloorplanScene label={l} focus={f} /> },
+  "realestate-matrix": { tone: "dark", render: (l, f) => <UnitMatrixScene label={l} focus={f} /> },
+  "realestate-mobile": { tone: "light", render: (l, f) => <RealEstatePhonesScene label={l} focus={f} /> },
+  "booking-calendar": { tone: "dark", render: (l, f) => <CalendarScene label={l} focus={f} /> },
+  "booking-mobile": { tone: "light", render: (l, f) => <BookingPhonesScene label={l} focus={f} /> },
+  "booking-flow": { tone: "dark", render: (l, f) => <FlowScene spec={bookingFlow} label={l} focus={f} /> },
+  "ops-dashboard": { tone: "dark", render: (l, f) => <OpsDashboardScene label={l} focus={f} /> },
+  "ops-timeline": { tone: "light", render: (l, f) => <OpsTimelineScene label={l} focus={f} /> },
+  "ops-flow": { tone: "dark", render: (l, f) => <FlowScene spec={opsFlow} label={l} focus={f} /> },
+  "support-inbox": { tone: "dark", render: (l, f) => <SupportInboxScene label={l} focus={f} /> },
+  "support-knowledge": { tone: "light", render: (l, f) => <KnowledgeScene label={l} focus={f} /> },
+  "support-flow": { tone: "dark", render: (l, f) => <FlowScene spec={supportFlow} label={l} focus={f} /> },
+  "web-editorial": { tone: "light", render: (l, f) => <EditorialSiteScene label={l} focus={f} /> },
+  "web-system": { tone: "dark", render: (l, f) => <DesignSystemScene label={l} focus={f} /> },
+  "web-flow": { tone: "light", render: (l, f) => <FlowScene spec={webFlow} label={l} focus={f} /> },
 } satisfies Record<string, Composition>;
 
 export type CompositionId = keyof typeof compositions;

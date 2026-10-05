@@ -18,6 +18,7 @@ export const aiLeadManagement: Project = {
   coverImage: {
     kind: "composition",
     id: "lead-pipeline",
+    focus: "right",
     alt: {
       en: "Lead pipeline interface: inquiries from four channels flow into one board, with an AI qualification panel scoring a lead.",
       hy: "Հայտերի խողովակի ինտերֆեյս՝ չորս ալիքից եկող հարցումներ մեկ վահանակում և AI որակավորման պանել, որը գնահատում է հայտը։",

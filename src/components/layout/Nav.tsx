@@ -96,6 +96,7 @@ export function Nav({
     <>
       <header
         ref={navRef}
+        data-site-nav
         data-theme={theme}
         className="fixed inset-x-0 top-0 z-(--z-nav) h-(--nav-h) text-fg transition-colors duration-(--dur-ui)"
       >

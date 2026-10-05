@@ -1,4 +1,4 @@
-import { Canvas, Check, Panel, Phone, Pill, T, palette } from "../primitives";
+import { Canvas, Check, Panel, Phone, Pill, T, palette, type SceneProps } from "../primitives";
 
 type Slot = { day: number; start: number; dur: number; label: string; accent?: boolean; muted?: boolean };
 
@@ -22,7 +22,7 @@ const SLOTS: Slot[] = [
 ];
 
 /** Cover — a week that books, confirms and reminds itself. */
-export function CalendarScene({ label }: { label?: string }) {
+export function CalendarScene({ label, focus }: SceneProps) {
   const p = palette.dark;
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const x0 = 96;
@@ -31,7 +31,7 @@ export function CalendarScene({ label }: { label?: string }) {
   const rowH = 62;
   const hours = Array.from({ length: 10 }, (_, i) => 9 + i);
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={110} w={1040} h={790} p={p}>
         <T x={32} y={50} size={18} color={p.text} weight={500}>
           Week 41
@@ -101,11 +101,11 @@ export function CalendarScene({ label }: { label?: string }) {
 }
 
 /** Gallery — three-step booking on mobile. */
-export function BookingPhonesScene({ label }: { label?: string }) {
+export function BookingPhonesScene({ label, focus }: SceneProps) {
   const p = palette.light;
   const times = ["9:30", "10:30", "11:00", "13:30", "15:00", "16:30"];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Phone x={220} y={190} p={p}>
         <T x={22} y={78} size={11} color={p.mute} mono>
           Step 1 of 3

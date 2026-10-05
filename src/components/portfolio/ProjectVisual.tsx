@@ -52,7 +52,7 @@ export function ProjectVisual({
   const composition = compositions[visual.id];
   return (
     <div className={cn("relative h-full w-full overflow-hidden", composition.tone === "dark" ? "scene-dark" : "scene-light", className)}>
-      {composition.render(alt)}
+      {composition.render(alt, visual.focus)}
     </div>
   );
 }

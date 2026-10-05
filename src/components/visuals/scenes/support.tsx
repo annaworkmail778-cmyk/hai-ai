@@ -1,7 +1,7 @@
-import { Bar, Canvas, Meter, Panel, Pill, T, palette } from "../primitives";
+import { Bar, Canvas, Meter, Panel, Pill, T, palette, type SceneProps } from "../primitives";
 
 /** Cover — support inbox where AI drafts, cites and escalates. */
-export function SupportInboxScene({ label }: { label?: string }) {
+export function SupportInboxScene({ label, focus }: SceneProps) {
   const p = palette.dark;
   const threads: Array<[string, string, boolean?]> = [
     ["Where is my order?", "Delivery", true],
@@ -12,7 +12,7 @@ export function SupportInboxScene({ label }: { label?: string }) {
     ["Delivery to another city", "Delivery"],
   ];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={80} y={110} w={1440} h={780} p={p}>
         {/* Inbox list */}
         <rect x={0} y={0} width={400} height={780} rx={6} fill={p.panel2} />
@@ -118,11 +118,11 @@ export function SupportInboxScene({ label }: { label?: string }) {
 }
 
 /** Gallery — the knowledge base the assistant is grounded in. */
-export function KnowledgeScene({ label }: { label?: string }) {
+export function KnowledgeScene({ label, focus }: SceneProps) {
   const p = palette.light;
   const docs = ["Delivery policy", "Returns policy", "Warranty terms", "Product catalogue", "Order system", "Pricing rules"];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       {docs.map((d, i) => {
         const col = i % 3;
         const row = Math.floor(i / 3);

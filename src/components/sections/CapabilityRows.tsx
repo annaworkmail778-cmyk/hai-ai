@@ -15,6 +15,8 @@ export type CapabilityRow = {
   points: string[];
   related?: { title: string; href: string };
   relatedLabel: string;
+  /** Index into `previews` for the hover preview. */
+  previewIndex?: number;
 };
 
 /**
@@ -131,13 +133,16 @@ export function CapabilityRows({ rows, previews }: { rows: CapabilityRow[]; prev
             className={cn(
               "relative -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xs transition-[opacity,scale] duration-(--dur-ui) ease-out",
               "h-[15rem] w-[24rem]",
-              hovered === null ? "scale-90 opacity-0" : "scale-100 opacity-100",
+              hovered === null || rows[hovered]?.previewIndex === undefined ? "scale-90 opacity-0" : "scale-100 opacity-100",
             )}
           >
             {previews.map((preview, i) => (
               <div
                 key={i}
-                className={cn("absolute inset-0 transition-opacity duration-(--dur-ui)", hovered === i ? "opacity-100" : "opacity-0")}
+                className={cn(
+                  "absolute inset-0 transition-opacity duration-(--dur-ui)",
+                  hovered !== null && rows[hovered]?.previewIndex === i ? "opacity-100" : "opacity-0",
+                )}
               >
                 {preview}
               </div>

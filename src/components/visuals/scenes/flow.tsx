@@ -1,4 +1,4 @@
-import { Canvas, Connector, T, palette, type Tone } from "../primitives";
+import { Canvas, Connector, T, palette, type Tone, type SceneProps } from "../primitives";
 
 export type FlowSpec = {
   tone: Tone;
@@ -11,7 +11,7 @@ const NODE_W = 236;
 const NODE_H = 66;
 
 /** Data-driven system flow: columns of nodes with orthogonal connectors. */
-export function FlowScene({ spec, label }: { spec: FlowSpec; label?: string }) {
+export function FlowScene({ spec, label, focus }: SceneProps & { spec: FlowSpec }) {
   const p = palette[spec.tone];
   const cols = spec.columns.length;
   const marginX = 130;
@@ -27,7 +27,7 @@ export function FlowScene({ spec, label }: { spec: FlowSpec; label?: string }) {
   });
 
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       {spec.columns.map((col, c) => (
         <g key={col.title}>
           <T x={marginX + c * gapX} y={180} size={12} color={p.mute} mono>

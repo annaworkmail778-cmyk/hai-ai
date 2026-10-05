@@ -1,4 +1,4 @@
-import { Bar, Canvas, Check, Meter, Panel, Pill, T, palette } from "../primitives";
+import { Bar, Canvas, Check, Meter, Panel, Pill, T, palette, type SceneProps } from "../primitives";
 
 const p = palette.dark;
 
@@ -68,10 +68,10 @@ function LeadCard({ x, y, card }: { x: number; y: number; card: Card }) {
 }
 
 /** Cover — unified lead pipeline with AI qualification. */
-export function LeadPipelineScene({ label }: { label?: string }) {
+export function LeadPipelineScene({ label, focus }: SceneProps) {
   const sources = ["Website", "Instagram", "WhatsApp", "Calls"];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       {/* Channels converging into one inbox */}
       {sources.map((s, i) => {
         const y = 330 + i * 92;
@@ -166,7 +166,7 @@ export function LeadPipelineScene({ label }: { label?: string }) {
 }
 
 /** Gallery — conversation with AI-drafted replies and extracted details. */
-export function LeadConversationScene({ label }: { label?: string }) {
+export function LeadConversationScene({ label, focus }: SceneProps) {
   const messages: Array<{ from: "client" | "ai"; lines: string[] }> = [
     { from: "client", lines: ["Hi! We need one place to track client", "requests — we lose some every week."] },
     { from: "ai", lines: ["Happy to help. Roughly how many requests", "do you get per week, and from where?"] },
@@ -175,7 +175,7 @@ export function LeadConversationScene({ label }: { label?: string }) {
   ];
   let y = 120;
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={130} w={780} h={740} p={p}>
         <T x={28} y={44} size={18} color={p.text} weight={500}>
           Inquiry #2081

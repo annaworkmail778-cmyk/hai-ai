@@ -359,6 +359,7 @@
     "capabilities": "Capabilities",
     "next": "Next project",
     "back": "All work",
+    "figure": "Fig.",
     "conceptNote": "Concept project. This study demonstrates our approach to a common business problem. It does not describe a client engagement, and no measured results are claimed.",
     "legend": { "input": "Inputs", "core": "System", "output": "Outcomes" }
   },

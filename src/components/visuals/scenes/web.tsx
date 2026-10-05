@@ -1,4 +1,4 @@
-import { Bar, BrowserChrome, Canvas, Panel, Phone, T, palette } from "../primitives";
+import { Bar, BrowserChrome, Canvas, Panel, Phone, T, palette, type SceneProps } from "../primitives";
 
 /** Architectural elevation drawing used as the "hero image" inside the site mockups. */
 function Elevation({ x, y, w, h, ink, accent }: { x: number; y: number; w: number; h: number; ink: string; accent: string }) {
@@ -25,10 +25,10 @@ function Elevation({ x, y, w, h, ink, accent }: { x: number; y: number; w: numbe
 }
 
 /** Cover — a corporate flagship site built as an editorial experience. */
-export function EditorialSiteScene({ label }: { label?: string }) {
+export function EditorialSiteScene({ label, focus }: SceneProps) {
   const p = palette.light;
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={110} w={1080} h={780} p={p} fill={p.raised}>
         <BrowserChrome w={1080} p={p} url="company.example" />
         {/* Site nav */}
@@ -92,7 +92,7 @@ export function EditorialSiteScene({ label }: { label?: string }) {
 }
 
 /** Gallery — the design system behind the experience. */
-export function DesignSystemScene({ label }: { label?: string }) {
+export function DesignSystemScene({ label, focus }: SceneProps) {
   const p = palette.dark;
   const swatches = ["#000000", "#111111", "#f3f2ee", "#ffffff", "#999999", "#ff5b14"];
   const scale: Array<[string, number]> = [
@@ -103,7 +103,7 @@ export function DesignSystemScene({ label }: { label?: string }) {
     ["Label", 12],
   ];
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={120} w={700} h={760} p={p}>
         <T x={36} y={56} size={11} color={p.mute} mono>
           Type scale

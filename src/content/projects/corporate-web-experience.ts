@@ -17,6 +17,7 @@ export const corporateWebExperience: Project = {
   coverImage: {
     kind: "composition",
     id: "web-editorial",
+    focus: "left",
     alt: {
       en: "Editorial corporate website in a browser and on a phone, with a large headline over an architectural elevation drawing.",
       hy: "Էդիտորիալ կորպորատիվ կայք դիտարկիչում և հեռախոսում՝ մեծ վերնագրով և ճարտարապետական ճակատի գծագրով։",

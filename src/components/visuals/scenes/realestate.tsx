@@ -1,4 +1,4 @@
-import { Bar, Canvas, Panel, Phone, Pill, T, palette } from "../primitives";
+import { Bar, Canvas, Panel, Phone, Pill, T, palette, type SceneProps } from "../primitives";
 
 /* ── Shared data ───────────────────────────────────────────────── */
 
@@ -143,11 +143,11 @@ function FloorPlan({ x, y, ink, mute, accent }: { x: number; y: number; ink: str
 }
 
 /** Cover — floor plan with unit card and live availability. */
-export function FloorplanScene({ label }: { label?: string }) {
+export function FloorplanScene({ label, focus }: SceneProps) {
   const p = palette.light;
   const grid = matrix(10, 6);
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <FloorPlan x={180} y={230} ink={p.solid} mute={p.mute} accent={p.accent} />
 
       <Panel x={1040} y={150} w={460} h={430} p={p} fill={p.raised}>
@@ -216,7 +216,7 @@ export function FloorplanScene({ label }: { label?: string }) {
 }
 
 /** Gallery — the sales "chessboard": every unit, every status, live. */
-export function UnitMatrixScene({ label }: { label?: string }) {
+export function UnitMatrixScene({ label, focus }: SceneProps) {
   const p = palette.dark;
   const floors = 14;
   const units = 8;
@@ -228,7 +228,7 @@ export function UnitMatrixScene({ label }: { label?: string }) {
   const cellW = 92;
   const cellH = 34;
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       <Panel x={110} y={110} w={1000} h={780} p={p}>
         <T x={32} y={50} size={18} color={p.text} weight={500}>
           Building A — availability
@@ -298,11 +298,11 @@ export function UnitMatrixScene({ label }: { label?: string }) {
 }
 
 /** Gallery — buyer journey on mobile: browse, inspect, book a viewing. */
-export function RealEstatePhonesScene({ label }: { label?: string }) {
+export function RealEstatePhonesScene({ label, focus }: SceneProps) {
   const p = palette.light;
   const grid = matrix(5, 4);
   return (
-    <Canvas label={label}>
+    <Canvas label={label} focus={focus}>
       {/* Phone 1 — list */}
       <Phone x={230} y={190} p={p}>
         <T x={22} y={78} size={11} color={p.mute} mono>
