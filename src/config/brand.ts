@@ -42,8 +42,6 @@ export type BrandLogo =
 
 export const brand = {
   companyName: COMPANY_NAME,
-  /** Used in compact places (favicon monogram, OG fallback). 1–3 characters. */
-  monogram: "YC",
   /** Registered legal name for the copyright line. */
   legalName: COMPANY_NAME,
 
@@ -60,6 +58,13 @@ export const brand = {
   } satisfies Localized,
 
   logo: { type: "wordmark" } as BrandLogo,
+
+  /**
+   * The single accent colour (signal orange). Used sparingly: markers, focus
+   * rings, the 3D model's light seam, diagrams and generated images.
+   * Change it here; also update src/app/[lang]/icon.svg (a static file).
+   */
+  accent: "#ff5b14",
 
   /** PLACEHOLDER contact details — replace before launch. */
   email: "hello@example.com",

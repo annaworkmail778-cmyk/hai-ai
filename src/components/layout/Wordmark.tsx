@@ -1,20 +1,25 @@
-import Image from "next/image";
 import { brand } from "@/config/brand";
 import { cn } from "@/lib/cn";
 
 /**
  * Brand mark + name. Driven entirely by src/config/brand.ts:
  *  - logo.type "wordmark": renders the placeholder glyph + company name
- *  - logo.type "svg": renders the final logo file
+ *  - logo.type "svg": renders the final logo file in the current text colour
  */
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   const logo = brand.logo;
 
   if (logo.type === "svg") {
+    // The SVG's shape is used as a mask filled with the current text colour,
+    // so one file works on dark and light sections.
+    const mask = `url(${logo.src}) left center / contain no-repeat`;
     return (
-      <span className={cn("inline-flex items-center", className)}>
-        <Image src={logo.src} alt={brand.companyName} width={logo.width} height={logo.height} priority unoptimized />
-      </span>
+      <span
+        role="img"
+        aria-label={brand.companyName}
+        className={cn("inline-block shrink-0 bg-current", className)}
+        style={{ width: logo.width, height: logo.height, mask, WebkitMask: mask }}
+      />
     );
   }
 

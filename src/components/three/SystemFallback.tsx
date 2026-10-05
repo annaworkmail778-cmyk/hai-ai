@@ -1,3 +1,5 @@
+import { brand } from "@/config/brand";
+
 /**
  * Static axonometric drawing of the system — shown when WebGL is unavailable.
  * Same composition as the 3D object in its resolved state.
@@ -49,7 +51,7 @@ export function SystemFallback({ className }: { className?: string }) {
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke={g === 1 && i === 2 ? "#ff5b14" : "#8c8c8c"}
+              stroke={g === 1 && i === 2 ? brand.accent : "#8c8c8c"}
               strokeWidth="1"
             />
           );

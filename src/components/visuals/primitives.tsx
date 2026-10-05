@@ -6,6 +6,7 @@
  * All coordinates are in a 1600 × 1000 view box.
  */
 import type { ReactNode, SVGProps } from "react";
+import { brand } from "@/config/brand";
 
 export type Tone = "dark" | "light";
 
@@ -20,7 +21,7 @@ export const palette = {
     text: "#ecebe7",
     mute: "#8d8c88",
     faint: "#4b4a47",
-    accent: "#ff5b14",
+    accent: brand.accent,
     solid: "#e9e8e4",
   },
   light: {
@@ -33,7 +34,7 @@ export const palette = {
     text: "#111111",
     mute: "#6b6a66",
     faint: "#aaa79f",
-    accent: "#ff5b14",
+    accent: brand.accent,
     solid: "#141414",
   },
 } as const;

@@ -15,9 +15,18 @@ import { ConceptTag } from "@/components/sections/FeaturedWork";
 import { ProjectVisual } from "@/components/portfolio/ProjectVisual";
 import { ExpandMedia } from "@/components/portfolio/ExpandMedia";
 import { SystemDiagram } from "@/components/portfolio/SystemDiagram";
-import { Chapter, GalleryBlock, NextProject, Paragraphs, Statement } from "@/components/portfolio/CaseStudyParts";
+import {
+  CaseFilm,
+  Chapter,
+  GalleryBlock,
+  NextProject,
+  Paragraphs,
+  Statement,
+} from "@/components/portfolio/CaseStudyParts";
 
-export const dynamicParams = false;
+// Unknown slugs reach the page and call notFound() → localized 404.
+// (dynamicParams = false would also 404, but logs an internal error per request.)
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return getProjects().map((p) => ({ slug: p.slug }));
@@ -34,6 +43,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug
     title: c.seo?.title ?? c.title,
     description: c.seo?.description ?? c.shortDescription,
     type: "article",
+    ownImage: true,
   });
 }
 
@@ -199,6 +209,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
           </p>
         </div>
         <div className="mt-12 space-y-24 lg:mt-16 lg:space-y-36">
+          {project.video && <CaseFilm src={project.video.src} poster={project.video.poster} label={t.film} title={c.title} />}
           {project.gallery.map((item, i) => (
             <GalleryBlock key={i} item={item} locale={lang} index={i} figure={t.figure} />
           ))}

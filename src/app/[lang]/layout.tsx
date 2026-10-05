@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono, Noto_Sans_Armenian } from "next/font/google";
@@ -63,6 +64,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       lang={lang}
       data-theme="dark"
       className={cn("site", geist.variable, geistMono.variable, armenian.variable)}
+      style={{ "--color-signal": brand.accent } as CSSProperties}
     >
       <a
         href="#main"

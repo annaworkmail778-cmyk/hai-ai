@@ -64,5 +64,21 @@ export function LocaleSync({ locale }: { locale: Locale }) {
   useEffect(() => {
     rememberLocale(locale);
   }, [locale]);
+
+  // <html> belongs to the legacy root layout (src/app/layout.tsx), whose old
+  // i18n provider also writes `lang`. Keep it on the active locale; the .site
+  // wrapper carries the right lang regardless. Remove this with the legacy files.
+  useEffect(() => {
+    const html = document.documentElement;
+    const lang = localeMeta[locale].hreflang;
+    const apply = () => {
+      if (html.lang !== lang) html.lang = lang;
+    };
+    apply();
+    const observer = new MutationObserver(apply);
+    observer.observe(html, { attributes: true, attributeFilter: ["lang"] });
+    return () => observer.disconnect();
+  }, [locale]);
+
   return null;
 }

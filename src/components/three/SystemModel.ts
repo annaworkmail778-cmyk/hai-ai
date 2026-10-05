@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import type { SceneState } from "./choreography";
+import { brand } from "@/config/brand";
 import {
   ACCENT_CONDUITS,
   BEAM,
@@ -281,7 +282,7 @@ export function createSystem({ detail, shadows }: SystemOptions): SystemModel {
     uOpacity: { value: 0 },
     uBase: { value: new THREE.Color(0xb4b4b4) },
     uBright: { value: new THREE.Color(0xffffff) },
-    uAccent: { value: new THREE.Color(0xff5b14) },
+    uAccent: { value: new THREE.Color(brand.accent) },
   };
   const lineMaterial = track(
     new THREE.ShaderMaterial({

@@ -42,3 +42,6 @@ next-env.d.ts
 
 # parallel preview dev server (NEXT_DIST_DIR)
 /.next-preview/
+
+# example environment file (no secrets)
+!.env.example

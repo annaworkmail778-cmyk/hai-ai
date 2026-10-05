@@ -94,7 +94,7 @@ export function EditorialSiteScene({ label, focus }: SceneProps) {
 /** Gallery — the design system behind the experience. */
 export function DesignSystemScene({ label, focus }: SceneProps) {
   const p = palette.dark;
-  const swatches = ["#000000", "#111111", "#f3f2ee", "#ffffff", "#999999", "#ff5b14"];
+  const swatches = ["#000000", "#111111", "#f3f2ee", "#ffffff", "#999999", palette.dark.accent];
   const scale: Array<[string, number]> = [
     ["Display", 76],
     ["Heading", 44],

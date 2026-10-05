@@ -131,6 +131,28 @@ export function GalleryBlock({
   );
 }
 
+/** Optional case-study film: shows its poster and plays only when the visitor asks. */
+export function CaseFilm({ src, poster, label, title }: { src: string; poster: string; label: string; title: string }) {
+  return (
+    <figure className="shell">
+      <figcaption className="label mb-4 flex items-center gap-3 text-fg-mute">
+        <span aria-hidden="true" className="size-1.5 bg-signal" />
+        {label}
+      </figcaption>
+      <video
+        controls
+        playsInline
+        preload="none"
+        poster={poster}
+        aria-label={`${label}: ${title}`}
+        className="aspect-video w-full rounded-xs bg-graphite object-cover"
+      >
+        <source src={src} />
+      </video>
+    </figure>
+  );
+}
+
 /** Large closing link into the next case study. */
 export function NextProject({ project, locale, dict }: { project: Project; locale: Locale; dict: Dictionary }) {
   const c = projectContent(project, locale);

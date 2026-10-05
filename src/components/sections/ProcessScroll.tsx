@@ -5,6 +5,7 @@ import { gsap, useGSAP } from "@/components/motion/gsap";
 import type { Dictionary } from "@/i18n/types";
 import { pad2 } from "@/i18n/format";
 import { media } from "@/config/motion";
+import { brand } from "@/config/brand";
 import { cn } from "@/lib/cn";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { RevealText } from "@/components/motion/Reveal";
@@ -45,7 +46,7 @@ export function ProcessScroll({ t }: { t: Dictionary["process"] }) {
           .fromTo(q("[data-tangle] line"), { strokeDasharray: "1 1", strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger: 0.01, duration: 0.08 }, 0.06)
           // 02 Identify — friction points light up.
           .fromTo(q("[data-ring]"), { opacity: 0, scale: 0.2, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, stagger: 0.015, duration: 0.06, ease: "back.out(2)" }, 0.22)
-          .to(q("[data-dot] rect"), { fill: (i) => (DOTS[i].friction ? "#ff5b14" : "#f3f2ee"), duration: 0.02 }, 0.22)
+          .to(q("[data-dot] rect"), { fill: (i) => (DOTS[i].friction ? brand.accent : "#f3f2ee"), duration: 0.02 }, 0.22)
           // 03 Design — blueprint and dashed modules.
           .fromTo(q("[data-blueprint]"), { opacity: 0 }, { opacity: 1, duration: 0.01 }, 0.41)
           .fromTo(q("[data-blueprint] line"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger: 0.008, duration: 0.1 }, 0.41)

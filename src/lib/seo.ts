@@ -40,6 +40,21 @@ export function baseMetadata(locale: Locale): Metadata {
   };
 }
 
+/**
+ * The generated share card of a locale (app/[lang]/opengraph-image.tsx).
+ * Pages that set their own `openGraph` replace the inherited one, so they
+ * reference the card explicitly. A route with its own opengraph-image file
+ * (case studies) still wins over this config value.
+ */
+function shareImage(locale: Locale) {
+  return {
+    url: localePath(locale, "/opengraph-image"),
+    width: 1200,
+    height: 630,
+    alt: `${brand.companyName} — ${brand.tagline[locale]}`,
+  };
+}
+
 /** Per-page metadata with localized title, description and alternates. */
 export function pageMetadata({
   locale,
@@ -48,6 +63,7 @@ export function pageMetadata({
   description,
   absoluteTitle = false,
   type = "website",
+  ownImage = false,
 }: {
   locale: Locale;
   path: string;
@@ -56,14 +72,26 @@ export function pageMetadata({
   /** Use the title as-is (no "— Company" template). */
   absoluteTitle?: boolean;
   type?: "website" | "article";
+  /** The route has its own opengraph-image file; don't reference the locale card. */
+  ownImage?: boolean;
 }): Metadata {
+  // Omit the key entirely when the route has its own image file: even an
+  // `images: undefined` entry would replace the file-based image.
+  const images = ownImage ? {} : { images: [shareImage(locale)] };
   const fullTitle = absoluteTitle ? title : `${title} — ${brand.companyName}`;
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
     alternates: alternatesFor(path, locale),
-    openGraph: { ...openGraphBase(locale), type, title: fullTitle, description, url: localePath(locale, path) },
-    twitter: { card: "summary_large_image", title: fullTitle, description },
+    openGraph: {
+      ...openGraphBase(locale),
+      type,
+      title: fullTitle,
+      description,
+      url: localePath(locale, path),
+      ...images,
+    },
+    twitter: { card: "summary_large_image", title: fullTitle, description, ...images },
   };
 }
 

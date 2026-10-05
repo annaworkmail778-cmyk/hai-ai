@@ -199,6 +199,10 @@
   outline-offset: 3px;
   border-radius: revert-layer;
 }
+/* Underlined form fields show focus on their rule instead of an outline box. */
+.site .field-control:focus-visible {
+  outline: none;
+}
 
 .site {
   font-family: var(--font-geist), var(--font-armenian), ui-sans-serif, system-ui, sans-serif;
