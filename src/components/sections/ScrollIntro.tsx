@@ -107,6 +107,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
         const heroWords = q("[data-hero-title] [data-word]");
         const heroRest = q("[data-hero-rest]");
         const introUi = q("[data-intro-ui]");
+        const labelLayer = q("[data-label-layer]");
         const counter = counterRef.current;
         const bar = barRef.current;
 
@@ -130,7 +131,11 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
         // Scene 01 → 02: the opening UI steps back.
         tl.to(introUi, { autoAlpha: 0, y: -32, duration: 0.07, ease: "power1.in" }, 0.035);
 
-        // Scene 03: statement rises behind the object, then leaves.
+        // Layer labels follow the smoothed 3D progress; this raw-scroll fade makes
+        // sure they are gone before the statement arrives, even on fast scrolls.
+        tl.to(labelLayer, { autoAlpha: 0, duration: 0.04 }, 0.44);
+
+        // Scene 03: statement rises in front of the object, then leaves.
         // (y: 0 clears the CSS pre-hydration offset so only yPercent moves the words.)
         tl.fromTo(
           statementWords,
@@ -195,11 +200,14 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
       className="intro relative h-svh bg-black motion-safe:h-[280svh] lg:motion-safe:h-[460vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
-        {/* Statement — on desktop it sits behind the object so the system passes in
-            front of the words; on phones it sits in front, below the raised object. */}
-        <div className="pointer-events-none absolute inset-0 z-[2] flex items-end pb-[14vh] motion-reduce:hidden lg:z-0 lg:items-center lg:pb-0">
+        {/* Statement — always in front of the object so every word stays readable;
+            on phones it sits below the raised object, on desktop across it. */}
+        <div className="pointer-events-none absolute inset-0 z-[2] flex items-end pb-[14vh] motion-reduce:hidden lg:items-center lg:pb-0">
           <div className="shell">
-            <p data-statement className="max-w-[16ch] text-display-m font-medium text-paper/90 lg:max-w-[17ch] lg:text-display-l">
+            <p
+              data-statement
+              className="max-w-[16ch] text-display-m font-medium text-paper/90 [text-shadow:0_2px_28px_rgb(0_0_0/0.9)] lg:max-w-[17ch] lg:text-display-l"
+            >
               <MaskedWords text={intro.statement} />
             </p>
           </div>
@@ -231,7 +239,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
         </div>
 
         {/* Layer labels, projected onto the levels each frame. */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3] motion-reduce:hidden">
+        <div data-label-layer aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3] motion-reduce:hidden">
           {intro.layers.map((name, i) => (
             <div
               key={name}

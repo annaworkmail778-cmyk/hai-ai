@@ -125,7 +125,8 @@ export default async function Image({ params }: { params: Promise<{ lang: string
   const { lang, slug } = await params;
   const locale = isLocale(lang) ? lang : defaultLocale;
   const dict = getDictionary(locale);
-  const project = getProject(slug) ?? getProjects()[0];
+  const project = getProject(slug);
+  if (!project) return new Response("Not found", { status: 404 });
   const c = projectContent(project, locale);
   const index = getProjects().findIndex((p) => p.slug === project.slug);
   const light = project.theme === "light";
