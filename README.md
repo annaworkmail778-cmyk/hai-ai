@@ -206,12 +206,21 @@ files were left untouched while this site was built:
 - `.old-site-backup/`
 
 The new site works with them in place: `/` redirects to `/hy`, and the new
-`[lang]` layout renders inside the old root layout. That has side effects
-until the cleanup is done. The initial HTML has `lang="en"` (corrected in
-the browser), the old fonts and `globals.css` still load, and
-`/creation` is still served.
+`[lang]` layout renders inside the old root layout. Until the cleanup, that
+costs every page (measured on the production build):
+
+- ~74 KB of extra JavaScript: the old site's dictionaries and pricing data,
+  loaded by its `I18nProvider`
+- two unused font preloads (Sora, Manrope; ~50 KB) and the old `globals.css`
+- `lang="en"` in the initial HTML. The browser corrects it, but crawlers
+  that don't run JavaScript see `en`. The old provider also rewrites
+  `lang`; `LocaleSync` puts it back.
+- `/creation` and the old favicon are still served.
 
 **Recommended cleanup** (one commit, then `npm run build`): delete the files
 above, and turn `src/app/[lang]/layout.tsx` into the root layout by having
 it render `<html lang={lang}>` and `<body>` (moving the font classes onto
-`<html>`). Remove `/creation` from `LEGACY_PATHS` in `src/proxy.ts`.
+`<html>`). Then remove the `<html lang>` observer in `LocaleSync`
+(`src/components/layout/LanguageSwitcher.tsx`), and `/creation` from
+`LEGACY_PATHS` in `src/proxy.ts`. Uninstall `framer-motion` and
+`lucide-react` if nothing else uses them.
