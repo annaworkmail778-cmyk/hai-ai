@@ -24,9 +24,8 @@ import {
   Statement,
 } from "@/components/portfolio/CaseStudyParts";
 
-// Unknown slugs reach the page and call notFound() → localized 404.
-// (dynamicParams = false would also 404, but logs an internal error per request.)
-export const dynamicParams = true;
+// Unknown slugs render on demand and call notFound() → localized 404.
+// (dynamicParams = false would 404 too, but logs an internal error per request.)
 
 export function generateStaticParams() {
   return getProjects().map((p) => ({ slug: p.slug }));

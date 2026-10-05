@@ -68,13 +68,12 @@ export function MobileMenu({
     if (open) {
       returnFocus.current = document.activeElement as HTMLElement;
       lockScroll(true);
-      if (reduce) {
-        gsap.set(panel, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-      } else {
+      // Visible synchronously: elements inside a visibility:hidden panel can't take focus.
+      gsap.set(panel, { autoAlpha: 1, clipPath: reduce ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)" });
+      if (!reduce) {
         gsap
           .timeline()
-          .set(panel, { autoAlpha: 1 })
-          .fromTo(panel, { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "expo.inOut" })
+          .to(panel, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.8, ease: "expo.inOut" })
           .fromTo(items, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.out", stagger: 0.05 }, "-=0.35");
       }
       closeRef.current?.focus();

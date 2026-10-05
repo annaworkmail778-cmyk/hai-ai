@@ -192,7 +192,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
       data-theme="dark"
       data-nav-theme="dark"
       data-nav-solid="false"
-      className="intro relative h-[280svh] bg-black lg:h-[460vh] motion-reduce:h-svh"
+      className="intro relative h-svh bg-black motion-safe:h-[280svh] lg:motion-safe:h-[460vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Statement — on desktop it sits behind the object so the system passes in
@@ -281,7 +281,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
         {/* Scene counter (desktop) */}
         <div
           aria-hidden="true"
-          className="absolute top-1/2 right-(--page-x) hidden -translate-y-1/2 flex-col items-center gap-4 lg:flex motion-reduce:hidden"
+          className="absolute top-1/2 right-(--page-x) hidden -translate-y-1/2 flex-col items-center gap-4 lg:motion-safe:flex"
         >
           <span className="label text-paper">
             <span ref={counterRef}>01</span>

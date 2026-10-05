@@ -35,7 +35,6 @@ export function baseMetadata(locale: Locale): Metadata {
     alternates: alternatesFor("/", locale),
     openGraph: { ...openGraphBase(locale), title, description, url: localePath(locale, "/") },
     twitter: { card: "summary_large_image", title, description },
-    robots: { index: true, follow: true },
     formatDetection: { telephone: false, email: false, address: false },
   };
 }

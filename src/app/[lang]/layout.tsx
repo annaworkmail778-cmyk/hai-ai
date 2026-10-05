@@ -37,8 +37,8 @@ const armenian = Noto_Sans_Armenian({
   display: "swap",
 });
 
-export const dynamicParams = false;
-
+// Locales are prerendered. Anything else never reaches this layout (proxy.ts
+// redirects it), and the notFound() guard below covers direct requests.
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }

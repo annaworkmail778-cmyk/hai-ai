@@ -124,7 +124,7 @@ export function ScrollStatement({
       aria-label={eyebrow}
       data-theme="dark"
       data-nav-theme="dark"
-      className="statement relative h-[230svh] bg-black lg:h-[340vh] motion-reduce:h-auto"
+      className="statement relative bg-black motion-safe:h-[230svh] lg:motion-safe:h-[340vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden motion-reduce:static motion-reduce:h-auto">
         {/* Black stage — the claim we reject */}

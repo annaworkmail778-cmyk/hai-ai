@@ -73,7 +73,7 @@ export function EditorialCTA({
       aria-label={eyebrow}
       data-theme="light"
       data-nav-theme="light"
-      className="cta relative h-[170svh] bg-bg lg:h-[220vh] motion-reduce:h-auto"
+      className="cta relative bg-bg motion-safe:h-[170svh] lg:motion-safe:h-[220vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden motion-reduce:static motion-reduce:h-auto">
         <div
