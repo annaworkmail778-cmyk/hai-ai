@@ -1,0 +1,498 @@
+{
+  "meta": {
+    "home": {
+      "title": "AI, automation & custom software studio",
+      "description": "We design AI systems, automation and custom software that improve sales, operations and customer experience."
+    },
+    "work": {
+      "title": "Work",
+      "description": "Selected systems, platforms and digital products — each presented as a case study, from business problem to working system."
+    },
+    "solutions": {
+      "title": "Solutions",
+      "description": "AI systems, automation, custom software, business applications, web experiences, sales systems and internal tools."
+    },
+    "about": {
+      "title": "About",
+      "description": "A studio for business systems: business understanding, systems thinking, design and engineering in one team."
+    },
+    "contact": {
+      "title": "Start a project",
+      "description": "Tell us what slows your business down. We will find the system that removes it."
+    },
+    "notFound": {
+      "title": "Page not found"
+    }
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "viewCaseStudy": "View case study",
+    "view": "View",
+    "allProjects": "All projects",
+    "backToTop": "Back to top",
+    "concept": "Concept",
+    "next": "Next",
+    "close": "Close",
+    "explore": "Explore"
+  },
+  "nav": {
+    "home": "Home",
+    "work": "Work",
+    "solutions": "Solutions",
+    "process": "Process",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Start a Project",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language",
+    "primary": "Primary navigation"
+  },
+  "intro": {
+    "scroll": "Scroll to explore",
+    "skip": "Skip intro",
+    "layers": ["AI", "Automation", "Software", "Systems"],
+    "layerNotes": ["Decisions & language", "Flows & triggers", "Interfaces & logic", "Data & infrastructure"],
+    "statement": "We turn business friction into intelligent systems.",
+    "sceneLabel": "Abstract architectural model of a business system: stacked layers for systems, software, automation and AI, connected by structural lines."
+  },
+  "hero": {
+    "eyebrow": "AI · Automation · Software",
+    "title": "Systems that move businesses forward.",
+    "lead": "We design AI, automation and custom software that improve sales, operations and customer experience.",
+    "primary": "Explore Our Work",
+    "secondary": "Start a Project"
+  },
+  "statement": {
+    "eyebrow": "Position",
+    "line1": "We don't sell tools.",
+    "line2": "We design better ways to run businesses.",
+    "note": "Software is the medium. The work is how your business runs."
+  },
+  "featured": {
+    "eyebrow": "Selected work",
+    "title": "Built around real workflows.",
+    "intro": "Every project starts with how a business actually operates — and ends with a system people use every day.",
+    "challenge": "Challenge",
+    "solution": "Solution",
+    "capabilities": "Capabilities",
+    "outroTitle": "Every project here is a system, not a website.",
+    "outroLink": "See all work"
+  },
+  "problems": {
+    "eyebrow": "Problems we solve",
+    "title": "Where businesses quietly lose time.",
+    "intro": "Most friction hides inside everyday work. These are the patterns we meet most often — and the systems that remove them.",
+    "labels": {
+      "problem": "Problem",
+      "system": "Possible system",
+      "outcome": "Outcome"
+    },
+    "items": [
+      {
+        "title": "Manual processes",
+        "text": "Teams copy data between spreadsheets, chats and tools by hand.",
+        "system": "Connected workflows that move data between your tools automatically.",
+        "outcome": "Repetitive hours returned to the team."
+      },
+      {
+        "title": "Lost leads",
+        "text": "Inquiries arrive through five channels and nobody owns them.",
+        "system": "One lead inbox with instant routing and AI qualification.",
+        "outcome": "Every lead answered, tracked and followed up."
+      },
+      {
+        "title": "Slow customer responses",
+        "text": "Customers wait hours for answers you have given a hundred times.",
+        "system": "An AI assistant trained on your knowledge, with a human handoff.",
+        "outcome": "Faster, consistent replies at any hour."
+      },
+      {
+        "title": "Disconnected systems",
+        "text": "CRM, accounting and operations don't talk to each other.",
+        "system": "Integrations and a shared data layer across your stack.",
+        "outcome": "One source of truth instead of five versions."
+      },
+      {
+        "title": "Weak sales visibility",
+        "text": "Leadership sees the pipeline only after the month is over.",
+        "system": "Live dashboards built on clean, connected data.",
+        "outcome": "Decisions made on current numbers, not guesses."
+      },
+      {
+        "title": "Repetitive administrative work",
+        "text": "Invoices, reminders, reports and approvals eat the week.",
+        "system": "Automations for documents, notifications and approvals.",
+        "outcome": "Less admin, fewer errors, calmer operations."
+      }
+    ]
+  },
+  "capabilities": {
+    "eyebrow": "Capabilities",
+    "title": "What we build.",
+    "intro": "Seven disciplines, one connected practice. Most systems combine several of them.",
+    "more": "Explore solutions",
+    "items": {
+      "ai-systems": {
+        "name": "AI Systems",
+        "summary": "Assistants, agents and decision support built on your own data.",
+        "points": ["AI agents for sales and support", "Document and data extraction", "Knowledge assistants on internal data", "Classification, routing and summaries"]
+      },
+      "automation": {
+        "name": "Automation",
+        "summary": "Workflows that run themselves between the tools you already use.",
+        "points": ["Process automation with n8n and custom code", "CRM, email and messenger integrations", "Approval and notification flows", "Scheduled reports and data syncs"]
+      },
+      "custom-software": {
+        "name": "Custom Software",
+        "summary": "Software designed around how your team actually works.",
+        "points": ["Bespoke web platforms", "APIs and integrations", "Back-office systems", "Migration from spreadsheets and legacy tools"]
+      },
+      "business-applications": {
+        "name": "Business Applications",
+        "summary": "CRM, operations and management apps fitted to your processes.",
+        "points": ["Custom CRM and pipelines", "Inventory and order management", "Client and partner portals", "Role-based access and audit trails"]
+      },
+      "web-experiences": {
+        "name": "Web Experiences",
+        "summary": "Websites and interactive experiences with a clear business purpose.",
+        "points": ["Corporate and product websites", "Interactive 3D and scroll storytelling", "Multilingual content architecture", "Performance and SEO foundations"]
+      },
+      "sales-systems": {
+        "name": "Sales Systems",
+        "summary": "Lead capture, pipelines and follow-up that never drop the ball.",
+        "points": ["Omnichannel lead capture", "AI lead qualification and routing", "Automated follow-up sequences", "Pipeline and forecast dashboards"]
+      },
+      "internal-tools": {
+        "name": "Internal Tools",
+        "summary": "Dashboards, admin panels and utilities your team will actually use.",
+        "points": ["Operational dashboards", "Admin and back-office panels", "Reporting and exports", "Team utilities and calculators"]
+      }
+    }
+  },
+  "diagnostic": {
+    "eyebrow": "Business diagnostic",
+    "title": "Where is your business losing time?",
+    "intro": "Choose an area. We will show the friction we usually find there — and the kind of system that removes it.",
+    "labels": {
+      "areas": "Business area",
+      "friction": "Common friction",
+      "system": "Possible system",
+      "improvements": "Example improvements",
+      "analyzing": "Analysing",
+      "report": "Diagnostic report",
+      "cta": "Discuss this area with us",
+      "note": "Illustrative. Every business is different — details are confirmed in a first conversation."
+    },
+    "categories": [
+      {
+        "id": "sales",
+        "name": "Sales",
+        "friction": ["Leads arrive from many channels with no single owner", "Follow-ups depend on memory and sticky notes", "Pipeline status lives in someone's head"],
+        "system": {
+          "name": "Sales command system",
+          "description": "One pipeline that captures every inquiry, qualifies it with AI and schedules the next step automatically.",
+          "steps": ["Capture", "Qualify", "Assign", "Follow up"]
+        },
+        "improvements": ["No inquiry left unanswered", "Consistent follow-up without manual reminders", "A live pipeline view for leadership"]
+      },
+      {
+        "id": "operations",
+        "name": "Operations",
+        "friction": ["Data re-typed between spreadsheets and tools", "Approvals stuck in chats and inboxes", "No clear view of what is late or blocked"],
+        "system": {
+          "name": "Operations backbone",
+          "description": "Connected workflows and a shared data layer that move work between people and tools without copy-paste.",
+          "steps": ["Intake", "Route", "Approve", "Report"]
+        },
+        "improvements": ["Fewer manual handovers", "Clear ownership at every step", "Bottlenecks visible before they become problems"]
+      },
+      {
+        "id": "support",
+        "name": "Customer Support",
+        "friction": ["The same questions answered by hand every day", "Slow replies outside working hours", "Context lost between channels and agents"],
+        "system": {
+          "name": "AI support layer",
+          "description": "An assistant trained on your knowledge base that resolves routine questions and hands complex cases to people with full context.",
+          "steps": ["Understand", "Answer", "Escalate", "Learn"]
+        },
+        "improvements": ["Faster first responses", "Agents focused on cases that need a human", "Consistent answers across channels"]
+      },
+      {
+        "id": "marketing",
+        "name": "Marketing",
+        "friction": ["Campaign leads disconnected from sales", "Reports assembled by hand from several platforms", "Audiences and content managed in silos"],
+        "system": {
+          "name": "Marketing data loop",
+          "description": "Lead capture, attribution and reporting connected end to end, so marketing sees what actually turns into revenue.",
+          "steps": ["Capture", "Enrich", "Attribute", "Report"]
+        },
+        "improvements": ["Automatic lead handoff to sales", "Reporting without spreadsheet assembly", "A clearer view of which channels perform"]
+      },
+      {
+        "id": "booking",
+        "name": "Booking",
+        "friction": ["Appointments arranged through back-and-forth messages", "No-shows without reminders", "Double bookings across staff or locations"],
+        "system": {
+          "name": "Booking automation",
+          "description": "Online scheduling connected to calendars, reminders and payments — with rules that match how you really operate.",
+          "steps": ["Book", "Confirm", "Remind", "Reschedule"]
+        },
+        "improvements": ["Fewer missed appointments", "No manual scheduling messages", "A calendar that reflects real availability"]
+      },
+      {
+        "id": "data",
+        "name": "Data",
+        "friction": ["Numbers differ depending on who you ask", "Reports take days to compile", "Decisions made on outdated information"],
+        "system": {
+          "name": "Single source of truth",
+          "description": "Integrations that consolidate your systems into one clean data layer, with live dashboards on top.",
+          "steps": ["Connect", "Clean", "Model", "Visualise"]
+        },
+        "improvements": ["One set of numbers everyone trusts", "Reports available on demand", "Earlier signals for important decisions"]
+      }
+    ]
+  },
+  "process": {
+    "eyebrow": "Process",
+    "title": "From friction to system, in five moves.",
+    "outputLabel": "Output",
+    "steps": [
+      {
+        "title": "Understand",
+        "text": "We study how the business really works: people, tools, data and the moments where things slow down.",
+        "output": "Process map"
+      },
+      {
+        "title": "Identify",
+        "text": "We map the friction and find the few changes that will make the biggest difference.",
+        "output": "Opportunity map"
+      },
+      {
+        "title": "Design",
+        "text": "We design the system: workflows, interfaces, data — and the role AI should and shouldn't play.",
+        "output": "System blueprint"
+      },
+      {
+        "title": "Build",
+        "text": "We engineer, integrate and launch in focused stages, with your team involved at every step.",
+        "output": "Working system"
+      },
+      {
+        "title": "Improve",
+        "text": "We watch how the system is used, refine it and extend it as the business grows.",
+        "output": "Continuous evolution"
+      }
+    ]
+  },
+  "technology": {
+    "eyebrow": "Technology",
+    "title": "Chosen per problem. Never the other way around.",
+    "intro": "We work across a modern, proven stack — and pick the simplest tools that solve the problem properly.",
+    "groups": [
+      { "name": "AI", "items": ["OpenAI", "Anthropic Claude", "Google Gemini", "Retrieval (RAG)", "Vector search"] },
+      { "name": "Automation", "items": ["n8n", "Make", "Webhooks", "Scheduled jobs", "Custom workers"] },
+      { "name": "Frontend", "items": ["Next.js", "React", "TypeScript", "Three.js", "Tailwind CSS"] },
+      { "name": "Backend", "items": ["Node.js", "PostgreSQL", "Supabase", "Python", "REST & GraphQL APIs"] },
+      { "name": "Infrastructure", "items": ["Vercel", "Netlify", "Docker", "Cloudflare", "AWS"] },
+      { "name": "Integrations", "items": ["CRM platforms", "Telegram & WhatsApp", "Email", "Payments", "Calendars"] }
+    ]
+  },
+  "why": {
+    "eyebrow": "Why us",
+    "items": [
+      { "title": "Business first", "text": "We start with business friction, not technology. Every decision traces back to how the company sells, operates and serves customers." },
+      { "title": "Custom systems", "text": "We build around real workflows instead of forcing your team into someone else's software." },
+      { "title": "One connected experience", "text": "We connect the systems that should work together — data, people and tools in one coherent flow." },
+      { "title": "Long-term thinking", "text": "We build technology that can evolve with the business: clean architecture, clear ownership, no dead ends." }
+    ]
+  },
+  "cta": {
+    "eyebrow": "Next step",
+    "line1": "Something in your business is still more manual than it should be.",
+    "line2": "Let's find it.",
+    "primary": "Start a Project",
+    "secondary": "Talk to Us"
+  },
+  "footer": {
+    "statement": "A studio for AI, automation and custom software — built around how businesses actually work.",
+    "navigation": "Navigation",
+    "capabilities": "Capabilities",
+    "contact": "Contact",
+    "social": "Social",
+    "language": "Language",
+    "rights": "All rights reserved.",
+    "localTime": "Local time",
+    "backToTop": "Back to top"
+  },
+  "work": {
+    "eyebrow": "Work",
+    "title": "Selected work",
+    "intro": "Systems, platforms and digital products — each presented as a case study, from the business problem to the working system.",
+    "views": { "gallery": "Gallery", "index": "Index", "label": "View" },
+    "filterLabel": "Filter by capability",
+    "all": "All",
+    "columns": { "number": "No.", "project": "Project", "industry": "Industry", "type": "Type", "year": "Year" },
+    "empty": "No projects match this filter yet.",
+    "conceptNotice": "Projects marked “Concept” are demonstration studies that show how we approach a problem. Client case studies are added as they are cleared for publication.",
+    "count": "Projects"
+  },
+  "caseStudy": {
+    "overview": "Overview",
+    "context": "Context",
+    "challenge": "Challenge",
+    "findings": "What we found",
+    "solution": "Solution",
+    "systemsBuilt": "Systems built",
+    "system": "System",
+    "systemIntro": "How the parts connect",
+    "experience": "Experience",
+    "features": "Key features",
+    "outcome": "Outcome",
+    "outcomeConcept": "Expected outcomes",
+    "technology": "Technology",
+    "services": "Services",
+    "industry": "Industry",
+    "year": "Year",
+    "client": "Client",
+    "type": "Type",
+    "capabilities": "Capabilities",
+    "next": "Next project",
+    "back": "All work",
+    "conceptNote": "Concept project. This study demonstrates our approach to a common business problem. It does not describe a client engagement, and no measured results are claimed.",
+    "legend": { "input": "Inputs", "core": "System", "output": "Outcomes" }
+  },
+  "solutions": {
+    "eyebrow": "Solutions",
+    "title": "Systems for the parts of a business that matter most.",
+    "intro": "Seven areas where we design and build. Most projects combine several of them into one connected system.",
+    "labels": {
+      "problems": "Typical problems",
+      "deliverables": "What we build",
+      "examples": "Example systems",
+      "related": "Related work",
+      "discuss": "Discuss a project"
+    },
+    "items": {
+      "ai-systems": {
+        "lead": "AI that does real work inside your business — grounded in your data, measured by what it changes.",
+        "problems": ["Teams spend hours reading, sorting and answering the same requests", "Knowledge sits in documents nobody can search", "Decisions wait for someone to compile information"],
+        "deliverables": ["AI agents with tools and guardrails", "Assistants trained on internal knowledge", "Document understanding and extraction", "Evaluation and monitoring of AI quality"],
+        "examples": ["Lead qualification agent", "Support assistant with human handoff", "Contract and invoice data extraction"]
+      },
+      "automation": {
+        "lead": "The repetitive steps between your tools, handled automatically and reliably.",
+        "problems": ["Data copied between systems by hand", "Approvals and notifications lost in chats", "Reports rebuilt from scratch every week"],
+        "deliverables": ["End-to-end workflow automation", "Integrations between CRM, email, messengers and finance", "Error handling, logging and alerts", "Documentation your team can own"],
+        "examples": ["Order-to-invoice flow", "New-client onboarding sequence", "Weekly management report generation"]
+      },
+      "custom-software": {
+        "lead": "When off-the-shelf software forces workarounds, we build the system your process actually needs.",
+        "problems": ["Critical work runs on fragile spreadsheets", "Several tools stitched together with manual steps", "Licences paid for features nobody uses"],
+        "deliverables": ["Web platforms and back-office systems", "APIs and data models", "Integrations with existing tools", "Secure, scalable infrastructure"],
+        "examples": ["Production planning platform", "Partner management system", "Quote and pricing engine"]
+      },
+      "business-applications": {
+        "lead": "CRM, operations and management applications fitted to how your company sells and delivers.",
+        "problems": ["Generic CRM that nobody keeps up to date", "No single place for clients, orders and documents", "Access and permissions handled informally"],
+        "deliverables": ["Custom CRM and pipelines", "Order, inventory and resource management", "Client and partner portals", "Roles, permissions and audit trails"],
+        "examples": ["Real-estate sales CRM", "Service operations hub", "B2B client portal"]
+      },
+      "web-experiences": {
+        "lead": "Websites and interactive experiences that explain complex value clearly — and convert.",
+        "problems": ["The website no longer reflects the company", "Complex offers are hard to understand online", "Slow pages and weak search visibility"],
+        "deliverables": ["Corporate and product websites", "Interactive 3D and scroll storytelling", "Multilingual content architecture", "Performance, accessibility and SEO"],
+        "examples": ["Corporate flagship website", "Interactive product configurator", "Investor and partner presentation site"]
+      },
+      "sales-systems": {
+        "lead": "Every inquiry captured, qualified and followed up — with leadership seeing the pipeline live.",
+        "problems": ["Leads scattered across channels", "Follow-up depends on individual memory", "Forecasts built on guesswork"],
+        "deliverables": ["Omnichannel lead capture", "AI qualification and routing", "Automated follow-up sequences", "Pipeline and forecast dashboards"],
+        "examples": ["Unified lead inbox", "Sales pipeline with AI scoring", "Booking-to-deal automation"]
+      },
+      "internal-tools": {
+        "lead": "Focused tools that remove daily friction for your team — fast to build, easy to use.",
+        "problems": ["Teams switching between many tabs for one task", "Managers lacking a live operational view", "Manual exports and recalculations"],
+        "deliverables": ["Operational dashboards", "Admin and back-office panels", "Calculators, generators and utilities", "Reporting and data exports"],
+        "examples": ["Operations dashboard", "Pricing calculator", "Document generator"]
+      }
+    }
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "A systems studio for businesses that have outgrown their tools.",
+    "intro": "We combine business understanding, systems thinking, design and engineering in one team — so the technology we build fits the way a company actually works.",
+    "manifesto": "Good systems are almost invisible. People simply notice that work got easier.",
+    "approachTitle": "How we think",
+    "approach": [
+      { "title": "Business understanding", "text": "We learn how the company sells, delivers and makes decisions before we propose anything." },
+      { "title": "Systems thinking", "text": "We look at the whole chain — people, processes, data and tools — not a single screen." },
+      { "title": "Design", "text": "Interfaces and workflows are designed to be obvious for the people who use them every day." },
+      { "title": "Engineering", "text": "Clean architecture, solid integrations and security are part of the design, not afterthoughts." },
+      { "title": "AI, used deliberately", "text": "We use AI where it measurably helps, with guardrails, review and a human in the loop." },
+      { "title": "Long-term partnership", "text": "We stay to measure, maintain and extend what we build as the business changes." }
+    ],
+    "isTitle": "What we are",
+    "is": ["A partner that starts with the business problem.", "One team that designs and engineers the whole system.", "A studio that stays to improve what it builds."],
+    "notTitle": "What we are not",
+    "not": ["Not a template agency.", "Not a reseller of someone else's tools.", "Not a team that disappears after launch."],
+    "engagementTitle": "How we work together",
+    "engagement": [
+      { "title": "Diagnose", "text": "A focused study of your processes and systems that ends with a clear map of opportunities." },
+      { "title": "Build", "text": "Design and engineering in short stages, with working software reviewed at every step." },
+      { "title": "Evolve", "text": "Ongoing support, measurement and new capabilities as the business grows." }
+    ],
+    "ctaTitle": "Tell us where the friction is.",
+    "cta": "Start a Project"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Tell us what slows your business down.",
+    "intro": "Share a few details. We read every message personally and reply with concrete next steps.",
+    "direct": "Or write directly",
+    "privacy": "We use your details only to reply to your message.",
+    "fields": {
+      "name": "Name",
+      "company": "Company",
+      "contact": "Email or phone",
+      "business": "What does your business do?",
+      "improve": "What would you like to improve?",
+      "process": "What process currently takes too much time?",
+      "areas": "Areas of interest"
+    },
+    "placeholders": {
+      "name": "Your full name",
+      "company": "Company name",
+      "contact": "you@company.com or +374 …",
+      "business": "A few words about your company and customers",
+      "improve": "Sales follow-up, customer support, reporting…",
+      "process": "Describe one process that takes too long today"
+    },
+    "optional": "Optional",
+    "submit": "Send message",
+    "sending": "Sending…",
+    "errors": {
+      "required": "This field is required.",
+      "contact": "Enter a valid email address or phone number.",
+      "tooShort": "Please add a little more detail.",
+      "tooLong": "Please keep this under {max} characters.",
+      "summary": "Please check the highlighted fields.",
+      "generic": "Something went wrong. Please try again, or email us directly.",
+      "notConfigured": "The form is not connected to a delivery channel yet. Please email us directly at {email}.",
+      "rateLimited": "Too many messages in a short time. Please try again later."
+    },
+    "success": {
+      "title": "Thank you.",
+      "text": "Your message is on its way. We will reply with next steps.",
+      "dev": "Development mode: no delivery channel is configured, so the message was logged on the server instead of being sent.",
+      "again": "Send another message"
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "This page doesn't exist.",
+    "text": "The link may be outdated, or the page has moved.",
+    "home": "Back to home",
+    "work": "See our work"
+  }
+}
