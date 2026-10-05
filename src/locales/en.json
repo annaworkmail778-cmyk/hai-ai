@@ -65,7 +65,7 @@
   },
   "statement": {
     "eyebrow": "Position",
-    "line1": "We don't sell tools.",
+    "line1": "We don't sell *tools*.",
     "line2": "We design better ways to run businesses.",
     "note": "Software is the medium. The work is how your business runs."
   },
