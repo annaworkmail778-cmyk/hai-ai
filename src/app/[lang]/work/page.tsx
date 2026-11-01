@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { ProjectCard } from "@/components/portfolio/ProjectCard";
 import { ProjectVisual } from "@/components/portfolio/ProjectVisual";
 import { WorkExplorer, type WorkItem } from "@/components/portfolio/WorkExplorer";
+import { DemoPoster } from "@/components/demos/DemoStage";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/work">): Promise<Metadata> {
   const { lang } = await params;
@@ -37,7 +38,11 @@ export default async function WorkPage({ params }: PageProps<"/[lang]/work">) {
       href: localePath(lang, `/work/${project.slug}`),
       capabilities: project.capabilities,
       card: <ProjectCard project={project} index={i} locale={lang} dict={dict} />,
-      preview: <ProjectVisual visual={project.coverImage} locale={lang} sizes="25rem" />,
+      preview: project.demo ? (
+        <DemoPoster id={project.demo} locale={lang} />
+      ) : (
+        <ProjectVisual visual={project.coverImage} locale={lang} sizes="25rem" />
+      ),
       row: {
         index: pad2(i + 1),
         title: c.title,

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import { localePath } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
@@ -8,56 +7,8 @@ import { localize, projectContent } from "@/content/localize";
 import { pad2 } from "@/i18n/format";
 import { cn } from "@/lib/cn";
 import { ProjectVisual } from "./ProjectVisual";
-import { MediaReveal, Reveal, RevealText } from "@/components/motion/Reveal";
-
-/** A labelled case-study chapter on the editorial grid. */
-export function Chapter({
-  index,
-  label,
-  children,
-  className,
-  id,
-}: {
-  index: string;
-  label: string;
-  children: ReactNode;
-  className?: string;
-  id?: string;
-}) {
-  return (
-    <section id={id} aria-label={label} className={cn("shell py-(--section-y-sm)", className)}>
-      <div className="grid-editorial gap-y-10 border-t border-rule pt-8">
-        <p className="label col-span-4 flex gap-4 text-fg-mute md:col-span-2 lg:col-span-3">
-          <span className="text-fg">{index}</span>
-          {label}
-        </p>
-        <div className="col-span-4 md:col-span-6 lg:col-span-9">{children}</div>
-      </div>
-    </section>
-  );
-}
-
-/** Large statement line inside a chapter. */
-export function Statement({ children, className }: { children: string; className?: string }) {
-  return (
-    <RevealText as="p" className={cn("max-w-[24ch] text-display-m font-medium", className)}>
-      {children}
-    </RevealText>
-  );
-}
-
-/** Running text in one or two columns. */
-export function Paragraphs({ items, columns = 2 }: { items: string[]; columns?: 1 | 2 }) {
-  return (
-    <Reveal stagger={0.08} className={cn("mt-10 grid gap-6 lg:gap-10", columns === 2 && "lg:grid-cols-2")}>
-      {items.map((p) => (
-        <p key={p} className="max-w-[52ch] text-lead text-fg-mute">
-          {p}
-        </p>
-      ))}
-    </Reveal>
-  );
-}
+import { DemoPoster } from "@/components/demos/DemoStage";
+import { MediaReveal } from "@/components/motion/Reveal";
 
 /** One gallery entry in its chosen layout. */
 export function GalleryBlock({
@@ -174,7 +125,7 @@ export function NextProject({ project, locale, dict }: { project: Project; local
         </div>
         <div className="relative mt-12 h-[60svh] overflow-hidden md:h-[78svh]">
           <div className="absolute inset-0 transition-transform duration-[1600ms] ease-out group-hover:scale-[1.04]">
-            <ProjectVisual visual={project.coverImage} locale={locale} />
+            {project.demo ? <DemoPoster id={project.demo} locale={locale} /> : <ProjectVisual visual={project.coverImage} locale={locale} />}
           </div>
         </div>
       </Link>

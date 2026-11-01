@@ -1,10 +1,10 @@
 /**
  * Scroll choreography for the 3D intro, as pure functions of progress (0–1).
  *
- *  SCENE 01  Intro          0.00–0.12  compact monolith inside a dark-glass shell
+ *  SCENE 01  Hero           0.00–0.12  headline on screen; compact model beside it
  *  SCENE 02  System expands 0.10–0.44  shell dissolves, layers separate, labels
- *  SCENE 03  Transformation 0.42–0.72  connections draw, modules align, statement
- *  SCENE 04  Hero           0.72–1.00  system settles to the right, hero resolves
+ *  SCENE 03  Connection     0.42–0.72  connections draw, modules align, statement
+ *  SCENE 04  What we build  0.72–1.00  model settles to the side of the service list
  *
  * The DOM overlay timeline in ScrollIntro.tsx uses the same breakpoints.
  */
@@ -69,21 +69,23 @@ export function sceneState(p: number, tier: SceneTier): SceneState {
 
   const spacing = lerp(lerp(0.56, mobile ? 0.98 : 1.08, expand), mobile ? 0.78 : 0.84, resolve);
 
-  // Camera path: far & elevated → closer & lower → orbit → settle.
+  // Camera path: beside the headline → closer while the layers open → orbit → settle.
   // (Portrait phones need more distance: the horizontal field of view is narrow.)
   const distance = mobile
-    ? lerp(lerp(lerp(19.5, 22.5, expand), 19.4, connect), 22, resolve)
-    : lerp(lerp(lerp(13.2, 11.2, expand), 11.8, connect), 13.4, resolve);
+    ? lerp(lerp(lerp(25, 22.5, expand), 19.4, connect), 22, resolve)
+    : lerp(lerp(lerp(13.6, 11.2, expand), 11.8, connect), 13.4, resolve);
   const azimuth = mobile
-    ? lerp(lerp(lerp(36, 46, expand), 58, connect), 42, resolve)
-    : lerp(lerp(lerp(36, 54, expand), 74, connect), 42, resolve);
-  const elevation = lerp(lerp(lerp(24, 13, expand), 19, connect), mobile ? 18 : 17, resolve);
-  // Lens shift: nudge the system right while the statement plays, then settle it beside the hero.
+    ? lerp(lerp(lerp(40, 46, expand), 58, connect), 42, resolve)
+    : lerp(lerp(lerp(38, 54, expand), 74, connect), 42, resolve);
+  const elevation = lerp(lerp(lerp(21, 13, expand), 19, connect), mobile ? 18 : 17, resolve);
+  // Lens shift: the model starts beside the headline, comes to the centre while the
+  // layers are labelled, then moves aside again for the statement and the service list.
   const shift = mobile
     ? lerp(lerp(0, 0.12, expand), 0, connect)
-    : lerp(lerp(0, 0.13, connect), 0.28, resolve);
+    : lerp(lerp(lerp(0.27, 0.06, expand), 0.13, connect), 0.28, resolve);
+  // Phones: the model sits high (text below it) except while the layers are labelled.
   const targetY = mobile
-    ? lerp(lerp(lerp(-0.6, -0.2, expand), -2, connect), -3, resolve)
+    ? lerp(lerp(lerp(-3.1, -0.2, expand), -2, connect), -3, resolve)
     : lerp(0, 0.1, resolve);
 
   const labelIn = (i: number) => smoothstep(SCENE.labelsIn[0] + i * 0.025, SCENE.labelsIn[1] + i * 0.025, p);

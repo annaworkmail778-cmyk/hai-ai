@@ -21,10 +21,10 @@ export function WhyUs({ t }: { t: Dictionary["why"] }) {
                   i % 2 === 0 ? "lg:col-start-2" : "lg:col-start-3",
                 )}
               >
-                <h3 className="text-display-m font-medium uppercase md:text-display-l">{item.title}</h3>
+                <h3 className="text-display-m font-medium">{item.title}</h3>
               </ScrubClip>
               <Reveal className="col-span-4 md:col-span-6 md:col-start-2 lg:col-span-3 lg:col-start-10">
-                <p className="text-body text-fg-mute">{item.text}</p>
+                <p className="text-lead text-fg-mute">{item.text}</p>
               </Reveal>
             </li>
           ))}

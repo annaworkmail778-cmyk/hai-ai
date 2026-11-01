@@ -3,9 +3,9 @@
 Every project is one TypeScript file in `src/content/projects/`. From that
 single file the site generates:
 
-- the card on **/work** (gallery and index views, with capability filters)
+- the card on **/work** (gallery and index views, with service filters)
 - the full **case-study page** `/[lang]/work/<slug>` in Armenian, Russian and English
-- the panel in the homepage **Featured Work** section (if `featured: true`)
+- the row in the homepage **Examples** section (if `featured: true`), with its live demo
 - "Related work" links on **/solutions** and the homepage capabilities list
 - the **system diagram**, the "next project" link, the **sitemap** entries,
   page **metadata**, **JSON-LD** and a generated **Open Graph image**
@@ -66,16 +66,17 @@ These are not optional.
 | `id` | Stable internal id, e.g. `"p-dental-clinic-crm"`. |
 | `slug` | URL segment, lowercase words joined by hyphens. Changing it changes the URL. |
 | `status` | `"client"` or `"concept"` (see above). |
-| `featured` | `true` shows it in the homepage horizontal showcase. Three or four featured projects work best. |
+| `featured` | `true` shows it in the homepage **Examples** section, next to its demo. Three or four featured projects work best. |
 | `order` | Sort order (ascending) everywhere. Ties are sorted newest first. |
 | `year` | Year shown on cards and in the case study. |
 | `capabilities` | Ids from `src/config/navigation.ts`: `ai-systems`, `automation`, `custom-software`, `business-applications`, `web-experiences`, `sales-systems`, `internal-tools`. They drive the work filters and the "Related work" lists. |
-| `technologies` | Shown in chapter 08 and in the JSON-LD keywords. |
+| `technologies` | Shown under "Under the hood" and in the JSON-LD keywords. |
 | `theme` | `"dark"` or `"light"`: colour mood of the case study and its "next project" panel. |
 | `coverImage` | A `Visual` (below). Used for cards, the case-study hero and previews. |
-| `gallery` | Ordered list of `{ visual, layout, caption? }` for chapter 06. |
-| `video` | Optional `{ src, poster }` film, shown first in chapter 06; plays only when pressed. |
-| `system` | Nodes and edges of the chapter 05 diagram (below). |
+| `gallery` | Ordered list of `{ visual, layout, caption? }` — real screenshots or photos, shown as a "Screens" section. Leave empty (`[]`) until you have real material. |
+| `video` | Optional `{ src, poster }` film, shown with the screens; plays only when pressed. |
+| `system` | Nodes and edges of the "How it connects" diagram (below). |
+| `demo` | Optional id of an interactive step-by-step demo from `src/components/demos/registry.ts` (`lead`, `booking`, `realestate`, `support`, `ops`, `web`). When set, the case study and the homepage show it instead of a static cover. |
 | `content.en` / `.hy` / `.ru` | All text (below). |
 
 ### Visuals
@@ -134,24 +135,44 @@ accessible text description, and the project's Open Graph image.
 | `client`, `industry`, `projectType` | Hero meta list, cards, OG image. |
 | `shortDescription` | Cards, search results (meta description) unless `seo.description` is set. |
 | `challenge`, `solution` | One line each, homepage showcase panel. |
-| `context` | Chapter 01. |
-| `challengeDetail[]` | Chapter 02 paragraphs (below the `challenge` statement). |
-| `research[]` | Chapter 03 "What we found", ideally four findings. |
-| `solutionDetail[]`, `systemsBuilt[]` | Chapter 04. |
-| `features[]` | Chapter 06 "Key features", ideally four `{ title, text }`. |
-| `results[]` | Chapter 07 (see the truthfulness rules). |
-| `services[]` | Chapter 08. |
+| `context` | "The problem" — the situation, one paragraph. |
+| `challengeDetail[]` | "The problem" — short paragraphs below the `challenge` line. |
+| `research[]` | "What we noticed", ideally four short findings. |
+| `solutionDetail[]`, `systemsBuilt[]` | "What we build". |
+| `features[]` | "Main features", ideally four `{ title, text }`. |
+| `results[]` | "What changes" — the first one is also shown on the homepage (see the truthfulness rules). |
+| `services[]` | "Under the hood". |
 | `seo` | Optional `{ title, description }` overrides for search results. |
 
-## 4. Remove or replace the demo projects
+## 4. Interactive demos
 
-The six projects shipped with the site are **concept demos** (each file
-starts with a `DEMO CONTENT` comment). To retire one, remove it from the
+The six example projects each have a coded, step-by-step demo in
+`src/components/demos/` (one file per demo, registered in `registry.ts`).
+A demo shows two screens — what the customer sees (a phone) and what the
+team sees (an app window) — and a plain caption for every step, in all three
+languages.
+
+- **Use an existing demo:** set `demo: "booking"` (or another id) in the
+  project file.
+- **Write a new one:** copy the closest demo file, change the steps
+  (`steps.en/hy/ru` — a title and one or two sentences each), the screen
+  text (`ui.en/hy/ru`) and the two screen components, then add it to
+  `registry.ts`. The building blocks (phone frame, app window, chat
+  bubbles, notifications) are in `kit.tsx`.
+- Keep steps to four or five, and screen text short: the caption under the
+  demo carries the explanation.
+- Demo screens contain fictional interface data only. Never put real client
+  data, names or results in a demo.
+
+## 5. Remove or replace the demo projects
+
+The six projects shipped with the site are **examples** (each file
+starts with a `DEMO CONTENT` comment and is shown with an "Example" tag). To retire one, remove it from the
 `registry` array in `src/content/projects/index.ts` and delete its file.
 Its URL, sitemap entries and links disappear automatically. Keep at least
 one project registered.
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 | Message | Fix |
 | --- | --- |

@@ -14,6 +14,7 @@ export const bookingAutomation: Project = {
   capabilities: ["automation", "sales-systems", "internal-tools"],
   technologies: ["Next.js", "Node.js", "PostgreSQL", "n8n", "Google Calendar API", "Telegram Bot API", "Stripe"],
   theme: "dark",
+  demo: "booking",
   coverImage: {
     kind: "composition",
     id: "booking-calendar",
@@ -23,42 +24,8 @@ export const bookingAutomation: Project = {
       ru: "Недельный календарь приёмов с автоматическими подтверждениями, напоминаниями и уведомлениями листа ожидания.",
     },
   },
-  gallery: [
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "booking-mobile",
-        alt: {
-          en: "Three phone screens of the booking flow: choose a service, pick a time, confirmation with reminders.",
-          hy: "Ամրագրման հոսքի հեռախոսի երեք էկրան՝ ծառայության ընտրություն, ժամի ընտրություն և հաստատում՝ հիշեցումներով։",
-          ru: "Три экрана записи на телефоне: выбор услуги, выбор времени и подтверждение с напоминаниями.",
-        },
-      },
-      caption: {
-        en: "Booking takes less than a minute — and needs no phone call.",
-        hy: "Ամրագրումը տևում է մեկ րոպեից պակաս և զանգ չի պահանջում։",
-        ru: "Запись занимает меньше минуты — и не требует звонка.",
-      },
-    },
-    {
-      layout: "split-left",
-      visual: {
-        kind: "composition",
-        id: "booking-flow",
-        alt: {
-          en: "System flow from booking channels through an availability engine to confirmations, reminders and staff calendars.",
-          hy: "Համակարգի հոսք՝ ամրագրման ալիքներից հասանելիության շարժիչով դեպի հաստատումներ, հիշեցումներ և աշխատակիցների օրացույցներ։",
-          ru: "Схема системы: от каналов записи через движок доступности к подтверждениям, напоминаниям и календарям сотрудников.",
-        },
-      },
-      caption: {
-        en: "Availability is calculated from real calendars and service rules, not guessed.",
-        hy: "Հասանելիությունը հաշվարկվում է իրական օրացույցներից և ծառայությունների կանոններից, ոչ թե ենթադրվում։",
-        ru: "Доступность рассчитывается по реальным календарям и правилам услуг, а не на глаз.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "page", group: "input", label: { en: "Booking page", hy: "Ամրագրման էջ", ru: "Страница записи" } },

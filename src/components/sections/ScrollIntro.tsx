@@ -16,10 +16,10 @@ import { pad2 } from "@/i18n/format";
 const SystemScene = dynamic(() => import("@/components/three/SystemScene"), { ssr: false });
 
 type Props = {
-  tagline: string;
   intro: Dictionary["intro"];
   hero: Dictionary["hero"];
-  workHref: string;
+  /** Where "See examples" leads (the examples section). */
+  examplesHref: string;
   contactHref: string;
 };
 
@@ -40,18 +40,20 @@ function supportsWebGL2() {
 }
 
 /**
- * 01 — 3D scroll intro → 02 — hero resolution.
- * A tall scroll track with a sticky stage. One ScrollTrigger drives both the
+ * 01/02 — Hero and 3D scroll intro.
+ * The first screen states plainly what the company does, with the 3D model
+ * beside it. Scrolling then explains the model (labelled layers → statement)
+ * and ends on a short list of what we build. One ScrollTrigger drives both the
  * WebGL choreography (via a shared progress ref) and the DOM overlay timeline.
  */
-export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Props) {
+export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useRef<SceneProgress>({ value: 0 });
   const pointer = useRef<PointerState>({ x: 0, y: 0 });
   const labelRefs = useRef<Array<HTMLElement | null>>([]);
   const counterRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLSpanElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const buildRef = useRef<HTMLHeadingElement>(null);
 
   const [mode, setMode] = useState<"pending" | "webgl" | "fallback">("pending");
   const [tier, setTier] = useState<SceneTier>("high");
@@ -104,9 +106,9 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
 
       mm.add(media.motionOk, () => {
         const statementWords = q("[data-statement] [data-word]");
-        const heroWords = q("[data-hero-title] [data-word]");
-        const heroRest = q("[data-hero-rest]");
-        const introUi = q("[data-intro-ui]");
+        const buildWords = q("[data-build-title] [data-word]");
+        const buildRest = q("[data-build-rest]");
+        const heroBlock = q("[data-hero]");
         const labelLayer = q("[data-label-layer]");
         const counter = counterRef.current;
         const bar = barRef.current;
@@ -128,8 +130,8 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
           },
         });
 
-        // Scene 01 → 02: the opening UI steps back.
-        tl.to(introUi, { autoAlpha: 0, y: -32, duration: 0.07, ease: "power1.in" }, 0.035);
+        // Scene 01 → 02: the hero steps back as the model opens up.
+        tl.to(heroBlock, { autoAlpha: 0, y: -40, duration: 0.07, ease: "power1.in" }, 0.03);
 
         // Layer labels follow the smoothed 3D progress; this raw-scroll fade makes
         // sure they are gone before the statement arrives, even on fast scrolls.
@@ -148,17 +150,17 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
           0.68,
         );
 
-        // Scene 04: hero resolves.
+        // Scene 04: what we build.
         tl.fromTo(
-          heroWords,
+          buildWords,
           { yPercent: 135, y: 0 },
           { yPercent: 0, duration: 0.08, stagger: 0.01, ease: "power3.out" },
-          0.79,
+          0.78,
         ).fromTo(
-          heroRest,
-          { autoAlpha: 0, y: 28 },
-          { autoAlpha: 1, y: 0, duration: 0.07, stagger: 0.015, ease: "power2.out" },
-          0.86,
+          buildRest,
+          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 1, y: 0, duration: 0.06, stagger: 0.012, ease: "power2.out" },
+          0.84,
         );
 
         tl.set({}, {}, 1);
@@ -183,11 +185,11 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
     return section.offsetTop + section.offsetHeight - window.innerHeight + 1;
   }, []);
 
-  // Fast-forward to the resolved hero and hand focus to its headline.
+  // Fast-forward to the end of the sequence and hand focus to the service list.
   const skipIntro = () =>
     scrollToTarget(introEnd(), {
       duration: 1.6,
-      onComplete: () => titleRef.current?.focus({ preventScroll: true }),
+      onComplete: () => buildRef.current?.focus({ preventScroll: true }),
     });
 
   return (
@@ -197,7 +199,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
       data-theme="dark"
       data-nav-theme="dark"
       data-nav-solid="false"
-      className="intro relative h-svh bg-black motion-safe:h-[280svh] lg:motion-safe:h-[460vh]"
+      className="intro relative h-svh bg-black motion-safe:h-[250svh] lg:motion-safe:h-[380vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Statement — always in front of the object so every word stays readable;
@@ -206,7 +208,7 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
           <div className="shell">
             <p
               data-statement
-              className="max-w-[16ch] text-display-m font-medium text-paper/90 [text-shadow:0_2px_28px_rgb(0_0_0/0.9)] lg:max-w-[17ch] lg:text-display-l"
+              className="max-w-[22ch] text-heading font-medium text-paper/90 [text-shadow:0_2px_28px_rgb(0_0_0/0.9)] lg:max-w-[20ch] lg:text-display-m"
             >
               <MaskedWords text={intro.statement} />
             </p>
@@ -263,26 +265,37 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
           ))}
         </div>
 
-        {/* Scene 01 UI */}
+        {/* Scene 01 — hero: what we do, on the first screen */}
         <div
-          data-intro-ui
-          className="intro-ui shell absolute inset-x-0 bottom-0 z-[4] flex flex-col gap-8 pb-[max(1.75rem,5vh)] motion-reduce:hidden md:flex-row md:items-end md:justify-between"
+          data-hero
+          className="shell absolute inset-x-0 bottom-0 z-[4] flex flex-col pb-[max(1.5rem,4vh)] lg:top-0 lg:justify-center lg:pt-(--nav-h) lg:pb-0"
         >
-          <p className="max-w-[17ch] text-heading font-medium text-paper">{tagline}</p>
-          <div className="flex shrink-0 flex-row-reverse items-center justify-between gap-5 md:flex-col md:items-end">
-            <button
-              type="button"
-              onClick={skipIntro}
-              className="label text-mute transition-colors hover:text-paper"
-            >
-              {intro.skip}
-            </button>
+          <div className="max-w-[40rem] animate-hero-in lg:max-w-[48%]">
+            <p className="label mb-6 flex items-center gap-3 text-mute">
+              <span aria-hidden="true" className="inline-block size-1.5 bg-signal" />
+              {hero.eyebrow}
+            </p>
+            <h1 className="text-display-m font-medium text-paper">{hero.title}</h1>
+            <p className="mt-6 max-w-[38ch] text-lead text-mute">{hero.lead}</p>
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <ButtonLink href={examplesHref} variant="solid" arrow="down">
+                {hero.primary}
+              </ButtonLink>
+              <ArrowLink href={contactHref} className="text-paper">
+                {hero.secondary}
+              </ArrowLink>
+            </div>
+          </div>
+          <div className="mt-8 hidden items-center gap-6 motion-reduce:hidden lg:absolute lg:right-(--page-x) lg:bottom-[max(1.75rem,5vh)] lg:mt-0 lg:flex">
             <div className="flex items-center gap-3 text-paper/80">
-              <span className="label hidden sm:inline">{intro.scroll}</span>
+              <span className="label">{intro.scroll}</span>
               <span aria-hidden="true" className="relative block h-12 w-px overflow-hidden bg-paper/15">
                 <span className="absolute inset-0 block animate-cue bg-paper" />
               </span>
             </div>
+            <button type="button" onClick={skipIntro} className="label text-mute transition-colors hover:text-paper">
+              {intro.skip}
+            </button>
           </div>
         </div>
 
@@ -300,34 +313,30 @@ export function ScrollIntro({ tagline, intro, hero, workHref, contactHref }: Pro
           <span className="label text-mute">04</span>
         </div>
 
-        {/* Scene 04 — hero */}
-        <div className="intro-hero shell absolute inset-x-0 bottom-0 z-[4] pb-[max(2rem,7vh)]">
-          <div className="lg:max-w-[64%]">
-            <p data-hero-rest className="label mb-8 hidden items-center gap-3 text-mute sm:flex">
-              <span aria-hidden="true" className="inline-block size-1.5 bg-signal" />
-              {hero.eyebrow}
-            </p>
-            <h1 ref={titleRef} tabIndex={-1} data-hero-title className="text-display-l font-medium text-paper outline-none">
-              <MaskedWords text={hero.title} />
-            </h1>
-            <div className="mt-6 flex flex-col gap-7 md:mt-10 xl:flex-row xl:items-end xl:gap-16">
-              <p data-hero-rest className="max-w-[38ch] text-lead text-mute">
-                {hero.lead}
-              </p>
-              <div data-hero-rest className="flex flex-wrap items-center gap-x-8 gap-y-5">
-                <ButtonLink href={workHref} variant="solid">
-                  {hero.primary}
-                </ButtonLink>
-                <ArrowLink href={contactHref} className="text-paper">
-                  {hero.secondary}
-                </ArrowLink>
-              </div>
+        {/* Scene 04 — what we build */}
+        <div className="intro-build shell absolute inset-x-0 bottom-0 z-[4] pb-[max(2rem,6vh)] motion-reduce:hidden lg:top-0 lg:flex lg:flex-col lg:justify-center lg:pt-(--nav-h) lg:pb-0">
+          <div className="lg:max-w-[46%]">
+            <h2 ref={buildRef} tabIndex={-1} data-build-title className="text-display-m font-medium text-paper outline-none">
+              <MaskedWords text={intro.build.title} />
+            </h2>
+            <ul className="mt-8 border-t border-paper/15">
+              {intro.build.items.map((item, i) => (
+                <li key={item} data-build-rest className="flex items-baseline gap-4 border-b border-paper/15 py-3.5 text-title text-paper">
+                  <span className="label text-mute">{pad2(i + 1)}</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div data-build-rest className="mt-8">
+              <ButtonLink href={examplesHref} variant="solid" arrow="down">
+                {intro.build.cta}
+              </ButtonLink>
             </div>
           </div>
         </div>
       </div>
       <noscript>
-        <style>{`.intro-hero [data-word]{transform:none!important}.intro-hero [data-hero-rest]{opacity:1!important}.intro-ui{display:none}`}</style>
+        <style>{`.intro-build{display:none}`}</style>
       </noscript>
     </section>
   );

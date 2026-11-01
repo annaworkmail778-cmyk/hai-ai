@@ -6,6 +6,7 @@ import type { Project } from "@/content/types";
 import { projectContent } from "@/content/localize";
 import { pad2 } from "@/i18n/format";
 import { ProjectVisual } from "./ProjectVisual";
+import { DemoPoster } from "@/components/demos/DemoStage";
 import { MediaReveal } from "@/components/motion/Reveal";
 import { ConceptTag } from "@/components/sections/FeaturedWork";
 import { Arrow } from "@/components/ui/Arrow";
@@ -38,16 +39,28 @@ export function ProjectCard({
       >
         <MediaReveal className="relative aspect-[4/5] overflow-hidden rounded-xs @4xl:aspect-[16/9]">
           <div className="absolute inset-0 transition-transform duration-[1400ms] ease-out group-hover:scale-[1.03]">
-            <ProjectVisual visual={project.coverImage} locale={locale} sizes="(min-width: 1024px) 70vw, 100vw" />
+            {project.demo ? (
+              <DemoPoster id={project.demo} locale={locale} />
+            ) : (
+              <ProjectVisual visual={project.coverImage} locale={locale} sizes="(min-width: 1024px) 70vw, 100vw" />
+            )}
           </div>
         </MediaReveal>
       </Link>
       <div className="mt-6 grid gap-4 @4xl:grid-cols-12 @4xl:gap-6">
-        <div className="flex items-center gap-4 @4xl:col-span-2 @4xl:items-start">
+        <div className="flex flex-wrap items-center gap-3 @4xl:col-span-3 @4xl:flex-col @4xl:items-start">
           <span className="label text-fg">{pad2(index + 1)}</span>
           {project.status === "concept" && <ConceptTag label={dict.common.concept} />}
+          {project.demo && (
+            <span className="label inline-flex items-center gap-2 rounded-full bg-fg px-3 py-1 text-bg">
+              <svg viewBox="0 0 24 24" className="size-3" fill="currentColor" aria-hidden="true">
+                <path d="M8.5 5.8v12.4L18.5 12z" />
+              </svg>
+              {dict.work.demoTag}
+            </span>
+          )}
         </div>
-        <div className="@4xl:col-span-6">
+        <div className="@4xl:col-span-5">
           <h2 className="text-heading font-medium">
             <Link href={href} className="inline-flex items-center gap-3">
               <span className="link-underline">{c.title}</span>

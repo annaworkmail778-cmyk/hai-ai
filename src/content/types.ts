@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import type { CapabilityId } from "@/config/navigation";
 import type { CompositionId } from "@/components/visuals/registry";
+import type { DemoId } from "@/components/demos/registry";
 
 /**
  * PORTFOLIO CONTENT SCHEMA
@@ -111,6 +112,8 @@ export type Project = {
   gallery: GalleryItem[];
   /** Optional case-study film (muted, user-initiated playback). */
   video?: { src: string; poster: string };
+  /** Interactive step-by-step demo shown on the case study and the homepage (src/components/demos). */
+  demo?: DemoId;
   system: SystemMap;
   content: { en: ProjectContent } & Partial<Record<Locale, ProjectContent>>;
 };

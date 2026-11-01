@@ -87,7 +87,7 @@ export function SystemDiagram({
         <svg viewBox={`0 0 ${W} ${H}`} className="hidden h-auto w-full md:block" aria-hidden="true">
           {GROUPS.map((g) => (
             <g key={g}>
-              <text x={colX[g]} y={52} className="fill-fg-mute" fontSize={13} letterSpacing={1.4} style={{ textTransform: "uppercase", fontFamily: "var(--font-geist-mono), var(--font-armenian), monospace" }}>
+              <text x={colX[g]} y={52} className="fill-fg-mute" fontSize={13} letterSpacing={1.4}>
                 {legend[g]}
               </text>
               <line x1={colX[g]} x2={colX[g] + NW} y1={70} y2={70} className="stroke-rule-strong" />
@@ -115,7 +115,7 @@ export function SystemDiagram({
         <svg viewBox={`0 0 ${VW} ${VH}`} className="h-auto w-full md:hidden" aria-hidden="true">
           {vertical.map(({ g, top, nodes }, gi) => (
             <g key={g}>
-              <text x={0} y={top + 20} className="fill-fg-mute" fontSize={12} letterSpacing={1.2} style={{ textTransform: "uppercase", fontFamily: "var(--font-geist-mono), var(--font-armenian), monospace" }}>
+              <text x={0} y={top + 20} className="fill-fg-mute" fontSize={12} letterSpacing={1.2}>
                 {legend[g]}
               </text>
               {nodes.map(({ n, y }) => (

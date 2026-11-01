@@ -69,13 +69,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
 
       {/* 01–02 */}
-      <ScrollIntro
-        tagline={brand.tagline[lang]}
-        intro={dict.intro}
-        hero={dict.hero}
-        workHref={localePath(lang, "/work")}
-        contactHref={contact}
-      />
+      <ScrollIntro intro={dict.intro} hero={dict.hero} examplesHref="#work" contactHref={contact} />
       {/* 03 */}
       <ScrollStatement
         eyebrow={dict.statement.eyebrow}

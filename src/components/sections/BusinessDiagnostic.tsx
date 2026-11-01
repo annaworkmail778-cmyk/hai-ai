@@ -201,7 +201,7 @@ export function BusinessDiagnostic({ t, contactHref }: { t: Dictionary["diagnost
               </div>
 
               <div data-report-item className="mt-12 flex flex-col gap-6 border-t border-rule pt-6 md:flex-row md:items-center md:justify-between">
-                <p className="max-w-[60ch] text-small text-fg-mute">{t.labels.note}</p>
+                <p className="max-w-[60ch] text-body text-fg-mute">{t.labels.note}</p>
                 <Link
                   href={`${contactHref}?area=${category.id}`}
                   className="group inline-flex shrink-0 items-center gap-3 font-medium"

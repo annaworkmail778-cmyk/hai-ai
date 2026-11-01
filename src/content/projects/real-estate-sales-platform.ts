@@ -14,6 +14,7 @@ export const realEstateSalesPlatform: Project = {
   capabilities: ["business-applications", "sales-systems", "custom-software", "web-experiences"],
   technologies: ["Next.js", "TypeScript", "PostgreSQL", "Supabase", "Three.js", "Telegram Bot API"],
   theme: "light",
+  demo: "realestate",
   coverImage: {
     kind: "composition",
     id: "realestate-plan",
@@ -23,42 +24,8 @@ export const realEstateSalesPlatform: Project = {
       ru: "Архитектурная планировка квартиры рядом с карточкой свободного объекта и сеткой доступности по дому.",
     },
   },
-  gallery: [
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "realestate-matrix",
-        alt: {
-          en: "Availability matrix of a residential building: every unit by floor with sold, reserved and available states.",
-          hy: "Բնակելի շենքի հասանելիության աղյուսակ՝ բոլոր բնակարաններն ըստ հարկերի՝ վաճառված, ամրագրված և հասանելի կարգավիճակներով։",
-          ru: "Шахматка жилого дома: все квартиры по этажам со статусами «продано», «бронь» и «свободно».",
-        },
-      },
-      caption: {
-        en: "One live inventory — the same truth for the sales team, agents and the website.",
-        hy: "Մեկ կենդանի բազա՝ նույն ճշմարտությունը վաճառքի թիմի, գործակալների և կայքի համար։",
-        ru: "Одна живая база — одна и та же правда для отдела продаж, агентов и сайта.",
-      },
-    },
-    {
-      layout: "inset",
-      visual: {
-        kind: "composition",
-        id: "realestate-mobile",
-        alt: {
-          en: "Three phone screens: browsing residences, viewing a unit plan and a confirmed viewing appointment.",
-          hy: "Հեռախոսի երեք էկրան՝ բնակարանների դիտում, հատակագծի ուսումնասիրում և հաստատված այց։",
-          ru: "Три экрана телефона: подбор квартир, планировка объекта и подтверждённый просмотр.",
-        },
-      },
-      caption: {
-        en: "Buyers explore plans and book viewings on their phone, without waiting for a PDF.",
-        hy: "Գնորդներն ուսումնասիրում են հատակագծերը և ամրագրում այցերը հեռախոսով՝ առանց PDF սպասելու։",
-        ru: "Покупатели смотрят планировки и записываются на просмотр с телефона — без ожидания PDF.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "inventory", group: "input", label: { en: "Unit inventory", hy: "Բնակարանների բազա", ru: "База объектов" } },

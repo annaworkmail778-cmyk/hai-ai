@@ -77,7 +77,7 @@ export function ProcessScroll({ t }: { t: Dictionary["process"] }) {
       aria-labelledby="process-title"
       data-theme="dark"
       data-nav-theme="dark"
-      className="relative bg-bg text-fg lg:motion-safe:h-[460vh]"
+      className="relative bg-bg text-fg lg:motion-safe:h-[360vh]"
     >
       {/* Desktop pinned sequence */}
       <div data-pinned className="sticky top-0 hidden h-svh overflow-hidden lg:motion-safe:block">

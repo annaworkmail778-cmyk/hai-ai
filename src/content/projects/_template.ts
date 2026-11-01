@@ -36,6 +36,9 @@ export const projectTemplate: Project = {
     // position: "50% 30%",  // optional focal point (CSS object-position)
   },
 
+  // Optional interactive demo (src/components/demos/registry.ts), e.g. "booking".
+  // demo: "booking",
+
   // Optional film, played only when the visitor presses play.
   // video: { src: "/projects/your-slug/film.mp4", poster: "/projects/your-slug/film-poster.jpg" },
 

@@ -81,7 +81,7 @@ export function CapabilityRows({ rows, previews }: { rows: CapabilityRow[]; prev
                   >
                     {row.name}
                   </span>
-                  <span className="hidden text-small text-fg-mute md:block">{row.summary}</span>
+                  <span className="hidden text-body text-fg-mute md:block">{row.summary}</span>
                   <PlusIcon open={isOpen} className="text-[1.4rem] text-fg" />
                 </button>
               </h3>

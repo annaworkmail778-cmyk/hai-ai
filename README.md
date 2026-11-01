@@ -23,9 +23,9 @@ web experiences.
 
 | Route | Content |
 | --- | --- |
-| `/[lang]` | 3D scroll intro → hero → statement → featured work (horizontal) → problems → capabilities → interactive business diagnostic → process → technology → why us → closing CTA |
+| `/[lang]` | Hero with the 3D model → short 3D story (layers, statement, what we build) → statement → examples with live demos → problems → services → interactive business diagnostic → process → technology → why us → closing CTA |
 | `/[lang]/work` | Work index with capability filters, gallery and index views |
-| `/[lang]/work/[slug]` | Case study: hero, context, challenge, findings, solution, system diagram, experience, outcomes, technology, next project |
+| `/[lang]/work/[slug]` | Example / case study: plain summary, interactive demo, the problem, what changes, what we build, how it connects, technology, next project |
 | `/[lang]/solutions` | Seven capability areas with problems, deliverables, example systems and related work |
 | `/[lang]/about` | Manifesto, how we think, what we are / aren't, engagement model |
 | `/[lang]/contact` | Project inquiry form with validation and real delivery channels |
@@ -125,17 +125,34 @@ hero. The DOM text is a GSAP timeline on the same ScrollTrigger.
 | No WebGL2 | Static isometric SVG drawing of the same model |
 | Skip | "Skip intro" scrolls straight to the hero and moves focus to its heading |
 
+## Interactive demos
+
+`src/components/demos/` — each example project has a step-by-step demo: a
+phone (what the customer sees) beside an app window (what the team sees),
+with a plain caption per step in all three languages. The player plays
+itself while it is on screen, pauses while someone points at or focuses it,
+never autoplays with reduced motion, and can be driven with the step list
+or the previous / play / next buttons. On phones it shows one screen at a
+time with a switch. See PROJECT_CONTENT_GUIDE.md → *Interactive demos*.
+
 ## Motion system
 
 GSAP + ScrollTrigger + SplitText, with Lenis smooth scrolling driven by
 GSAP's ticker. Timing tokens are in `src/config/motion.ts`. The major
-moments are: the 3D intro, the statement wipe, the horizontal featured
-work, the process diagram build, the scrubbed "why us" type, the closing
-CTA panel and the case-study cover expansion. Everything else uses quiet
-line or fade reveals. All animations are created inside `gsap.matchMedia`
-and reverted on unmount. With `prefers-reduced-motion`, Lenis is off,
-pinned sequences become normal sections, and content appears without
-movement.
+moments are: the 3D intro, the statement wipe, the interactive demos, the
+process diagram build, the scrubbed "why us" type, the closing CTA panel and
+the case-study cover expansion. Everything else uses quiet line or fade
+reveals. All animations are created inside `gsap.matchMedia` and reverted on
+unmount. With `prefers-reduced-motion`, Lenis is off, pinned sequences
+become normal sections, and content appears without movement.
+
+## Readability
+
+Body text is 18px; secondary text keeps at least 7:1 contrast; small
+labels use the normal sentence-case body font (no uppercase monospace,
+which was hard to read in Armenian); display sizes are tuned so Armenian
+headlines don't break mid-word. Copy is written in plain language — what
+the business gets, not technical jargon.
 
 ## Contact form
 

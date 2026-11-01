@@ -19,6 +19,7 @@
 @source "../components/visuals";
 @source "../components/ui";
 @source "../components/contact";
+@source "../components/demos";
 @source "../content";
 
 /* ── Tokens ─────────────────────────────────────────────────────── */
@@ -32,7 +33,7 @@
   --color-graphite: #111111;
   --color-paper: #f3f2ee; /* Warm off-white */
   --color-white: #ffffff;
-  --color-mute: #999999; /* Secondary gray (on dark) */
+  --color-mute: #b4b3ae; /* Secondary gray (on dark) — 9:1 on black */
 
   /* Derived neutrals */
   --color-carbon: #181818;
@@ -40,7 +41,7 @@
   --color-ash: #3a3a3a;
   --color-bone: #e7e5df;
   --color-stone: #d4d2cb;
-  --color-mute-ink: #6b6a66; /* Secondary gray for light surfaces (AA on paper) */
+  --color-mute-ink: #55544f; /* Secondary gray for light surfaces — 7:1 on paper */
 
   /* The single accent. Use sparingly: markers, active states, one word. */
   --color-signal: #ff5b14;
@@ -51,33 +52,35 @@
   --color-line-ink: rgb(8 8 8 / 0.14);
   --color-line-ink-strong: rgb(8 8 8 / 0.3);
 
-  /* Type scale — 9 steps, fluid between 360px and 1920px viewports. */
+  /* Type scale — fluid between 360px and 1920px viewports.
+     Display sizes stay large but never so large that words must break;
+     reading sizes favour comfort over density. */
   --text-*: initial;
-  --text-display-xl: clamp(3.1rem, 1.05rem + 7.6vw, 9rem);
-  --text-display-xl--line-height: 0.92;
-  --text-display-xl--letter-spacing: -0.048em;
-  --text-display-l: clamp(2.6rem, 1.25rem + 5vw, 6.75rem);
-  --text-display-l--line-height: 0.95;
-  --text-display-l--letter-spacing: -0.042em;
-  --text-display-m: clamp(2.05rem, 1.2rem + 3.1vw, 4.5rem);
-  --text-display-m--line-height: 1;
-  --text-display-m--letter-spacing: -0.034em;
-  --text-heading: clamp(1.6rem, 1.12rem + 1.65vw, 2.75rem);
-  --text-heading--line-height: 1.08;
-  --text-heading--letter-spacing: -0.026em;
-  --text-title: clamp(1.2rem, 1.03rem + 0.62vw, 1.625rem);
-  --text-title--line-height: 1.22;
-  --text-title--letter-spacing: -0.016em;
-  --text-lead: clamp(1.08rem, 0.98rem + 0.42vw, 1.4rem);
-  --text-lead--line-height: 1.45;
-  --text-lead--letter-spacing: -0.01em;
-  --text-body: 1.0625rem;
-  --text-body--line-height: 1.6;
-  --text-small: 0.875rem;
-  --text-small--line-height: 1.5;
-  --text-label: 0.75rem;
-  --text-label--line-height: 1.2;
-  --text-label--letter-spacing: 0.09em;
+  --text-display-xl: clamp(2.5rem, 1.25rem + 5.2vw, 6.75rem);
+  --text-display-xl--line-height: 1;
+  --text-display-xl--letter-spacing: -0.034em;
+  --text-display-l: clamp(2.15rem, 1.2rem + 3.9vw, 5.25rem);
+  --text-display-l--line-height: 1.03;
+  --text-display-l--letter-spacing: -0.03em;
+  --text-display-m: clamp(1.8rem, 1.15rem + 2.5vw, 3.6rem);
+  --text-display-m--line-height: 1.08;
+  --text-display-m--letter-spacing: -0.022em;
+  --text-heading: clamp(1.5rem, 1.12rem + 1.3vw, 2.4rem);
+  --text-heading--line-height: 1.15;
+  --text-heading--letter-spacing: -0.016em;
+  --text-title: clamp(1.2rem, 1.06rem + 0.5vw, 1.55rem);
+  --text-title--line-height: 1.3;
+  --text-title--letter-spacing: -0.01em;
+  --text-lead: clamp(1.15rem, 1.04rem + 0.42vw, 1.45rem);
+  --text-lead--line-height: 1.5;
+  --text-lead--letter-spacing: -0.005em;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.96875rem;
+  --text-small--line-height: 1.55;
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.35;
+  --text-label--letter-spacing: 0.005em;
 
   /* Radii — architectural: sharp, with small softening only. */
   --radius-*: initial;
@@ -96,6 +99,38 @@
 
   --animate-cue: cue 2.4s var(--ease-in-out) infinite;
   --animate-blink: blink 1.1s steps(2, start) infinite;
+  /* Interactive demos */
+  --animate-demo-in: demo-in 0.55s var(--ease-out) both;
+  --animate-demo-pop: demo-pop 0.6s var(--ease-out) both;
+  --animate-demo-typing: demo-typing 1.2s ease-in-out infinite;
+  --animate-demo-pulse: demo-pulse 1.8s ease-out infinite;
+  --animate-hero-in: hero-in 1.1s var(--ease-out) both;
+
+  @keyframes demo-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes demo-pop {
+    0% { opacity: 0; transform: scale(0.94); }
+    60% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes demo-typing {
+    0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+    40% { opacity: 1; transform: translateY(-3px); }
+  }
+  @keyframes demo-pulse {
+    0% { box-shadow: 0 0 0 0 rgb(255 91 20 / 0.45); }
+    100% { box-shadow: 0 0 0 12px rgb(255 91 20 / 0); }
+  }
+  @keyframes demo-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes hero-in {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
 
   @keyframes cue {
     0% { transform: scaleY(0); transform-origin: top; }
@@ -231,24 +266,24 @@
   text-wrap: pretty;
 }
 
-/* Armenian script: open the tracking and leading of display sizes. */
+/* Armenian script: wider letterforms, taller ascenders — open tracking and leading. */
 .site:lang(hy) .text-display-xl,
 .site:lang(hy) .text-display-l {
-  letter-spacing: -0.026em;
-  line-height: 1.04;
+  letter-spacing: -0.012em;
+  line-height: 1.1;
 }
 .site:lang(hy) .text-display-m,
 .site:lang(hy) .text-heading {
-  letter-spacing: -0.018em;
-  line-height: 1.1;
+  letter-spacing: -0.006em;
+  line-height: 1.16;
 }
-.site:lang(hy) .text-label {
-  letter-spacing: 0.06em;
+.site:lang(hy) .text-title {
+  letter-spacing: 0;
 }
 /* Cyrillic sets wider; tighten less. */
 .site:lang(ru) .text-display-xl,
 .site:lang(ru) .text-display-l {
-  letter-spacing: -0.04em;
+  letter-spacing: -0.026em;
 }
 
 /* ── Components ─────────────────────────────────────────────────── */
@@ -281,13 +316,14 @@
     padding-block: var(--section-y);
   }
 
+  /* Small annotations (section names, meta, tags). Plain sentence case in
+     the body font: uppercase monospace was hard to read, above all in Armenian. */
   .label {
-    font-family: var(--font-geist-mono), var(--font-armenian), ui-monospace, monospace;
     font-size: var(--text-label);
     line-height: var(--text-label--line-height);
     letter-spacing: var(--text-label--letter-spacing);
-    text-transform: uppercase;
-    font-weight: 450;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
   }
 
   .hairline {
@@ -364,11 +400,11 @@
 
 /* ── Scroll intro: initial states (only when motion is allowed) ─── */
 @media (prefers-reduced-motion: no-preference) {
-  .intro-hero [data-word],
+  .intro-build [data-word],
   .intro [data-statement] [data-word] {
     transform: translateY(135%);
   }
-  .intro-hero [data-hero-rest] {
+  .intro-build [data-build-rest] {
     opacity: 0;
     visibility: hidden;
   }

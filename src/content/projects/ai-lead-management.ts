@@ -15,6 +15,7 @@ export const aiLeadManagement: Project = {
   capabilities: ["ai-systems", "sales-systems", "automation"],
   technologies: ["Next.js", "Node.js", "PostgreSQL", "OpenAI", "n8n", "WhatsApp Business API", "Telegram Bot API"],
   theme: "dark",
+  demo: "lead",
   coverImage: {
     kind: "composition",
     id: "lead-pipeline",
@@ -25,42 +26,8 @@ export const aiLeadManagement: Project = {
       ru: "Интерфейс воронки заявок: обращения из четырёх каналов попадают на одну доску, панель AI-квалификации оценивает заявку.",
     },
   },
-  gallery: [
-    {
-      layout: "split-right",
-      visual: {
-        kind: "composition",
-        id: "lead-conversation",
-        alt: {
-          en: "A customer conversation with AI-drafted replies next to the details extracted from it.",
-          hy: "Հաճախորդի հետ զրույց՝ AI-ի նախապատրաստած պատասխաններով և դրանից դուրս բերված տվյալներով։",
-          ru: "Диалог с клиентом с ответами, подготовленными AI, и извлечёнными из него данными.",
-        },
-      },
-      caption: {
-        en: "Every conversation becomes structured data the team can act on.",
-        hy: "Յուրաքանչյուր զրույց վերածվում է կառուցվածքային տվյալի, որի հիման վրա թիմը կարող է գործել։",
-        ru: "Каждый диалог становится структурированными данными, с которыми команда может работать.",
-      },
-    },
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "lead-flow",
-        alt: {
-          en: "System flow from four channels through a unified inbox and AI qualification to sales, nurturing and dashboards.",
-          hy: "Համակարգի հոսք՝ չորս ալիքից միասնական մուտքով և AI որակավորմամբ դեպի վաճառք, հետագա հաղորդակցություն և վահանակներ։",
-          ru: "Схема системы: от четырёх каналов через единый входящий поток и AI-квалификацию к продажам, касаниям и дашбордам.",
-        },
-      },
-      caption: {
-        en: "From five channels to one owner and one next step.",
-        hy: "Հինգ ալիքից՝ մեկ պատասխանատու և մեկ հաջորդ քայլ։",
-        ru: "От пяти каналов — к одному ответственному и одному следующему шагу.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "web", group: "input", label: { en: "Website", hy: "Կայք", ru: "Сайт" } },

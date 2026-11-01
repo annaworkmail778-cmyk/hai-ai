@@ -8,12 +8,13 @@ export const operationsDashboard: Project = {
   id: "p-operations-dashboard",
   slug: "operations-dashboard",
   status: "concept",
-  featured: true,
+  featured: false,
   order: 4,
   year: 2025,
   capabilities: ["internal-tools", "custom-software", "automation"],
   technologies: ["Next.js", "TypeScript", "PostgreSQL", "Python", "n8n", "REST APIs"],
   theme: "dark",
+  demo: "ops",
   coverImage: {
     kind: "composition",
     id: "ops-dashboard",
@@ -23,42 +24,8 @@ export const operationsDashboard: Project = {
       ru: "Операционный дашборд с количеством заказов, графиком пропускной способности, загрузкой этапов и таблицей рисковых заказов.",
     },
   },
-  gallery: [
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "ops-timeline",
-        alt: {
-          en: "Production timeline of orders across the week with a current-time marker and an alert about an order at risk.",
-          hy: "Պատվերների արտադրական ժամանակացույց ամբողջ շաբաթվա համար՝ ընթացիկ պահի նշիչով և ռիսկային պատվերի ծանուցմամբ։",
-          ru: "Производственная шкала заказов на неделю с отметкой текущего времени и предупреждением о рисковом заказе.",
-        },
-      },
-      caption: {
-        en: "Risks surface days before a deadline — not when the client calls.",
-        hy: "Ռիսկերը երևում են վերջնաժամկետից օրեր առաջ, ոչ թե այն ժամանակ, երբ հաճախորդը զանգում է։",
-        ru: "Риски видны за дни до дедлайна — а не когда звонит клиент.",
-      },
-    },
-    {
-      layout: "split-right",
-      visual: {
-        kind: "composition",
-        id: "ops-flow",
-        alt: {
-          en: "System flow from order, inventory and production data through a shared data layer to dashboards, alerts and reports.",
-          hy: "Համակարգի հոսք՝ պատվերների, պահեստի և արտադրության տվյալներից ընդհանուր շերտով դեպի վահանակներ, ծանուցումներ և հաշվետվություններ։",
-          ru: "Схема системы: данные заказов, склада и производства через общий слой данных к дашбордам, уведомлениям и отчётам.",
-        },
-      },
-      caption: {
-        en: "One shared model replaces five versions of the truth.",
-        hy: "Մեկ ընդհանուր մոդելը փոխարինում է ճշմարտության հինգ տարբերակներին։",
-        ru: "Одна общая модель вместо пяти версий правды.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "orders", group: "input", label: { en: "Orders", hy: "Պատվերներ", ru: "Заказы" } },

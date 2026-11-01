@@ -15,21 +15,15 @@ import { ConceptTag } from "@/components/sections/FeaturedWork";
 import { ProjectVisual } from "@/components/portfolio/ProjectVisual";
 import { ExpandMedia } from "@/components/portfolio/ExpandMedia";
 import { SystemDiagram } from "@/components/portfolio/SystemDiagram";
-import {
-  CaseFilm,
-  Chapter,
-  GalleryBlock,
-  NextProject,
-  Paragraphs,
-  Statement,
-} from "@/components/portfolio/CaseStudyParts";
-
-// Unknown slugs render on demand and call notFound() → localized 404.
-// (dynamicParams = false would 404 too, but logs an internal error per request.)
+import { DemoPlayer } from "@/components/demos/DemoPlayer";
+import { CaseFilm, GalleryBlock, NextProject } from "@/components/portfolio/CaseStudyParts";
 
 export function generateStaticParams() {
   return getProjects().map((p) => ({ slug: p.slug }));
 }
+
+// Unknown slugs render on demand and call notFound() → localized 404.
+// (dynamicParams = false would 404 too, but logs an internal error per request.)
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
   const { lang, slug } = await params;
@@ -44,6 +38,31 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug
     type: "article",
     ownImage: true,
   });
+}
+
+/** A plain section with a small numbered label and a heading. */
+function Part({
+  index,
+  title,
+  children,
+  className,
+}: {
+  index: string;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section aria-label={title} className={cn("shell py-(--section-y-sm)", className)}>
+      <div className="grid-editorial gap-y-8 border-t border-rule pt-10">
+        <div className="col-span-4 md:col-span-8 lg:col-span-4">
+          <p className="label text-fg-mute">{index}</p>
+          <h2 className="mt-3 text-heading font-medium">{title}</h2>
+        </div>
+        <div className="col-span-4 md:col-span-8 lg:col-span-8">{children}</div>
+      </div>
+    </section>
+  );
 }
 
 export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/[slug]">) {
@@ -87,13 +106,10 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
     },
   ];
 
-  // [label, value, full width]
-  const meta: Array<[string, string, boolean]> = [
-    [t.year, String(project.year), false],
-    [t.type, c.projectType, false],
-    [t.industry, c.industry, true],
-    [t.client, c.client, true],
-    [t.capabilities, capabilityNames.join(" / "), true],
+  const meta: Array<[string, string]> = [
+    [t.industry, c.industry],
+    [t.type, c.projectType],
+    [t.year, String(project.year)],
   ];
 
   return (
@@ -101,7 +117,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
 
       {/* Hero */}
-      <header className="shell pt-[calc(var(--nav-h)+clamp(3rem,10vh,8rem))]">
+      <header className="shell pt-[calc(var(--nav-h)+clamp(2.5rem,8vh,6rem))]">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <Link href={localePath(lang, "/work")} className="group label inline-flex items-center gap-2 text-fg-mute hover:text-fg">
             <Arrow direction="left" className="transition-transform group-hover:-translate-x-1" />
@@ -112,154 +128,163 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
           </span>
           {concept && <ConceptTag label={dict.common.concept} />}
         </div>
-        <RevealText as="h1" immediate className="mt-10 max-w-[15ch] text-display-l font-medium sm:text-display-xl">
+        <RevealText as="h1" immediate className="mt-8 max-w-[22ch] text-display-l font-medium">
           {c.title}
         </RevealText>
-        <div className="grid-editorial mt-12 gap-y-10 lg:mt-16">
-          <Reveal delay={0.25} className="col-span-4 md:col-span-8 lg:col-span-6">
-            <p className="max-w-[40ch] text-lead text-fg-mute">{c.subtitle}</p>
+        <div className="grid-editorial mt-8 gap-y-8 lg:mt-10">
+          <Reveal delay={0.2} className="col-span-4 md:col-span-8 lg:col-span-7">
+            <p className="max-w-[46ch] text-lead text-fg-mute">{c.subtitle}</p>
           </Reveal>
-          <Reveal delay={0.35} className="col-span-4 md:col-span-8 lg:col-span-5 lg:col-start-8">
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-6">
-              {meta.map(([k, v, wide]) => (
-                <div key={k} className={cn("border-t border-rule pt-3", wide && "col-span-2")}>
-                  <dt className="label text-fg-mute">{k}</dt>
-                  <dd className="mt-2 text-body">{v}</dd>
+          <Reveal delay={0.3} className="col-span-4 md:col-span-8 lg:col-span-4 lg:col-start-9">
+            <dl className="grid gap-x-6 gap-y-4">
+              {meta.map(([k, v]) => (
+                <div key={k} className="flex items-baseline justify-between gap-6 border-t border-rule pt-3">
+                  <dt className="label shrink-0 text-fg-mute">{k}</dt>
+                  <dd className="text-right text-body">{v}</dd>
                 </div>
               ))}
             </dl>
           </Reveal>
         </div>
-      </header>
-
-      <ExpandMedia className="mt-16 h-[64svh] md:h-[88svh] lg:mt-24">
-        <ProjectVisual visual={project.coverImage} locale={lang} priority />
-      </ExpandMedia>
-
-      {concept && (
-        <div className="shell mt-10">
-          <p className="flex max-w-[80ch] gap-4 border border-rule-strong p-5 text-small text-fg-mute">
-            <span aria-hidden="true" className="mt-1.5 size-1.5 shrink-0 bg-signal" />
+        {concept && (
+          <p className="mt-10 flex max-w-[80ch] gap-4 rounded-md border border-rule-strong p-5 text-body text-fg-mute">
+            <span aria-hidden="true" className="mt-2.5 size-1.5 shrink-0 rounded-full bg-signal" />
             {t.conceptNote}
           </p>
-        </div>
+        )}
+      </header>
+
+      {/* How it works */}
+      {project.demo ? (
+        <section aria-labelledby="demo-title" className="shell mt-16 lg:mt-20">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <h2 id="demo-title" className="text-heading font-medium">
+              {dict.demo.title}
+            </h2>
+            <p className="text-body text-fg-mute">{dict.demo.intro}</p>
+          </div>
+          <DemoPlayer id={project.demo} locale={lang} labels={dict.demo} className="mt-8" />
+        </section>
+      ) : (
+        <ExpandMedia className="mt-16 h-[64svh] md:h-[88svh] lg:mt-24">
+          <ProjectVisual visual={project.coverImage} locale={lang} priority />
+        </ExpandMedia>
       )}
 
-      <Chapter index="01" label={t.context} className="mt-8">
-        <RevealText as="p" className="max-w-[36ch] text-heading font-medium">
-          {c.context}
-        </RevealText>
-      </Chapter>
+      {/* The problem */}
+      <Part index="01" title={t.problem} className="mt-8">
+        <p className="max-w-[40ch] text-title font-medium">{c.challenge}</p>
+        <div className="mt-6 space-y-4">
+          <p className="max-w-[62ch] text-body text-fg-mute">{c.context}</p>
+          {c.challengeDetail.map((p) => (
+            <p key={p} className="max-w-[62ch] text-body text-fg-mute">
+              {p}
+            </p>
+          ))}
+        </div>
+        <h3 className="label mt-10 text-fg-mute">{t.found}</h3>
+        <ul className="mt-4 grid gap-3 md:grid-cols-2">
+          {c.research.map((finding) => (
+            <li key={finding} className="flex gap-3 rounded-md border border-rule p-4 text-body">
+              <span aria-hidden="true" className="mt-2.5 size-1.5 shrink-0 rounded-full bg-fg-mute" />
+              {finding}
+            </li>
+          ))}
+        </ul>
+      </Part>
 
-      <Chapter index="02" label={t.challenge}>
-        <Statement>{c.challenge}</Statement>
-        <Paragraphs items={c.challengeDetail} />
-      </Chapter>
+      {/* What changes */}
+      <Part index="02" title={concept ? t.changeConcept : t.change}>
+        <ul className="grid gap-3 md:grid-cols-2">
+          {c.results.map((r) => (
+            <li key={r} className="flex items-start gap-4 rounded-md bg-surface p-5 text-title font-medium">
+              <svg viewBox="0 0 24 24" className="mt-0.5 size-6 shrink-0 text-signal" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
+                <path d="m5 12.5 4.5 4.5L19 7.5" />
+              </svg>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </Part>
 
-      <Chapter index="03" label={t.findings}>
-        <ol className="grid gap-px border border-rule bg-rule md:grid-cols-2">
-          {c.research.map((finding, i) => (
-            <li key={finding} className="bg-bg p-6 lg:p-10">
-              <span className="label text-signal">{pad2(i + 1)}</span>
-              <p className="mt-6 max-w-[34ch] text-title">{finding}</p>
+      {/* What we build */}
+      <Part index="03" title={t.built}>
+        <p className="max-w-[40ch] text-title font-medium">{c.solution}</p>
+        <div className="mt-6 space-y-4">
+          {c.solutionDetail.map((p) => (
+            <p key={p} className="max-w-[62ch] text-body text-fg-mute">
+              {p}
+            </p>
+          ))}
+        </div>
+        <ol className="mt-10 border-b border-rule">
+          {c.systemsBuilt.map((s, i) => (
+            <li key={s} className="grid grid-cols-[2.5rem_1fr] gap-4 border-t border-rule py-4 text-body">
+              <span className="label pt-0.5 text-fg-mute">{pad2(i + 1)}</span>
+              {s}
             </li>
           ))}
         </ol>
-      </Chapter>
+        <h3 className="label mt-10 text-fg-mute">{t.features}</h3>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {c.features.map((f) => (
+            <li key={f.title} className="rounded-md border border-rule p-5">
+              <p className="text-title font-medium">{f.title}</p>
+              <p className="mt-2 text-body text-fg-mute">{f.text}</p>
+            </li>
+          ))}
+        </ul>
+      </Part>
 
-      <Chapter index="04" label={t.solution}>
-        <Statement>{c.solution}</Statement>
-        <Paragraphs items={c.solutionDetail} />
-        <div className="mt-14">
-          <p className="label text-fg-mute">{t.systemsBuilt}</p>
-          <ul className="mt-6 border-b border-rule">
-            {c.systemsBuilt.map((s, i) => (
-              <li key={s} className="grid grid-cols-[3rem_1fr] gap-4 border-t border-rule py-4 text-title">
-                <span className="label pt-1.5 text-fg-mute">{pad2(i + 1)}</span>
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Chapter>
-
-      {/* System — inverted band */}
-      <section data-theme={inverse} data-nav-theme="dark" aria-label={t.system} className="mt-(--section-y-sm) bg-bg py-(--section-y-sm) text-fg">
+      {/* How it connects */}
+      <section data-theme={inverse} data-nav-theme="dark" aria-labelledby="system-title" className="mt-(--section-y-sm) bg-bg py-(--section-y-sm) text-fg">
         <div className="shell">
-          <div className="grid-editorial gap-y-6">
-            <p className="label col-span-4 flex gap-4 text-fg-mute md:col-span-2 lg:col-span-3">
-              <span className="text-fg">05</span>
-              {t.system}
-            </p>
-            <h2 className="col-span-4 text-heading font-medium md:col-span-6 lg:col-span-9">{t.systemIntro}</h2>
-          </div>
-          <div className="mt-12 lg:mt-16">
+          <p className="label text-fg-mute">04</p>
+          <h2 id="system-title" className="mt-3 text-heading font-medium">
+            {t.system}
+          </h2>
+          <p className="mt-3 max-w-[56ch] text-body text-fg-mute">{t.systemIntro}</p>
+          <div className="mt-10 lg:mt-14">
             <SystemDiagram system={project.system} locale={lang} legend={t.legend} label={`${t.system}: ${c.title}`} />
           </div>
         </div>
       </section>
 
-      {/* Experience */}
-      <section aria-label={t.experience} className="py-(--section-y-sm)">
-        <div className="shell">
-          <p className="label flex gap-4 border-t border-rule pt-8 text-fg-mute">
-            <span className="text-fg">06</span>
-            {t.experience}
-          </p>
-        </div>
-        <div className="mt-12 space-y-24 lg:mt-16 lg:space-y-36">
-          {project.video && <CaseFilm src={project.video.src} poster={project.video.poster} label={t.film} title={c.title} />}
-          {project.gallery.map((item, i) => (
-            <GalleryBlock key={i} item={item} locale={lang} index={i} figure={t.figure} />
-          ))}
-        </div>
-        <div className="shell mt-24 lg:mt-36">
-          <p className="label text-fg-mute">{t.features}</p>
-          <ul className="mt-6 grid gap-px border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
-            {c.features.map((f) => (
-              <li key={f.title} className="bg-bg p-6 lg:p-8">
-                <h3 className="text-title font-medium">{f.title}</h3>
-                <p className="mt-3 text-body text-fg-mute">{f.text}</p>
-              </li>
+      {/* Screens and film (real projects) */}
+      {(project.video || project.gallery.length > 0) && (
+        <section aria-label={t.experience} className="py-(--section-y-sm)">
+          <div className="space-y-24 lg:space-y-36">
+            {project.video && <CaseFilm src={project.video.src} poster={project.video.poster} label={t.film} title={c.title} />}
+            {project.gallery.map((item, i) => (
+              <GalleryBlock key={i} item={item} locale={lang} index={i} figure={t.figure} />
             ))}
-          </ul>
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      <Chapter index="07" label={concept ? t.outcomeConcept : t.outcome}>
-        <ul className="border-b border-rule">
-          {c.results.map((r) => (
-            <li key={r} className="flex items-baseline gap-5 border-t border-rule py-5 text-heading font-medium">
-              <span aria-hidden="true" className={cn("block size-2 shrink-0 translate-y-[-0.15em]", concept ? "border border-signal" : "bg-signal")} />
-              {r}
-            </li>
-          ))}
-        </ul>
-      </Chapter>
-
-      <Chapter index="08" label={t.technology} className="pb-(--section-y)">
-        <div className="grid gap-12 lg:grid-cols-2">
+      {/* Under the hood */}
+      <Part index="05" title={t.underHood} className="pb-(--section-y)">
+        <div className="grid gap-10 md:grid-cols-2">
           <div>
-            <p className="label text-fg-mute">{t.technology}</p>
-            <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-2 text-title">
-              {project.technologies.map((tech, i) => (
-                <li key={tech}>
+            <h3 className="label text-fg-mute">{t.technology}</h3>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <li key={tech} className="rounded-full border border-rule-strong px-3 py-1.5 text-small">
                   {tech}
-                  {i < project.technologies.length - 1 && <span className="ml-3 text-fg-mute">/</span>}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <p className="label text-fg-mute">{t.services}</p>
-            <ul className="mt-6 space-y-2 text-title">
+            <h3 className="label text-fg-mute">{t.services}</h3>
+            <ul className="mt-4 space-y-2 text-body">
               {c.services.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
           </div>
         </div>
-      </Chapter>
+      </Part>
 
       <NextProject project={next} locale={lang} dict={dict} />
     </article>

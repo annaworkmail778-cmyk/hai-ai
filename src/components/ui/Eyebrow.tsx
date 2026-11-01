@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Section label: mono, uppercase, with an optional index and a small
+ * Section label: small sentence-case text with an optional index and a small
  * accent marker — the recurring "drawing annotation" of the site.
  */
 export function Eyebrow({

@@ -14,6 +14,7 @@ export const aiCustomerSupport: Project = {
   capabilities: ["ai-systems", "automation", "business-applications"],
   technologies: ["Anthropic Claude", "OpenAI", "Retrieval (RAG)", "PostgreSQL", "Node.js", "Next.js", "Telegram Bot API"],
   theme: "dark",
+  demo: "support",
   coverImage: {
     kind: "composition",
     id: "support-inbox",
@@ -23,42 +24,8 @@ export const aiCustomerSupport: Project = {
       ru: "Входящие поддержки с метками намерений, AI-ответом со ссылками на источники и панелью найденных знаний и правил эскалации.",
     },
   },
-  gallery: [
-    {
-      layout: "inset",
-      visual: {
-        kind: "composition",
-        id: "support-knowledge",
-        alt: {
-          en: "The documents and live systems the assistant is grounded in, with answer-quality measures reviewed by the team.",
-          hy: "Փաստաթղթերը և կենդանի համակարգերը, որոնց վրա հիմնված է օգնականը, և պատասխանների որակի ցուցանիշները, որոնք վերանայում է թիմը։",
-          ru: "Документы и живые системы, на которых основан ассистент, и показатели качества ответов, которые проверяет команда.",
-        },
-      },
-      caption: {
-        en: "Answers come from company sources — policies and live order data — never from guesswork.",
-        hy: "Պատասխանները գալիս են ընկերության աղբյուրներից՝ քաղաքականություններից և պատվերների կենդանի տվյալներից, երբեք ենթադրություններից։",
-        ru: "Ответы опираются на источники компании — регламенты и живые данные заказов, а не на догадки.",
-      },
-    },
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "support-flow",
-        alt: {
-          en: "Support flow from chat, Telegram and email through intent detection and knowledge retrieval to AI replies or human handoff.",
-          hy: "Սպասարկման հոսք՝ չաթից, Telegram-ից և էլ. փոստից մտադրության ճանաչմամբ և գիտելիքների որոնմամբ դեպի AI պատասխան կամ մարդուն փոխանցում։",
-          ru: "Схема поддержки: от чата, Telegram и почты через определение намерения и поиск знаний к AI-ответу или передаче человеку.",
-        },
-      },
-      caption: {
-        en: "Clear rules decide when a person should take over — with the full context.",
-        hy: "Հստակ կանոնները որոշում են, թե երբ պետք է մարդը ստանձնի զրույցը՝ ամբողջական համատեքստով։",
-        ru: "Чёткие правила решают, когда разговор должен взять человек, — с полным контекстом.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "chat", group: "input", label: { en: "Website chat", hy: "Կայքի չաթ", ru: "Чат на сайте" } },

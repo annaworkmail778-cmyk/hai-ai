@@ -5,7 +5,7 @@ import { gsap, useGSAP } from "@/components/motion/gsap";
 import { MaskedWords } from "@/components/motion/MaskedWords";
 import { media } from "@/config/motion";
 
-/** Split "We don't sell *tools*." into words, marking emphasised ones. */
+/** Split "You tell us what *slows* you down." into words, marking emphasised ones. */
 function parseEmphasis(text: string) {
   const out: Array<{ word: string; em: boolean }> = [];
   let em = false;
@@ -26,9 +26,9 @@ function parseEmphasis(text: string) {
 }
 
 /**
- * 03 — Positioning statement. A pinned typographic moment:
- * a struck-out claim on black, a paper wipe, then the real position
- * travelling horizontally across the viewport.
+ * 03 — Positioning statement. A pinned typographic moment in two lines:
+ * what the client brings (on black, one word underlined in the accent),
+ * a paper wipe, then what we do about it.
  */
 export function ScrollStatement({
   eyebrow,
@@ -54,7 +54,6 @@ export function ScrollStatement({
       mm.add({ desktop: media.desktop, motion: media.motionOk }, (ctx) => {
         const { desktop, motion } = ctx.conditions as { desktop: boolean; motion: boolean };
         if (!motion) return;
-        const l2 = q("[data-l2]")[0] as HTMLElement | undefined;
 
         // The opening claim rises as the section arrives.
         gsap.fromTo(
@@ -83,8 +82,8 @@ export function ScrollStatement({
           },
         });
 
-        tl.fromTo(q("[data-strike]"), { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: "power2.inOut" }, 0.06)
-          .to(q("[data-l1]"), { xPercent: desktop ? -5 : 0, opacity: 0.4, duration: 0.34 }, 0.04)
+        tl.fromTo(q("[data-mark]"), { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: "power2.inOut" }, 0.06)
+          .to(q("[data-l1]"), { xPercent: desktop ? -3 : 0, opacity: 0.45, duration: 0.34 }, 0.04)
           .fromTo(
             q("[data-wipe]"),
             { clipPath: "inset(100% 0% 0% 0%)" },
@@ -97,16 +96,7 @@ export function ScrollStatement({
             { yPercent: 0, duration: 0.1, stagger: 0.012, ease: "power3.out" },
             0.44,
           );
-
-        if (desktop && l2) {
-          tl.fromTo(
-            l2,
-            { x: () => window.innerWidth * 0.22 },
-            { x: () => -(l2.scrollWidth - window.innerWidth * 0.8), duration: 0.5 },
-            0.44,
-          );
-        }
-        tl.fromTo(q("[data-note]"), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.06 }, 0.86);
+        tl.fromTo(q("[data-note]"), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.62);
         tl.set({}, {}, 1);
 
         return () => {
@@ -124,17 +114,17 @@ export function ScrollStatement({
       aria-label={eyebrow}
       data-theme="dark"
       data-nav-theme="dark"
-      className="statement relative bg-black motion-safe:h-[230svh] lg:motion-safe:h-[340vh]"
+      className="statement relative bg-black motion-safe:h-[200svh] lg:motion-safe:h-[260vh]"
     >
       <div className="sticky top-0 h-svh overflow-hidden motion-reduce:static motion-reduce:h-auto">
-        {/* Black stage — the claim we reject */}
+        {/* Black stage — what the client brings */}
         <div className="absolute inset-0 flex flex-col justify-center bg-black text-paper motion-reduce:relative motion-reduce:py-(--section-y)">
           <div className="shell">
             <p className="label flex items-center gap-3 text-mute">
               <span aria-hidden="true" className="size-1.5 bg-signal" />
               {eyebrow}
             </p>
-            <h2 data-l1 className="mt-8 text-display-xl font-medium uppercase md:max-w-[14ch]">
+            <h2 data-l1 className="mt-8 max-w-[18ch] text-display-l font-medium">
               {words.map(({ word, em }, i) => (
                 <Fragment key={i}>
                   <span className="-my-[0.16em] inline-block overflow-clip py-[0.16em] align-top">
@@ -142,9 +132,9 @@ export function ScrollStatement({
                       {word}
                       {em && (
                         <span
-                          data-strike
+                          data-mark
                           aria-hidden="true"
-                          className="absolute top-[52%] -right-[0.04em] -left-[0.04em] block h-[0.07em] origin-left bg-signal motion-safe:scale-x-0"
+                          className="absolute -right-[0.02em] bottom-[0.02em] -left-[0.02em] block h-[0.08em] origin-left bg-signal motion-safe:scale-x-0"
                         />
                       )}
                     </span>
@@ -156,23 +146,20 @@ export function ScrollStatement({
           </div>
         </div>
 
-        {/* Paper stage — what we actually do */}
+        {/* Paper stage — what we do about it */}
         <div
           data-wipe
           data-theme="light"
           className="absolute inset-0 flex flex-col justify-center bg-bg text-fg motion-safe:[clip-path:inset(100%_0%_0%_0%)] motion-reduce:relative motion-reduce:py-(--section-y)"
         >
-          <div className="overflow-hidden">
-            <p
-              data-l2
-              className="px-(--page-x) text-display-xl font-medium uppercase lg:motion-safe:w-max lg:motion-safe:whitespace-nowrap lg:motion-safe:px-0"
-            >
+          <div className="shell">
+            <p data-l2 className="max-w-[18ch] text-display-l font-medium">
               <MaskedWords text={line2} />
             </p>
+            <p data-note className="mt-10 max-w-[44ch] text-lead text-fg-mute">
+              {note}
+            </p>
           </div>
-          <p data-note className="shell mt-12 max-w-[30ch] text-lead text-fg-mute">
-            {note}
-          </p>
         </div>
       </div>
     </section>

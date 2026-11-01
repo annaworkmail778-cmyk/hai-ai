@@ -66,7 +66,7 @@ export function ProblemStory({ t }: { t: Dictionary["problems"] }) {
                       i === active ? "w-10 bg-signal" : "w-4 bg-rule-strong",
                     )}
                   />
-                  <span className={cn("text-small transition-colors", i === active ? "text-fg" : "text-fg-mute")}>
+                  <span className={cn("text-body transition-colors", i === active ? "text-fg" : "text-fg-mute")}>
                     {item.title}
                   </span>
                 </li>
@@ -81,7 +81,7 @@ export function ProblemStory({ t }: { t: Dictionary["problems"] }) {
               key={item.title}
               data-problem={i}
               data-active={i === active}
-              className="group border-t border-rule py-14 transition-opacity duration-(--dur-reveal) ease-out lg:flex lg:min-h-[68vh] lg:flex-col lg:justify-center lg:py-20 lg:motion-safe:opacity-25 lg:motion-safe:data-[active=true]:opacity-100"
+              className="group border-t border-rule py-14 transition-opacity duration-(--dur-reveal) ease-out lg:flex lg:min-h-[54vh] lg:flex-col lg:justify-center lg:py-20 lg:motion-safe:opacity-45 lg:motion-safe:data-[active=true]:opacity-100"
             >
               <p className="label text-fg-mute">{pad2(i + 1)}</p>
               <h3 className="mt-5 text-display-m font-medium">{item.title}</h3>

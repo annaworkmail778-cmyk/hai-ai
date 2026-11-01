@@ -8,12 +8,13 @@ export const corporateWebExperience: Project = {
   id: "p-corporate-web-experience",
   slug: "corporate-web-experience",
   status: "concept",
-  featured: true,
+  featured: false,
   order: 6,
   year: 2025,
   capabilities: ["web-experiences", "custom-software"],
   technologies: ["Next.js", "React", "TypeScript", "Three.js", "GSAP", "Headless CMS", "Vercel"],
   theme: "light",
+  demo: "web",
   coverImage: {
     kind: "composition",
     id: "web-editorial",
@@ -24,42 +25,8 @@ export const corporateWebExperience: Project = {
       ru: "Редакционный корпоративный сайт в браузере и на телефоне: крупный заголовок над архитектурным чертежом фасада.",
     },
   },
-  gallery: [
-    {
-      layout: "full",
-      visual: {
-        kind: "composition",
-        id: "web-system",
-        alt: {
-          en: "Design system sheet: type scale, twelve-column grid, colour tokens and interface components.",
-          hy: "Դիզայն համակարգի թերթ՝ տառատեսակների սանդղակ, տասներկու սյունականի ցանց, գույներ և ինտերֆեյսի բաղադրիչներ։",
-          ru: "Лист дизайн-системы: типографическая шкала, 12-колоночная сетка, цветовые токены и компоненты интерфейса.",
-        },
-      },
-      caption: {
-        en: "A design system the team can extend without breaking the experience.",
-        hy: "Դիզայն համակարգ, որը թիմը կարող է ընդլայնել՝ առանց փորձառությունը խաթարելու։",
-        ru: "Дизайн-система, которую команда может развивать, не ломая впечатление.",
-      },
-    },
-    {
-      layout: "split-left",
-      visual: {
-        kind: "composition",
-        id: "web-flow",
-        alt: {
-          en: "Content architecture: structured content in three languages flows through a CMS and templates to edge delivery.",
-          hy: "Բովանդակության ճարտարապետություն՝ երեք լեզվով կառուցվածքային բովանդակությունը CMS-ով և ձևանմուշներով հասնում է առաքման։",
-          ru: "Архитектура контента: структурированный контент на трёх языках через CMS и шаблоны доходит до доставки.",
-        },
-      },
-      caption: {
-        en: "One content model publishes every page in Armenian, Russian and English.",
-        hy: "Մեկ բովանդակային մոդելը հրապարակում է յուրաքանչյուր էջ հայերեն, ռուսերեն և անգլերեն։",
-        ru: "Одна модель контента публикует каждую страницу на армянском, русском и английском.",
-      },
-    },
-  ],
+  // Real screenshots go here once available (see PROJECT_CONTENT_GUIDE.md); the interactive demo shows the system meanwhile.
+  gallery: [],
   system: {
     nodes: [
       { id: "content", group: "input", label: { en: "Structured content", hy: "Կառուցվածքային բովանդակություն", ru: "Структурированный контент" } },

@@ -40,51 +40,30 @@ file (see PROJECT_CONTENT_GUIDE.md).
 
 ## Per project
 
-All six projects are **demo concepts**. Replace them with real client work
-when it is cleared for publication, rather than "upgrading" a concept with
-imagery that suggests it was a real engagement.
+All six projects are **examples** (marked "Example" on the site). Each one
+is explained by an interactive, coded demo (`src/components/demos/`), so it
+needs no imagery to work. When you publish **real client work**, give each
+project:
 
-### AI Lead Management System — `ai-lead-management`
-| Slot | Current composition | Replace with |
-| --- | --- | --- |
-| Cover | `lead-pipeline` | Real CRM/pipeline screen with a lead's qualification detail open. |
-| Gallery 1 (`split-right`) | `lead-conversation` | The AI qualification conversation next to the extracted lead card. |
-| Gallery 2 (`full`) | `lead-flow` | System diagram, or a photo of the sales team's real workspace. |
+| Slot | What to provide |
+| --- | --- |
+| Cover | One strong image of the product or the result (also used for cards, previews and the share image). |
+| Screens (`gallery`) | Two to four real screenshots or photos, with a one-line caption each. |
+| Film (optional) | A short screen recording of the system in use, with a poster frame. |
 
-### Real Estate Sales Platform — `real-estate-sales-platform`
-| Slot | Current composition | Replace with |
-| --- | --- | --- |
-| Cover | `realestate-plan` | Interactive floor plan / unit selector screen, or an architectural photo of the development with the interface. |
-| Gallery 1 (`full`) | `realestate-matrix` | Live unit availability matrix (chessboard) screen. |
-| Gallery 2 (`inset`) | `realestate-mobile` | Buyer flow on phones: unit page, reservation, confirmation. |
+Replace the examples with real projects rather than "upgrading" an example
+with imagery that suggests it was a real engagement.
 
-### Appointment & Booking Automation — `booking-automation`
-| Slot | Current composition | Replace with |
-| --- | --- | --- |
-| Cover | `booking-calendar` | Staff calendar with automated confirmations and reminders. |
-| Gallery 1 (`full`) | `booking-mobile` | Client booking flow on phones. |
-| Gallery 2 (`split-left`) | `booking-flow` | System diagram or reception desk photo (no patient data). |
+### Covers of the current examples (coded compositions)
 
-### Business Operations Dashboard — `operations-dashboard`
-| Slot | Current composition | Replace with |
+| Project | Composition | Suggested real replacement |
 | --- | --- | --- |
-| Cover | `ops-dashboard` | The live dashboard on a large screen, real but anonymised data. |
-| Gallery 1 (`full`) | `ops-timeline` | Order/production timeline view. |
-| Gallery 2 (`split-right`) | `ops-flow` | System diagram, or the dashboard in use on the floor. |
-
-### AI Customer Support System — `ai-customer-support`
-| Slot | Current composition | Replace with |
-| --- | --- | --- |
-| Cover | `support-inbox` | Support inbox with an AI-drafted reply and its sources. |
-| Gallery 1 (`inset`) | `support-knowledge` | Knowledge base / retrieval management screen. |
-| Gallery 2 (`full`) | `support-flow` | System diagram or escalation dashboard. |
-
-### Premium Corporate Web Experience — `corporate-web-experience`
-| Slot | Current composition | Replace with |
-| --- | --- | --- |
-| Cover | `web-editorial` (focus left) | Desktop + phone captures of the live site. |
-| Gallery 1 (`full`) | `web-system` | Design-system sheet (type, colour, components). |
-| Gallery 2 (`split-left`) | `web-flow` | Content architecture diagram or a scroll sequence. |
+| AI lead management | `lead-pipeline` | CRM / inquiry list with an AI-filled card |
+| Real estate sales platform | `realestate-plan` | Apartment selector or availability board |
+| Booking automation | `booking-calendar` | Staff calendar with online bookings |
+| Operations dashboard | `ops-dashboard` | The live dashboard on a large screen |
+| AI customer support | `support-inbox` | Support inbox with an AI reply and its sources |
+| Corporate website | `web-editorial` | Desktop and phone captures of the live site |
 
 ## Site-wide
 
