@@ -67,7 +67,7 @@ export const brand = {
 
   email: "riseup.group.2026@gmail.com",
   /** Leave empty to hide the phone everywhere. Format: "+374 77 200 433". */
-  phone: "" as string,
+  phone: "+374 77 200 433" as string,
   address: {
     street: "",
     city: { en: "Yerevan", hy: "Երևան", ru: "Ереван" } satisfies Localized,

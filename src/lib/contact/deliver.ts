@@ -40,20 +40,21 @@ export function configuredChannels(): Channel[] {
   return channels;
 }
 
-/** Human-readable lines shared by the Telegram and email messages. */
+/** Human-readable lines (in Armenian, for the owner) shared by the Telegram and email messages. */
 function describe(payload: ContactPayload, receivedAt: string) {
-  const areaNames = getDictionary("en").diagnostic.categories;
+  const areaNames = getDictionary("hy").diagnostic.categories;
   const areas = payload.areas.map((id) => areaNames.find((c) => c.id === id)?.name ?? id);
+  const time = new Date(receivedAt).toLocaleString("en-GB", { timeZone: brand.address.timeZone, dateStyle: "short", timeStyle: "short" });
   return [
-    ["Name", payload.name],
-    ["Company", payload.company || "—"],
-    ["Contact", payload.contact],
-    ["Business", payload.business],
-    ["Wants to improve", payload.improve],
-    ["Slow process", payload.process || "—"],
-    ["Areas", areas.length ? areas.join(", ") : "—"],
-    ["Language", payload.locale.toUpperCase()],
-    ["Received", receivedAt],
+    ["Անուն", payload.name],
+    ["Ընկերություն", payload.company || "—"],
+    ["Կոնտակտ", payload.contact],
+    ["Բիզնես", payload.business],
+    ["Ինչ է ուզում", payload.improve],
+    ["Դանդաղ գործընթաց", payload.process || "—"],
+    ["Ոլորտներ", areas.length ? areas.join(", ") : "—"],
+    ["Կայքի լեզու", payload.locale.toUpperCase()],
+    ["Ստացվել է", `${time} (Երևան)`],
   ] as const;
 }
 
@@ -84,7 +85,7 @@ const escapeHtml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g,
 
 async function sendTelegram(payload: ContactPayload, receivedAt: string) {
   const lines = describe(payload, receivedAt).map(([k, v]) => `<b>${escapeHtml(k)}:</b> ${escapeHtml(v)}`);
-  const text = [`<b>New inquiry — ${escapeHtml(brand.companyName)}</b>`, "", ...lines].join("\n");
+  const text = [`<b>🔔 Նոր հայտ կայքից — ${escapeHtml(brand.companyName)}</b>`, "", ...lines].join("\n");
   await post(`https://api.telegram.org/bot${env("TELEGRAM_BOT_TOKEN")}/sendMessage`, {
     chat_id: env("TELEGRAM_CHAT_ID"),
     text: text.length > 4000 ? `${text.slice(0, 3990)}…` : text,
@@ -105,7 +106,7 @@ async function sendEmail(payload: ContactPayload, receivedAt: string) {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
-      subject: `New inquiry: ${payload.name}${payload.company ? ` (${payload.company})` : ""}`,
+      subject: `Նոր հայտ՝ ${payload.name}${payload.company ? ` (${payload.company})` : ""}`,
       text,
       ...(isEmail(payload.contact) ? { reply_to: payload.contact } : {}),
     },
