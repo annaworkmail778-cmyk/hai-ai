@@ -25,7 +25,7 @@ export const projectTemplate: Project = {
   order: 10,
   year: 2026,
   // Ids from src/config/navigation.ts → capabilityOrder
-  capabilities: ["custom-software"],
+  capabilities: ["ai-admin"],
   technologies: ["Next.js", "PostgreSQL"],
   theme: "dark",
 
@@ -36,8 +36,8 @@ export const projectTemplate: Project = {
     // position: "50% 30%",  // optional focal point (CSS object-position)
   },
 
-  // Optional interactive demo (src/components/demos/registry.ts), e.g. "booking".
-  // demo: "booking",
+  // Optional interactive demo (src/components/demos/registry.ts), e.g. "salon".
+  // demo: "salon",
 
   // Optional film, played only when the visitor presses play.
   // video: { src: "/projects/your-slug/film.mp4", poster: "/projects/your-slug/film-poster.jpg" },

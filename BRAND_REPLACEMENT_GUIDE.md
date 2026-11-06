@@ -4,10 +4,10 @@ The site launches with neutral placeholders:
 
 | Placeholder | Value |
 | --- | --- |
-| Company name | `YOUR COMPANY` |
+| Company name | `Riseup` (set) |
 | Tagline | *Technology built around business.* |
 | Description | *AI, automation and software systems for modern businesses.* |
-| Email / phone | `hello@example.com` / `+374 00 000 000` |
+| Email / phone | `riseup.group.2026@gmail.com` (set) / phone empty = hidden |
 | Domain | `https://www.example.com` |
 | Logo | A placeholder glyph (a frame holding one orange module) + the name |
 

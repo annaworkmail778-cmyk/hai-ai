@@ -69,14 +69,14 @@ These are not optional.
 | `featured` | `true` shows it in the homepage **Examples** section, next to its demo. Three or four featured projects work best. |
 | `order` | Sort order (ascending) everywhere. Ties are sorted newest first. |
 | `year` | Year shown on cards and in the case study. |
-| `capabilities` | Ids from `src/config/navigation.ts`: `ai-systems`, `automation`, `custom-software`, `business-applications`, `web-experiences`, `sales-systems`, `internal-tools`. They drive the work filters and the "Related work" lists. |
+| `capabilities` | Ids from `src/config/navigation.ts`: `ai-admin`, `orders`, `real-estate`, `marketing`, `websites`. They drive the work filters and the "Related work" lists. |
 | `technologies` | Shown under "Under the hood" and in the JSON-LD keywords. |
 | `theme` | `"dark"` or `"light"`: colour mood of the case study and its "next project" panel. |
 | `coverImage` | A `Visual` (below). Used for cards, the case-study hero and previews. |
 | `gallery` | Ordered list of `{ visual, layout, caption? }` — real screenshots or photos, shown as a "Screens" section. Leave empty (`[]`) until you have real material. |
 | `video` | Optional `{ src, poster }` film, shown with the screens; plays only when pressed. |
 | `system` | Nodes and edges of the "How it connects" diagram (below). |
-| `demo` | Optional id of an interactive step-by-step demo from `src/components/demos/registry.ts` (`lead`, `booking`, `realestate`, `support`, `ops`, `web`). When set, the case study and the homepage show it instead of a static cover. |
+| `demo` | Optional id of an interactive step-by-step demo from `src/components/demos/registry.ts` (`salon`, `shop`, `realestate`, `marketing`, `web`). When set, the case study and the homepage show it instead of a static cover. |
 | `content.en` / `.hy` / `.ru` | All text (below). |
 
 ### Visuals
@@ -152,7 +152,7 @@ A demo shows two screens — what the customer sees (a phone) and what the
 team sees (an app window) — and a plain caption for every step, in all three
 languages.
 
-- **Use an existing demo:** set `demo: "booking"` (or another id) in the
+- **Use an existing demo:** set `demo: "salon"` (or another id) in the
   project file.
 - **Write a new one:** copy the closest demo file, change the steps
   (`steps.en/hy/ru` — a title and one or two sentences each), the screen

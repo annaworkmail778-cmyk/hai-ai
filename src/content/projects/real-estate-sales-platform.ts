@@ -9,9 +9,9 @@ export const realEstateSalesPlatform: Project = {
   slug: "real-estate-sales-platform",
   status: "concept",
   featured: true,
-  order: 2,
+  order: 3,
   year: 2026,
-  capabilities: ["business-applications", "sales-systems", "custom-software", "web-experiences"],
+  capabilities: ["real-estate"],
   technologies: ["Next.js", "TypeScript", "PostgreSQL", "Supabase", "Three.js", "Telegram Bot API"],
   theme: "light",
   demo: "realestate",
@@ -51,7 +51,7 @@ export const realEstateSalesPlatform: Project = {
   },
   content: {
     en: {
-      title: "Real Estate Sales Platform",
+      title: "Real estate sales system",
       subtitle: "Live availability, reservations and buyer journeys for residential developments.",
       client: "Concept study — residential developer",
       industry: "Real estate development",
@@ -98,7 +98,7 @@ export const realEstateSalesPlatform: Project = {
       ],
     },
     hy: {
-      title: "Անշարժ գույքի վաճառքի հարթակ",
+      title: "Անշարժ գույքի վաճառքի համակարգ",
       subtitle: "Կենդանի հասանելիություն, ամրագրումներ և գնորդի ճանապարհ բնակելի նախագծերի համար։",
       client: "Կոնցեպտ ուսումնասիրություն՝ բնակելի շինարարության կառուցապատող",
       industry: "Անշարժ գույքի կառուցապատում",
@@ -145,7 +145,7 @@ export const realEstateSalesPlatform: Project = {
       ],
     },
     ru: {
-      title: "Платформа продаж недвижимости",
+      title: "Система продаж недвижимости",
       subtitle: "Живая доступность, бронирование и путь покупателя для жилых комплексов.",
       client: "Концепт — девелопер жилой недвижимости",
       industry: "Девелопмент",

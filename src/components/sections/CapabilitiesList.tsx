@@ -5,6 +5,7 @@ import { capabilityOrder } from "@/config/navigation";
 import { getProjectsByCapability } from "@/content/projects";
 import { projectContent } from "@/content/localize";
 import { ProjectVisual } from "@/components/portfolio/ProjectVisual";
+import { DemoPoster } from "@/components/demos/DemoStage";
 import { RevealText } from "@/components/motion/Reveal";
 import { DrawRule } from "@/components/motion/DrawRule";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -27,7 +28,13 @@ export function CapabilitiesList({ locale, dict }: { locale: Locale; dict: Dicti
       previewIndex = previewSlugs.indexOf(project.slug);
       if (previewIndex === -1) {
         previewIndex = previewSlugs.push(project.slug) - 1;
-        previews.push(<ProjectVisual key={project.slug} visual={project.coverImage} locale={locale} sizes="24rem" />);
+        previews.push(
+          project.demo ? (
+            <DemoPoster key={project.slug} id={project.demo} locale={locale} />
+          ) : (
+            <ProjectVisual key={project.slug} visual={project.coverImage} locale={locale} sizes="24rem" />
+          ),
+        );
       }
     }
     return {

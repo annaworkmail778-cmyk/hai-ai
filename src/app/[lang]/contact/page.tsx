@@ -43,7 +43,7 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
       name: brand.companyName,
       url: brand.siteUrl,
       email: brand.email,
-      telephone: brand.phone,
+      ...(brand.phone ? { telephone: brand.phone } : {}),
       address: {
         "@type": "PostalAddress",
         addressLocality: brand.address.city.en,
@@ -72,21 +72,23 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
             <div className="lg:sticky lg:top-[calc(var(--nav-h)+2.5rem)]">
               <p className="label text-fg-mute">{t.direct}</p>
               <ul className="mt-6 space-y-2 text-title">
-                <li>
+                <li className="[overflow-wrap:anywhere]">
                   <a href={`mailto:${brand.email}`} className="link-underline">
                     {brand.email}
                   </a>
                 </li>
-                <li>
-                  <a href={`tel:${tel}`} className="link-underline">
-                    {brand.phone}
-                  </a>
-                </li>
+                {brand.phone && (
+                  <li>
+                    <a href={`tel:${tel}`} className="link-underline">
+                      {brand.phone}
+                    </a>
+                  </li>
+                )}
               </ul>
               <p className="mt-6 text-body text-fg-mute">
                 {brand.address.city[lang]}, {brand.address.country[lang]}
               </p>
-              <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-rule pt-6">
+              <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-rule pt-6 empty:hidden">
                 {brand.socialLinks.map((s) => (
                   <li key={s.label}>
                     <a

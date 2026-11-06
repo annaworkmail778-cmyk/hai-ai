@@ -39,10 +39,14 @@ export function DemoStage({
       aria-hidden="true"
       data-theme="dark"
       className={cn(
-        "relative overflow-hidden rounded-md bg-graphite p-4 [background-image:linear-gradient(rgb(255_255_255/0.03)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/0.03)_1px,transparent_1px)] [background-size:32px_32px] @2xl:p-6",
+        "relative isolate overflow-hidden rounded-xl bg-[#0b0b0c] p-4 @2xl:p-6",
         fill && "h-full",
       )}
     >
+      {/* Soft light behind the screens */}
+      <span className="pointer-events-none absolute -top-1/3 -left-1/4 -z-10 size-[70%] animate-demo-float rounded-full bg-[radial-gradient(circle,rgb(255_91_20/0.22),transparent_65%)] motion-reduce:animate-none" />
+      <span className="pointer-events-none absolute -right-1/4 -bottom-1/3 -z-10 size-[75%] animate-demo-float rounded-full bg-[radial-gradient(circle,rgb(120_110_255/0.14),transparent_65%)] [animation-delay:-4s] motion-reduce:animate-none" />
+      <span className="pointer-events-none absolute inset-0 -z-10 [background-image:radial-gradient(rgb(255_255_255/0.06)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" />
       <div
         className={cn(
           "grid gap-5 @2xl:grid-cols-[minmax(13rem,0.42fr)_minmax(0,1fr)]",

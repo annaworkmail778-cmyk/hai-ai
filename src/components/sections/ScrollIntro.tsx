@@ -286,7 +286,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
               </ArrowLink>
             </div>
           </div>
-          <div className="mt-8 hidden items-center gap-6 motion-reduce:hidden lg:absolute lg:right-(--page-x) lg:bottom-[max(1.75rem,5vh)] lg:mt-0 lg:flex">
+          <div className="mt-8 hidden items-center gap-6 motion-reduce:hidden lg:absolute lg:right-(--page-x) lg:bottom-[max(1.75rem,5vh)] lg:mt-0 lg:motion-safe:flex">
             <div className="flex items-center gap-3 text-paper/80">
               <span className="label">{intro.scroll}</span>
               <span aria-hidden="true" className="relative block h-12 w-px overflow-hidden bg-paper/15">
@@ -314,14 +314,14 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         </div>
 
         {/* Scene 04 — what we build */}
-        <div className="intro-build shell absolute inset-x-0 bottom-0 z-[4] pb-[max(2rem,6vh)] motion-reduce:hidden lg:top-0 lg:flex lg:flex-col lg:justify-center lg:pt-(--nav-h) lg:pb-0">
+        <div className="intro-build shell absolute inset-x-0 bottom-0 z-[4] pb-[max(2rem,6vh)] motion-reduce:hidden lg:top-0 lg:motion-safe:flex lg:flex-col lg:justify-center lg:pt-(--nav-h) lg:pb-0">
           <div className="lg:max-w-[46%]">
             <h2 ref={buildRef} tabIndex={-1} data-build-title className="text-display-m font-medium text-paper outline-none">
               <MaskedWords text={intro.build.title} />
             </h2>
-            <ul className="mt-8 border-t border-paper/15">
+            <ul className="mt-8">
               {intro.build.items.map((item, i) => (
-                <li key={item} data-build-rest className="flex items-baseline gap-4 border-b border-paper/15 py-3.5 text-title text-paper">
+                <li key={item} data-build-rest className="flex items-baseline gap-4 border-b border-paper/15 py-3.5 text-title text-paper first:border-t">
                   <span className="label text-mute">{pad2(i + 1)}</span>
                   {item}
                 </li>

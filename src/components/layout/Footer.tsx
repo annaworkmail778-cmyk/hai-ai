@@ -60,22 +60,24 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div className="col-span-4 md:col-span-3 lg:col-span-2">
             <ColumnTitle>{t.contact}</ColumnTitle>
             <ul className="space-y-3">
-              <li>
+              <li className="[overflow-wrap:anywhere]">
                 <a href={`mailto:${brand.email}`} className="link-underline pb-0.5">
                   {brand.email}
                 </a>
               </li>
-              <li>
-                <a href={`tel:${brand.phone.replace(/\s+/g, "")}`} className="link-underline pb-0.5 text-fg/85">
-                  {brand.phone}
-                </a>
-              </li>
+              {brand.phone && (
+                <li>
+                  <a href={`tel:${brand.phone.replace(/\s+/g, "")}`} className="link-underline pb-0.5 text-fg/85">
+                    {brand.phone}
+                  </a>
+                </li>
+              )}
               <li className="text-fg-mute">
                 {brand.address.city[locale]}, {brand.address.country[locale]}
               </li>
             </ul>
-            <h2 className="label mt-10 mb-4 text-fg-mute">{t.social}</h2>
-            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            {brand.socialLinks.length > 0 && <h2 className="label mt-10 mb-4 text-fg-mute">{t.social}</h2>}
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 empty:hidden">
               {brand.socialLinks.map((s) => (
                 <li key={s.label}>
                   <a

@@ -1,11 +1,10 @@
 import type { CapabilityId } from "@/config/navigation";
 import type { Project } from "../types";
 
-import { aiLeadManagement } from "./ai-lead-management";
+import { salonAiAdmin } from "./salon-ai-admin";
+import { instagramShopOrders } from "./instagram-shop-orders";
 import { realEstateSalesPlatform } from "./real-estate-sales-platform";
-import { bookingAutomation } from "./booking-automation";
-import { operationsDashboard } from "./operations-dashboard";
-import { aiCustomerSupport } from "./ai-customer-support";
+import { localMarketing } from "./local-marketing";
 import { corporateWebExperience } from "./corporate-web-experience";
 
 /**
@@ -14,11 +13,10 @@ import { corporateWebExperience } from "./corporate-web-experience";
  * Pages, routes, sitemap and metadata are generated from this list.
  */
 const registry: Project[] = [
-  aiLeadManagement,
+  salonAiAdmin,
+  instagramShopOrders,
   realEstateSalesPlatform,
-  bookingAutomation,
-  operationsDashboard,
-  aiCustomerSupport,
+  localMarketing,
   corporateWebExperience,
 ];
 

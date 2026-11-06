@@ -1,4 +1,23 @@
-# YOUR COMPANY — studio website
+# Riseup — website
+
+Riseup builds AI tools for small businesses in Armenia. Five products, each with
+an interactive demo and fixed prices:
+
+| Product | Capability id | Demo | Prices (AMD) |
+|---|---|---|---|
+| AI administrator + booking | `ai-admin` | `salon` | Start 60 000 + 20 000/mo · Pro 120 000 + 35 000/mo |
+| Order system for online shops | `orders` | `shop` | from 90 000 + 25 000/mo |
+| Real-estate system | `real-estate` | `realestate` | from 180 000 + 35 000/mo |
+| Instagram & Google marketing | `marketing` | `marketing` | 25 000/mo · 60 000/mo |
+| Websites | `websites` | `web` | from 120 000 + 10 000/mo · from 210 000 + 18 000/mo |
+
+**Change prices in `src/config/pricing.ts`** (amounts) and `src/locales/*.json →
+pricing.plans` (names and feature lists). They appear on the homepage, `/pricing`
+and `/solutions`. Company name, email, phone and social links live in
+`src/config/brand.ts`; an empty `phone` or `socialLinks` is hidden everywhere.
+
+---
+
 
 **Technology built around business.**
 A trilingual (Armenian · Russian · English) portfolio site for a studio that

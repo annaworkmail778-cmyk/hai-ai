@@ -1,27 +1,31 @@
 {
   "meta": {
     "home": {
-      "title": "AI, automation & custom software studio",
-      "description": "We design AI systems, automation and custom software that improve sales, operations and customer experience."
+      "title": "AI administrator, booking, orders & websites for business in Armenia",
+      "description": "Riseup builds AI tools for small businesses in Armenia: an AI administrator for Instagram and WhatsApp, online booking, order systems, Google marketing and websites. Launch prices from 60 000 ֏."
     },
     "work": {
-      "title": "Work",
-      "description": "Selected systems, platforms and digital products — each presented as a case study, from business problem to working system."
+      "title": "Examples",
+      "description": "Interactive examples: an AI administrator for a salon, orders for an Instagram shop, a real-estate system, marketing for a café and a company website."
     },
     "solutions": {
-      "title": "Solutions",
-      "description": "AI systems, automation, custom software, business applications, web experiences, sales systems and internal tools."
+      "title": "Products",
+      "description": "Five Riseup products: AI administrator with booking, order system, real-estate system, Instagram & Google marketing, and websites."
     },
     "about": {
       "title": "About",
-      "description": "A studio for business systems: business understanding, systems thinking, design and engineering in one team."
+      "description": "Riseup is a small team in Yerevan that builds AI tools for local businesses."
     },
     "contact": {
-      "title": "Start a project",
-      "description": "Tell us what slows your business down. We will find the system that removes it."
+      "title": "Get a free demo",
+      "description": "Tell us about your business. We'll show you how Riseup would work for it — for free."
     },
     "notFound": {
       "title": "Page not found"
+    },
+    "pricing": {
+      "title": "Prices",
+      "description": "Riseup prices in Armenian dram: AI administrator from 60 000 ֏, orders from 90 000 ֏, marketing from 25 000 ֏ a month, websites from 120 000 ֏."
     }
   },
   "common": {
@@ -37,12 +41,12 @@
   },
   "nav": {
     "home": "Home",
-    "work": "Work",
-    "solutions": "Solutions",
-    "process": "Process",
+    "work": "Examples",
+    "solutions": "Products",
+    "pricing": "Prices",
     "about": "About",
     "contact": "Contact",
-    "cta": "Start a project",
+    "cta": "Free demo",
     "menu": "Menu",
     "close": "Close",
     "language": "Language",
@@ -66,44 +70,44 @@
     "statement": "Together, they do the routine work for your team.",
     "sceneLabel": "3D model of a business system: four connected layers — data, software, automation and AI.",
     "build": {
-      "title": "What we can build for you",
+      "title": "What Riseup does for you",
       "items": [
-        "AI assistants for chats and calls",
-        "Automations between your programs",
-        "CRM and business apps",
-        "Websites that bring in clients"
+        "Answers Instagram & WhatsApp 24/7",
+        "Books visits and reminds clients",
+        "Takes orders for online shops",
+        "Websites and Google marketing"
       ],
-      "cta": "See how they work"
+      "cta": "See how it works"
     }
   },
   "hero": {
-    "eyebrow": "AI · Automation · Software",
-    "title": "We build AI assistants, automations and software for your business.",
-    "lead": "Less manual work for your team. Faster answers for your customers. Clear numbers for you.",
-    "primary": "See examples",
-    "secondary": "Start a project"
+    "eyebrow": "AI tools for business in Armenia",
+    "title": "Your clients get an answer in seconds. Even at night.",
+    "lead": "Riseup answers messages, books visits, takes orders and brings reviews — for salons, clinics, shops, agencies and cafés.",
+    "primary": "See how it works",
+    "secondary": "See prices"
   },
   "statement": {
-    "eyebrow": "How we work",
-    "line1": "You tell us what *slows* your business down.",
-    "line2": "We build the system that fixes it.",
-    "note": "A chatbot, a CRM, an automation or a website — whatever the problem needs, connected into one working system."
+    "eyebrow": "The idea",
+    "line1": "Your clients write *at 23:00*.",
+    "line2": "Riseup answers them for you.",
+    "note": "An AI administrator that knows your prices, books the visit and sends you a short note in Telegram. You sleep — the business keeps working."
   },
   "featured": {
     "eyebrow": "Examples",
-    "title": "See how it works in practice.",
-    "intro": "Each example shows a common business problem and the system that solves it. Press play, or go through the steps yourself.",
+    "title": "See how it works.",
+    "intro": "Each example is a real day in a small business. It plays by itself — or go through the steps yourself.",
     "problem": "The problem",
     "built": "What we build",
     "result": "What changes",
     "open": "Open the full example",
-    "outroTitle": "More examples: a company website, a production dashboard and more.",
+    "outroTitle": "Also: a company website that brings in clients.",
     "outroLink": "See all examples"
   },
   "problems": {
     "eyebrow": "Problems we solve",
     "title": "Sound familiar?",
-    "intro": "These are the problems business owners tell us about most often — and how we fix them.",
+    "intro": "What owners of salons, clinics, shops and agencies tell us most often — and what Riseup does about it.",
     "labels": {
       "problem": "The problem",
       "system": "What we build",
@@ -111,117 +115,97 @@
     },
     "items": [
       {
-        "title": "Too much manual work",
-        "text": "Your team copies the same data between Excel, chats and programs.",
-        "system": "Automations that move the data for you.",
-        "outcome": "Your team gets time back for real work."
+        "title": "Messages at night stay unanswered",
+        "text": "A client writes at 23:00, nobody answers, and in the morning they've booked somewhere else.",
+        "system": "An AI administrator answers Instagram, WhatsApp and Telegram 24/7.",
+        "outcome": "Every client gets an answer."
       },
       {
-        "title": "Lost customer inquiries",
-        "text": "Messages come from Instagram, WhatsApp, the website and calls — and some never get an answer.",
-        "system": "One inbox for every inquiry, with an AI assistant that replies right away.",
-        "outcome": "Every customer gets an answer."
+        "title": "The same questions all day",
+        "text": "“How much is it?”, “Any free time?”, “Where are you?” — a hundred times a day.",
+        "system": "The AI knows your prices, hours and address and answers for you.",
+        "outcome": "Your administrator gets hours back."
       },
       {
-        "title": "Slow replies to customers",
-        "text": "Customers wait hours for answers to the same simple questions.",
-        "system": "An AI assistant that knows your products and rules, and calls a person for hard cases.",
-        "outcome": "Fast, correct answers — even at night."
+        "title": "Clients forget their visit",
+        "text": "The master waits, the client doesn't come, the hour is lost.",
+        "system": "Automatic reminders with “confirm” and “move” buttons.",
+        "outcome": "Fewer empty hours in the day."
       },
       {
-        "title": "Programs that don't talk to each other",
-        "text": "Your CRM, accounting and warehouse each show different numbers.",
-        "system": "We connect your programs so the data moves between them by itself.",
-        "outcome": "One set of numbers everyone trusts."
+        "title": "Orders get lost in Direct",
+        "text": "Orders are mixed with other messages, stock is counted in a notebook.",
+        "system": "The AI takes the order and puts it on one order board.",
+        "outcome": "Every order is delivered on time."
       },
       {
-        "title": "No clear view of sales",
-        "text": "You only see how sales went after the month is over.",
-        "system": "A live dashboard with your key numbers.",
-        "outcome": "Decisions based on today's numbers."
+        "title": "Buyers and listings get mixed up",
+        "text": "Requests come from list.am, Instagram and calls, and nobody remembers who wanted what.",
+        "system": "One list of buyers and listings, with reminders to call back.",
+        "outcome": "No interested buyer is forgotten."
       },
       {
-        "title": "Paperwork and reminders",
-        "text": "Invoices, reminders, reports and approvals take up the whole week.",
-        "system": "Automatic documents, reminders and approvals.",
-        "outcome": "Less admin and fewer mistakes."
+        "title": "No time for Instagram and Google",
+        "text": "Posts are rare, reviews are few, and people can't find you on the map.",
+        "system": "A monthly content plan, a cared-for Google profile and review requests.",
+        "outcome": "New clients find you more often."
       }
     ]
   },
   "capabilities": {
-    "eyebrow": "Services",
-    "title": "What we build",
-    "intro": "Seven services. Most projects combine two or three of them.",
-    "more": "All services",
+    "eyebrow": "Products",
+    "title": "Five products. One goal: more clients, less routine.",
+    "intro": "Start with one. Add more when you're ready.",
+    "more": "All products and details",
     "items": {
-      "ai-systems": {
-        "name": "AI assistants",
-        "summary": "Chatbots and assistants that answer customers, sort requests and prepare documents.",
+      "ai-admin": {
+        "name": "AI administrator + booking",
+        "summary": "Answers Instagram, WhatsApp and Telegram 24/7, books visits, reminds clients and asks for reviews.",
         "points": [
-          "Chat assistants for your website, Instagram and Telegram",
-          "Answers based on your own information",
-          "Reading and filling in documents",
-          "Sorting and summarising requests"
+          "Answers in Armenian, Russian and English",
+          "Booking right in the chat",
+          "Reminders on the day of the visit",
+          "Telegram alerts and a daily report"
         ]
       },
-      "automation": {
-        "name": "Automation",
-        "summary": "Routine tasks done automatically, between the programs you already use.",
+      "orders": {
+        "name": "Order system for online shops",
+        "summary": "The AI answers “Is it available? How much?”, takes the order and puts it on one board with delivery.",
         "points": [
-          "Data moved between programs automatically",
-          "Notifications and reminders",
-          "Approvals without chasing people",
-          "Reports that build themselves"
+          "Answers about price, size and stock",
+          "Every order on one board",
+          "Address sent to the courier in Telegram",
+          "Daily sales report"
         ]
       },
-      "custom-software": {
-        "name": "Custom software",
-        "summary": "Software made for how your team works — when ready-made programs don't fit.",
+      "real-estate": {
+        "name": "Real-estate system",
+        "summary": "Every buyer request and every listing in one place — for agencies and developers.",
         "points": [
-          "Web platforms and back-office systems",
-          "Connections to the programs you use",
-          "Replacing spreadsheets with a real system",
-          "Secure and ready to grow"
+          "Requests from list.am, Instagram and calls in one list",
+          "AI first reply and buyer questions",
+          "Matching buyers with listings",
+          "Reminders to call back"
         ]
       },
-      "business-applications": {
-        "name": "CRM & business apps",
-        "summary": "CRM, orders, warehouse and client portals, set up around your processes.",
+      "marketing": {
+        "name": "Instagram & Google marketing",
+        "summary": "Posts every week, a cared-for Google profile, more reviews and a simple monthly report.",
         "points": [
-          "A CRM that matches how you sell",
-          "Orders and warehouse management",
-          "Portals for clients and partners",
-          "Access rights for each role"
+          "12–16 posts a month",
+          "Google Maps profile setup and care",
+          "Automatic review requests and replies",
+          "Monthly report in plain words"
         ]
       },
-      "web-experiences": {
+      "websites": {
         "name": "Websites",
-        "summary": "Fast, clear websites that explain your business and bring in inquiries.",
+        "summary": "Fast, clear websites in three languages that bring inquiries — from a one-page site to a full company website.",
         "points": [
-          "Company and product websites",
-          "Interactive and 3D presentations",
-          "Three languages from one place",
-          "Fast loading and good search visibility"
-        ]
-      },
-      "sales-systems": {
-        "name": "Sales & inquiries",
-        "summary": "Every inquiry captured, answered and followed up — nothing gets lost.",
-        "points": [
-          "All channels in one inbox",
-          "AI that sorts and scores inquiries",
-          "Automatic follow-up messages",
-          "A live view of your sales"
-        ]
-      },
-      "internal-tools": {
-        "name": "Dashboards & tools",
-        "summary": "Dashboards and simple tools that save your team time every day.",
-        "points": [
-          "Live dashboards for managers",
-          "Admin panels",
-          "Reports and exports",
-          "Calculators and document generators"
+          "One-page site or full website",
+          "Armenian, Russian and English",
+          "Contact form and chat connected",
+          "Visible on Google"
         ]
       }
     }
@@ -388,34 +372,34 @@
     ]
   },
   "process": {
-    "eyebrow": "How we work",
-    "title": "Five clear steps.",
+    "eyebrow": "How we start",
+    "title": "From first call to launch.",
     "outputLabel": "You get",
     "steps": [
       {
-        "title": "Get to know your business",
-        "text": "We talk with you and your team and look at how the work is done today.",
-        "output": "A clear picture of the problem"
+        "title": "A free 20-minute call",
+        "text": "You tell us how you get clients and what takes too much time.",
+        "output": "A clear picture of what to fix first"
       },
       {
-        "title": "Find what to fix",
-        "text": "We choose the few changes that will save the most time or bring the most clients.",
-        "output": "A short plan with priorities"
+        "title": "A demo for your business",
+        "text": "We show how Riseup would answer your clients, with your prices and services.",
+        "output": "A demo you can try yourself"
       },
       {
-        "title": "Design the solution",
-        "text": "Before we build anything, we show you step by step how the system will work.",
-        "output": "A plan you can see and approve"
-      },
-      {
-        "title": "Build and launch",
-        "text": "We build it in small parts, test it with your team and launch it.",
+        "title": "Setup and launch",
+        "text": "We set everything up, connect your Instagram, WhatsApp or website, and test it with you.",
         "output": "A working system"
       },
       {
-        "title": "Support and improve",
-        "text": "We stay with you, fix what's needed and add new features as you grow.",
-        "output": "Ongoing support"
+        "title": "Training",
+        "text": "We show you and your team how to use it. It takes less than an hour.",
+        "output": "A team that knows what to do"
+      },
+      {
+        "title": "Monthly support",
+        "text": "We watch the answers, update prices and services, and add what you need.",
+        "output": "A system that stays correct"
       }
     ]
   },
@@ -487,37 +471,37 @@
     ]
   },
   "why": {
-    "eyebrow": "Why us",
+    "eyebrow": "Why Riseup",
     "items": [
       {
-        "title": "We start with your business",
-        "text": "First we understand how you sell and work. Technology comes second."
+        "title": "Made for Armenia",
+        "text": "The AI speaks Armenian, Russian and English and knows how business works here: Instagram, WhatsApp, Telegram."
       },
       {
-        "title": "Built for you",
-        "text": "We build around how your team works, instead of forcing you into someone else's program."
+        "title": "Launch prices",
+        "text": "We're new, so our first clients get low prices fixed in the contract."
       },
       {
-        "title": "Everything connected",
-        "text": "Your website, CRM, chats and reports work together as one system."
+        "title": "Start small",
+        "text": "Begin with one tool. Add booking, orders or marketing later, when you see the value."
       },
       {
-        "title": "We stay after launch",
-        "text": "We support what we build and improve it as your business grows."
+        "title": "We stay with you",
+        "text": "Monthly support is included: changes, new prices and help when you need it."
       }
     ]
   },
   "cta": {
     "eyebrow": "Next step",
-    "line1": "Tell us what takes too much time in your business.",
-    "line2": "We'll suggest how to fix it.",
-    "primary": "Start a project",
+    "line1": "Tell us about your business in two lines.",
+    "line2": "We'll show you a free demo made for it.",
+    "primary": "Get a free demo",
     "secondary": "Write to us"
   },
   "footer": {
-    "statement": "AI assistants, automation and software for businesses — built around how you work.",
+    "statement": "AI administrator, booking, orders, marketing and websites for businesses in Armenia.",
     "navigation": "Navigation",
-    "capabilities": "Capabilities",
+    "capabilities": "Products",
     "contact": "Contact",
     "social": "Social",
     "language": "Language",
@@ -526,15 +510,15 @@
     "backToTop": "Back to top"
   },
   "work": {
-    "eyebrow": "Work",
-    "title": "Examples of our work",
-    "intro": "Each example explains a business problem, shows step by step how the solution works, and what changes for the business.",
+    "eyebrow": "Examples",
+    "title": "Examples",
+    "intro": "Each example shows a common problem of a small business and how Riseup solves it, step by step.",
     "views": {
       "gallery": "Gallery",
       "index": "Index",
       "label": "View"
     },
-    "filterLabel": "Filter by service",
+    "filterLabel": "Filter by product",
     "all": "All",
     "columns": {
       "number": "No.",
@@ -576,157 +560,120 @@
     "underHood": "Under the hood"
   },
   "solutions": {
-    "eyebrow": "Services",
-    "title": "What we can build for your business.",
-    "intro": "Seven services. Pick the one closest to your problem — or just describe the problem, and we'll suggest the right mix.",
+    "eyebrow": "Products",
+    "title": "Five products for small businesses.",
+    "intro": "Every product solves one clear problem. Prices are fixed and shown below each one.",
     "labels": {
-      "problems": "Sounds familiar if…",
-      "deliverables": "What we build",
-      "examples": "For example",
-      "related": "See it in an example",
-      "discuss": "Talk to us about this"
+      "problems": "You need it if…",
+      "deliverables": "What you get",
+      "examples": "Good for",
+      "related": "See it in action",
+      "discuss": "Get a free demo",
+      "prices": "Prices"
     },
     "items": {
-      "ai-systems": {
-        "lead": "AI that does real work inside your business — grounded in your data, measured by what it changes.",
+      "ai-admin": {
+        "lead": "An administrator that never sleeps: answers every message, books visits, reminds clients and asks for reviews.",
         "problems": [
-          "Teams spend hours reading, sorting and answering the same requests",
-          "Knowledge sits in documents nobody can search",
-          "Decisions wait for someone to compile information"
+          "Messages at night and on weekends stay unanswered",
+          "Your administrator answers the same questions all day",
+          "Clients forget their visits"
         ],
         "deliverables": [
-          "AI agents with tools and guardrails",
-          "Assistants trained on internal knowledge",
-          "Document understanding and extraction",
-          "Evaluation and monitoring of AI quality"
+          "AI replies in Instagram, WhatsApp and Telegram",
+          "Online booking calendar for each master or doctor",
+          "Reminders with confirm and move buttons",
+          "Telegram alerts, review requests and a daily report"
         ],
         "examples": [
-          "Lead qualification agent",
-          "Support assistant with human handoff",
-          "Contract and invoice data extraction"
+          "Beauty salons and barbershops",
+          "Dental and medical clinics",
+          "Massage, cosmetology, fitness"
         ]
       },
-      "automation": {
-        "lead": "The repetitive steps between your tools, handled automatically and reliably.",
+      "orders": {
+        "lead": "Every order from Instagram and WhatsApp in one place — from the first question to delivery.",
         "problems": [
-          "Data copied between systems by hand",
-          "Approvals and notifications lost in chats",
-          "Reports rebuilt from scratch every week"
+          "Orders get lost among messages",
+          "Stock is counted by hand",
+          "The courier gets addresses by phone"
         ],
         "deliverables": [
-          "End-to-end workflow automation",
-          "Integrations between CRM, email, messengers and finance",
-          "Error handling, logging and alerts",
-          "Documentation your team can own"
+          "AI answers about products, prices and stock",
+          "Orders taken in the chat",
+          "Order board with statuses",
+          "Courier messages and a daily sales report"
         ],
         "examples": [
-          "Order-to-invoice flow",
-          "New-client onboarding sequence",
-          "Weekly management report generation"
+          "Clothing and cosmetics shops",
+          "Cakes, flowers and gifts",
+          "Food delivery"
         ]
       },
-      "custom-software": {
-        "lead": "When off-the-shelf software forces workarounds, we build the system your process actually needs.",
+      "real-estate": {
+        "lead": "A simple CRM for real estate: every request, every listing and every next call in one place.",
         "problems": [
-          "Critical work runs on fragile spreadsheets",
-          "Several tools stitched together with manual steps",
-          "Licences paid for features nobody uses"
+          "Requests from list.am, Instagram and calls get lost",
+          "Nobody remembers which buyer wanted what",
+          "Agents forget to call back"
         ],
         "deliverables": [
-          "Web platforms and back-office systems",
-          "APIs and data models",
-          "Integrations with existing tools",
-          "Secure, scalable infrastructure"
+          "All requests in one list",
+          "AI first reply and qualifying questions",
+          "Matching buyers with listings",
+          "Call-back reminders and a live availability view"
         ],
         "examples": [
-          "Production planning platform",
-          "Partner management system",
-          "Quote and pricing engine"
+          "Real-estate agencies",
+          "Independent agents",
+          "Residential developers"
         ]
       },
-      "business-applications": {
-        "lead": "CRM, operations and management applications fitted to how your company sells and delivers.",
+      "marketing": {
+        "lead": "Your Instagram and Google profile, taken care of every month — without hiring an SMM team.",
         "problems": [
-          "Generic CRM that nobody keeps up to date",
-          "No single place for clients, orders and documents",
-          "Access and permissions handled informally"
+          "No time to post on Instagram",
+          "Few reviews on Google",
+          "Old photos, hours or address on the map"
         ],
         "deliverables": [
-          "Custom CRM and pipelines",
-          "Order, inventory and resource management",
-          "Client and partner portals",
-          "Roles, permissions and audit trails"
+          "12–16 posts a month, approved by you",
+          "Google Business Profile setup and care",
+          "Automatic review requests and polite replies",
+          "A monthly report in plain words"
         ],
         "examples": [
-          "Real-estate sales CRM",
-          "Service operations hub",
-          "B2B client portal"
+          "Cafés and restaurants",
+          "Clinics and salons",
+          "Any local business"
         ]
       },
-      "web-experiences": {
-        "lead": "Websites and interactive experiences that explain complex value clearly — and convert.",
+      "websites": {
+        "lead": "A fast, clear website in three languages that explains what you do and brings inquiries.",
         "problems": [
-          "The website no longer reflects the company",
-          "Complex offers are hard to understand online",
-          "Slow pages and weak search visibility"
+          "You have no website, or it's old and slow",
+          "Clients can't understand your offer online",
+          "Nobody finds you on Google"
         ],
         "deliverables": [
-          "Corporate and product websites",
-          "Interactive 3D and scroll storytelling",
-          "Multilingual content architecture",
-          "Performance, accessibility and SEO"
+          "One-page site or full company website",
+          "Armenian, Russian and English",
+          "Contact form, WhatsApp and AI chat connected",
+          "Fast loading and Google visibility"
         ],
         "examples": [
-          "Corporate flagship website",
-          "Interactive product configurator",
-          "Investor and partner presentation site"
-        ]
-      },
-      "sales-systems": {
-        "lead": "Every inquiry captured, qualified and followed up — with leadership seeing the pipeline live.",
-        "problems": [
-          "Leads scattered across channels",
-          "Follow-up depends on individual memory",
-          "Forecasts built on guesswork"
-        ],
-        "deliverables": [
-          "Omnichannel lead capture",
-          "AI qualification and routing",
-          "Automated follow-up sequences",
-          "Pipeline and forecast dashboards"
-        ],
-        "examples": [
-          "Unified lead inbox",
-          "Sales pipeline with AI scoring",
-          "Booking-to-deal automation"
-        ]
-      },
-      "internal-tools": {
-        "lead": "Focused tools that remove daily friction for your team — fast to build, easy to use.",
-        "problems": [
-          "Teams switching between many tabs for one task",
-          "Managers lacking a live operational view",
-          "Manual exports and recalculations"
-        ],
-        "deliverables": [
-          "Operational dashboards",
-          "Admin and back-office panels",
-          "Calculators, generators and utilities",
-          "Reporting and data exports"
-        ],
-        "examples": [
-          "Operations dashboard",
-          "Pricing calculator",
-          "Document generator"
+          "Clinics, salons and services",
+          "Construction and manufacturing",
+          "Any company that needs a site"
         ]
       }
     }
   },
   "about": {
     "eyebrow": "About",
-    "title": "We help businesses work faster with AI, automation and software.",
-    "intro": "We are business analysts, designers and engineers in one team. First we understand how your company works, then we build the technology that fits it.",
-    "manifesto": "Good systems are almost invisible. People simply notice that work got easier.",
+    "title": "Riseup helps small businesses in Armenia work faster with AI.",
+    "intro": "We are a small team in Yerevan. We build simple AI tools that answer clients, take bookings and orders, and help businesses be found — at prices local businesses can afford.",
+    "manifesto": "Good technology is almost invisible. The owner simply notices that clients get answers and the day is less chaotic.",
     "approachTitle": "How we work",
     "approach": [
       {
@@ -756,14 +703,14 @@
     ],
     "isTitle": "What we are",
     "is": [
-      "A partner that starts with the business problem.",
-      "One team that designs and engineers the whole system.",
-      "A studio that stays to improve what it builds."
+      "A partner that starts with your business problem.",
+      "A small team you talk to directly.",
+      "A service that stays after launch."
     ],
     "notTitle": "What we are not",
     "not": [
-      "Not a template agency.",
-      "Not a reseller of someone else's tools.",
+      "Not a big agency with big prices.",
+      "Not a “one size fits all” template.",
       "Not a team that disappears after launch."
     ],
     "engagementTitle": "How we work together",
@@ -781,13 +728,13 @@
         "text": "Ongoing support, measurement and new capabilities as the business grows."
       }
     ],
-    "ctaTitle": "Tell us what slows you down.",
-    "cta": "Start a Project"
+    "ctaTitle": "Let's see what Riseup can do for your business.",
+    "cta": "Get a free demo"
   },
   "contact": {
-    "eyebrow": "Contact",
-    "title": "Tell us what slows your business down.",
-    "intro": "Share a few details. We read every message personally and reply with concrete next steps.",
+    "eyebrow": "Free demo",
+    "title": "Tell us about your business.",
+    "intro": "Write a few words. We'll reply with a short demo of how Riseup would work for you, and a clear price.",
     "direct": "Or write directly",
     "privacy": "We use your details only to reply to your message.",
     "noscript": "The form needs JavaScript to send. You can always email us at {email}.",
@@ -796,7 +743,7 @@
       "company": "Company",
       "contact": "Email or phone",
       "business": "What does your business do?",
-      "improve": "What would you like to improve?",
+      "improve": "What would you like Riseup to do?",
       "process": "What process currently takes too much time?",
       "areas": "Areas of interest"
     },
@@ -804,9 +751,9 @@
       "name": "Your full name",
       "company": "Company name",
       "contact": "you@company.com or +374 …",
-      "business": "A few words about your company and customers",
-      "improve": "Sales follow-up, customer support, reporting…",
-      "process": "Describe one process that takes too long today"
+      "business": "For example: beauty salon in Yerevan, 4 masters",
+      "improve": "Answering Instagram, online booking, orders, Google reviews…",
+      "process": "For example: we answer the same questions in Direct all day"
     },
     "optional": "Optional",
     "submit": "Send message",
@@ -845,5 +792,110 @@
     "stepOf": "Step {n} of {total}",
     "region": "Interactive demo",
     "screens": "Choose a screen"
+  },
+  "pricing": {
+    "eyebrow": "Prices",
+    "title": "Clear prices. Launch offer for our first clients.",
+    "intro": "One-time setup, then a small monthly fee for hosting, AI, support and changes. No hidden costs.",
+    "badge": "Launch price",
+    "popular": "Most chosen",
+    "from": "from",
+    "setup": "setup",
+    "perMonth": "/ month",
+    "noSetup": "No setup fee",
+    "cta": "Choose this plan",
+    "seeDemo": "See how it works",
+    "all": "All prices and terms",
+    "termsTitle": "How payment works",
+    "terms": [
+      "50% of the setup is paid at the start, 50% at launch.",
+      "The monthly fee starts after launch and includes hosting, AI usage, support and small changes.",
+      "Prices are in Armenian dram and fixed in the contract. Final price for “from” plans is agreed after a free call.",
+      "We work officially, with a contract and an invoice."
+    ],
+    "plans": {
+      "admin-start": {
+        "name": "Start",
+        "for": "AI replies for one channel",
+        "features": [
+          "AI administrator for Instagram or WhatsApp",
+          "Knows your prices, services and address",
+          "Collects requests and sends them to Telegram",
+          "Answers in 3 languages"
+        ]
+      },
+      "admin-pro": {
+        "name": "Pro",
+        "for": "Replies + booking, all channels",
+        "features": [
+          "Everything in Start, for Instagram, WhatsApp and Telegram",
+          "Online booking calendar",
+          "Reminders before the visit",
+          "Review requests and a daily report"
+        ]
+      },
+      "orders": {
+        "name": "Orders",
+        "for": "For shops that sell in Instagram",
+        "features": [
+          "AI answers about products and stock",
+          "Orders taken in the chat",
+          "Order board with statuses",
+          "Courier in Telegram and a daily report"
+        ]
+      },
+      "real-estate": {
+        "name": "Real estate",
+        "for": "For agencies and developers",
+        "features": [
+          "All requests in one list",
+          "AI first reply to buyers",
+          "Buyer and listing matching",
+          "Call-back reminders"
+        ]
+      },
+      "marketing-local": {
+        "name": "Google & reviews",
+        "for": "Be found on the map",
+        "features": [
+          "Google Maps profile setup and care",
+          "Automatic review requests",
+          "Replies to every review",
+          "Monthly report"
+        ]
+      },
+      "marketing-full": {
+        "name": "Google + Instagram",
+        "for": "Full monthly marketing",
+        "features": [
+          "Everything in Google & reviews",
+          "12–16 Instagram posts a month",
+          "Stories and short videos",
+          "Content plan approved by you"
+        ]
+      },
+      "landing": {
+        "name": "One-page site",
+        "for": "Quick start online",
+        "features": [
+          "One page in 3 languages",
+          "Contact form and WhatsApp button",
+          "Fast and mobile-friendly",
+          "Hosting and domain setup"
+        ]
+      },
+      "website": {
+        "name": "Company website",
+        "for": "Several pages and services",
+        "features": [
+          "Up to 6 pages in 3 languages",
+          "Services, prices and examples",
+          "AI chat or booking can be added",
+          "Google visibility"
+        ]
+      }
+    },
+    "pageTitle": "Clear prices.",
+    "pageIntro": "Launch prices for our first clients. One-time setup, then a small monthly fee for hosting, AI, support and changes. No hidden costs."
   }
 }

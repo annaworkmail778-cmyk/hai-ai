@@ -1,18 +1,16 @@
-import { leadDemo } from "./lead";
-import { bookingDemo } from "./booking";
+import { salonDemo } from "./salon";
+import { shopDemo } from "./shop";
 import { realEstateDemo } from "./realestate";
-import { supportDemo } from "./support";
-import { opsDemo } from "./ops";
+import { marketingDemo } from "./marketing";
 import { webDemo } from "./web";
 import type { DemoDefinition } from "./types";
 
-/** Every interactive demo, by id. Reference these ids from project files (`demo`). */
+/** Every interactive demo, by id — one per Riseup product. Reference these ids from project files (`demo`). */
 export const demos = {
-  lead: leadDemo,
-  booking: bookingDemo,
+  salon: salonDemo,
+  shop: shopDemo,
   realestate: realEstateDemo,
-  support: supportDemo,
-  ops: opsDemo,
+  marketing: marketingDemo,
   web: webDemo,
 } satisfies Record<string, DemoDefinition>;
 

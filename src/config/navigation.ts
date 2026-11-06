@@ -6,20 +6,15 @@ type NavKey = keyof Dictionary["nav"];
 export const navItems = [
   { key: "work", href: "/work" },
   { key: "solutions", href: "/solutions" },
-  { key: "process", href: "/#process" },
+  { key: "pricing", href: "/pricing" },
   { key: "about", href: "/about" },
   { key: "contact", href: "/contact" },
 ] as const satisfies ReadonlyArray<{ key: NavKey; href: string }>;
 
-/** Order of capabilities across the site (keys of dictionary.capabilities.items). */
-export const capabilityOrder = [
-  "ai-systems",
-  "automation",
-  "custom-software",
-  "business-applications",
-  "web-experiences",
-  "sales-systems",
-  "internal-tools",
-] as const;
+/**
+ * The five Riseup products, in display order (keys of dictionary.capabilities.items
+ * and dictionary.solutions.items). Prices live in src/config/pricing.ts.
+ */
+export const capabilityOrder = ["ai-admin", "orders", "real-estate", "marketing", "websites"] as const;
 
 export type CapabilityId = (typeof capabilityOrder)[number];

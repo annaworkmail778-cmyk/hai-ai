@@ -9,9 +9,9 @@ export const corporateWebExperience: Project = {
   slug: "corporate-web-experience",
   status: "concept",
   featured: false,
-  order: 6,
+  order: 5,
   year: 2025,
-  capabilities: ["web-experiences", "custom-software"],
+  capabilities: ["websites"],
   technologies: ["Next.js", "React", "TypeScript", "Three.js", "GSAP", "Headless CMS", "Vercel"],
   theme: "light",
   demo: "web",
@@ -52,7 +52,7 @@ export const corporateWebExperience: Project = {
   },
   content: {
     en: {
-      title: "Premium Corporate Web Experience",
+      title: "Company website",
       subtitle: "An editorial, multilingual flagship site that explains complex expertise with clarity.",
       client: "Concept study — engineering group",
       industry: "Engineering & construction",
@@ -99,7 +99,7 @@ export const corporateWebExperience: Project = {
       ],
     },
     hy: {
-      title: "Պրեմիում կորպորատիվ վեբ փորձառություն",
+      title: "Ընկերության կայք",
       subtitle: "Էդիտորիալ, բազմալեզու գլխավոր կայք, որը հստակ ներկայացնում է բարդ փորձագիտությունը։",
       client: "Կոնցեպտ ուսումնասիրություն՝ ինժեներական խումբ",
       industry: "Ինժեներիա և շինարարություն",
@@ -146,7 +146,7 @@ export const corporateWebExperience: Project = {
       ],
     },
     ru: {
-      title: "Премиальный корпоративный веб-проект",
+      title: "Сайт компании",
       subtitle: "Редакционный мультиязычный флагманский сайт, который ясно объясняет сложную экспертизу.",
       client: "Концепт — инженерная группа",
       industry: "Инжиниринг и строительство",

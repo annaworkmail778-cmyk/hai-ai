@@ -9,15 +9,15 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-/** Home-screen icon: the placeholder brand glyph on black (see BRAND_REPLACEMENT_GUIDE.md). */
+/** Home-screen icon: the Riseup glyph on black (see BRAND_REPLACEMENT_GUIDE.md). */
 export default function AppleIcon() {
   return new ImageResponse(
     (
       <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#000" }}>
         <svg width="112" height="112" viewBox="0 0 20 20">
-          <rect x="0.75" y="0.75" width="18.5" height="18.5" fill="none" stroke="#f3f2ee" strokeWidth="1.3" />
-          <rect x="10" y="4" width="6" height="6" fill={brand.accent} />
-          <path d="M4 16h12M4 12.5h4" stroke="#f3f2ee" strokeWidth="1.3" />
+          <rect x="1.5" y="12" width="4" height="6.5" rx="1" fill="#f3f2ee" />
+        <rect x="7.75" y="8.5" width="4" height="10" rx="1" fill="#f3f2ee" />
+        <path d="M14 18.5V7.5h-1.6L16 2.5l3.6 5H18v11z" fill={brand.accent} />
         </svg>
       </div>
     ),

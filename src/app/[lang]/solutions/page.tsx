@@ -16,6 +16,9 @@ import { ArrowLink } from "@/components/ui/Button";
 import { Arrow } from "@/components/ui/Arrow";
 import { Reveal, RevealText } from "@/components/motion/Reveal";
 import { ProjectVisual } from "@/components/portfolio/ProjectVisual";
+import { DemoPoster } from "@/components/demos/DemoStage";
+import { plansFor } from "@/config/pricing";
+import { PlanCard } from "@/components/sections/PricingPlans";
 import { SolutionsIndex } from "@/components/sections/SolutionsIndex";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/solutions">): Promise<Metadata> {
@@ -145,10 +148,19 @@ function Solution({
         ))}
       </Reveal>
 
+      <div className="mt-14">
+        <p className="label border-b border-rule pb-3 text-fg-mute">{t.labels.prices}</p>
+        <Reveal stagger={0.08} className="mt-6 grid gap-4 sm:grid-cols-2">
+          {plansFor(id).map((plan) => (
+            <PlanCard key={plan.id} plan={plan} locale={locale} dict={dict} />
+          ))}
+        </Reveal>
+      </div>
+
       {related.length > 0 && (
         <div className="mt-14">
           <p className="label text-fg-mute">{t.labels.related}</p>
-          <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-5 grid gap-4 sm:grid-cols-2">
             {related.map((project) => {
               const c = projectContent(project, locale);
               return (
@@ -157,16 +169,22 @@ function Solution({
                     href={localePath(locale, `/work/${project.slug}`)}
                     data-cursor="view"
                     data-cursor-label={dict.common.view}
-                    className="group flex items-center gap-4 rounded-xs border border-rule p-2.5 pr-5 transition-colors duration-(--dur-ui) hover:border-rule-strong"
+                    className="group block rounded-md border border-rule p-2.5 transition-colors duration-(--dur-ui) hover:border-rule-strong"
                   >
-                    <div className="relative aspect-[16/10] w-24 shrink-0 overflow-hidden rounded-xs md:w-28">
-                      <ProjectVisual visual={project.coverImage} locale={locale} sizes="7rem" />
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-sm">
+                      {project.demo ? (
+                        <DemoPoster id={project.demo} locale={locale} />
+                      ) : (
+                        <ProjectVisual visual={project.coverImage} locale={locale} sizes="28rem" />
+                      )}
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-body font-medium">{c.title}</p>
-                      <p className="label mt-1 text-fg-mute">{c.industry}</p>
+                    <div className="flex items-center gap-4 px-1.5 pt-4 pb-2">
+                      <div className="min-w-0">
+                        <p className="text-body font-medium">{c.title}</p>
+                        <p className="label mt-1 text-fg-mute">{c.industry}</p>
+                      </div>
+                      <Arrow className="ml-auto shrink-0 transition-transform duration-(--dur-ui) group-hover:translate-x-1" />
                     </div>
-                    <Arrow className="ml-auto shrink-0 transition-transform duration-(--dur-ui) group-hover:translate-x-1" />
                   </Link>
                 </li>
               );

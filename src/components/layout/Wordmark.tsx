@@ -27,7 +27,7 @@ export function Wordmark({ className, compact = false }: { className?: string; c
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <BrandGlyph className="size-[1.15em] shrink-0" />
       {!compact && (
-        <span className="text-[0.95rem] leading-none font-semibold tracking-[0.02em] whitespace-nowrap uppercase">
+        <span className="leading-none font-semibold tracking-[-0.01em] text-[1.05rem] whitespace-nowrap ">
           {brand.companyName}
         </span>
       )}
@@ -36,15 +36,15 @@ export function Wordmark({ className, compact = false }: { className?: string; c
 }
 
 /**
- * Placeholder brand glyph: a structural frame holding one solid module.
- * Replace with the final mark (see BRAND_REPLACEMENT_GUIDE.md).
+ * Riseup glyph: three rising steps, the last one an arrow in the accent colour.
+ * Replace with the final mark when the logo is ready (see BRAND_REPLACEMENT_GUIDE.md).
  */
 export function BrandGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false" className={className}>
-      <rect x="0.75" y="0.75" width="18.5" height="18.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="10" y="4" width="6" height="6" fill="var(--color-signal)" />
-      <path d="M4 16h12M4 12.5h4" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="1.5" y="12" width="4" height="6.5" rx="1" fill="currentColor" />
+      <rect x="7.75" y="8.5" width="4" height="10" rx="1" fill="currentColor" />
+      <path d="M14 18.5V7.5h-1.6L16 2.5l3.6 5H18v11z" fill="var(--color-signal)" />
     </svg>
   );
 }

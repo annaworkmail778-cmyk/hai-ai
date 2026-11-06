@@ -5,21 +5,20 @@
  * navigation wordmark, footer, page titles, Open Graph images, favicons,
  * structured data (JSON-LD) and the contact page.
  *
- * The values below are TEMPORARY PLACEHOLDERS. Replace them when the final
- * identity is decided — no component needs to change.
+ * Change values here — no component needs to change.
  * See BRAND_REPLACEMENT_GUIDE.md for the full checklist.
  */
 
 import type { Locale } from "@/i18n/config";
 
 /** Company name as it appears in the wordmark, titles and legal lines. */
-export const COMPANY_NAME = "YOUR COMPANY";
+export const COMPANY_NAME = "Riseup";
 
 /** Brand tagline. English is the canonical source; translations below. */
-export const TAGLINE = "Technology built around business.";
+export const TAGLINE = "AI tools that help small businesses grow.";
 
 /** One-sentence description used for SEO and social previews. */
-export const DESCRIPTION = "AI, automation and software systems for modern businesses.";
+export const DESCRIPTION = "AI administrators, online booking, order systems, marketing and websites for businesses in Armenia.";
 
 type Localized = Record<Locale, string>;
 
@@ -47,14 +46,14 @@ export const brand = {
 
   tagline: {
     en: TAGLINE,
-    hy: "Տեխնոլոգիա՝ կառուցված բիզնեսի շուրջ։",
-    ru: "Технологии, выстроенные вокруг бизнеса.",
+    hy: "AI գործիքներ, որոնք օգնում են փոքր բիզնեսին աճել։",
+    ru: "AI-инструменты, которые помогают малому бизнесу расти.",
   } satisfies Localized,
 
   description: {
     en: DESCRIPTION,
-    hy: "AI, ավտոմատացում և ծրագրային համակարգեր ժամանակակից բիզնեսի համար։",
-    ru: "AI, автоматизация и программные системы для современного бизнеса.",
+    hy: "AI ադմինիստրատոր, առցանց ամրագրում, պատվերների համակարգ, մարքեթինգ և կայքեր Հայաստանի բիզնեսների համար։",
+    ru: "AI-администратор, онлайн-запись, система заказов, маркетинг и сайты для бизнеса в Армении.",
   } satisfies Localized,
 
   logo: { type: "wordmark" } as BrandLogo,
@@ -66,9 +65,9 @@ export const brand = {
    */
   accent: "#ff5b14",
 
-  /** PLACEHOLDER contact details — replace before launch. */
-  email: "hello@example.com",
-  phone: "+374 00 000 000",
+  email: "riseup.group.2026@gmail.com",
+  /** Leave empty to hide the phone everywhere. Format: "+374 77 200 433". */
+  phone: "" as string,
   address: {
     street: "",
     city: { en: "Yerevan", hy: "Երևան", ru: "Ереван" } satisfies Localized,
@@ -77,13 +76,12 @@ export const brand = {
     timeZone: "Asia/Yerevan",
   },
 
-  /** PLACEHOLDER social profiles — point these at the real accounts. */
-  socialLinks: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/" },
-    { label: "Instagram", href: "https://www.instagram.com/" },
-    { label: "Telegram", href: "https://telegram.org/" },
-    { label: "Behance", href: "https://www.behance.net/" },
-  ] satisfies SocialLink[],
+  /**
+   * Social profiles. Empty until the real accounts exist; the footer and
+   * contact page hide the list while it is empty. Example:
+   *   { label: "Instagram", href: "https://www.instagram.com/riseup.am" }
+   */
+  socialLinks: [] as SocialLink[],
 
   /**
    * Public site URL used for canonical links, sitemap and Open Graph.

@@ -54,11 +54,11 @@ export function OgWordmark({ color, size = 26 }: { color: string; size?: number 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
       <svg width={size} height={size} viewBox="0 0 20 20">
-        <rect x="0.75" y="0.75" width="18.5" height="18.5" fill="none" stroke={color} strokeWidth="1.5" />
-        <rect x="10" y="4" width="6" height="6" fill={og.signal} />
-        <path d="M4 16h12M4 12.5h4" stroke={color} strokeWidth="1.5" />
+        <rect x="1.5" y="12" width="4" height="6.5" rx="1" fill={color} />
+        <rect x="7.75" y="8.5" width="4" height="10" rx="1" fill={color} />
+        <path d="M14 18.5V7.5h-1.6L16 2.5l3.6 5H18v11z" fill={og.signal} />
       </svg>
-      <span style={{ fontSize: size * 0.8, fontWeight: 500, letterSpacing: "0.02em", textTransform: "uppercase", color }}>
+      <span style={{ fontSize: size * 0.8, fontWeight: 500, letterSpacing: "-0.01em", color }}>
         {brand.companyName}
       </span>
     </div>

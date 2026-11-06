@@ -10,9 +10,8 @@ import { ScrollStatement } from "@/components/sections/ScrollStatement";
 import { FeaturedWork } from "@/components/sections/FeaturedWork";
 import { ProblemStory } from "@/components/sections/ProblemStory";
 import { CapabilitiesList } from "@/components/sections/CapabilitiesList";
-import { BusinessDiagnostic } from "@/components/sections/BusinessDiagnostic";
 import { ProcessScroll } from "@/components/sections/ProcessScroll";
-import { TechnologyGrid } from "@/components/sections/TechnologyGrid";
+import { PricingSection } from "@/components/sections/PricingPlans";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { EditorialCTA } from "@/components/sections/EditorialCTA";
 
@@ -45,13 +44,13 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       logo: `${brand.siteUrl}/icon`,
       description: brand.description[lang],
       email: brand.email,
-      telephone: brand.phone,
+      ...(brand.phone ? { telephone: brand.phone } : {}),
       address: {
         "@type": "PostalAddress",
         addressLocality: brand.address.city.en,
         addressCountry: brand.address.country.en,
       },
-      sameAs: brand.socialLinks.map((s) => s.href),
+      ...(brand.socialLinks.length ? { sameAs: brand.socialLinks.map((s) => s.href) } : {}),
     },
     {
       "@context": "https://schema.org",
@@ -69,7 +68,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
 
       {/* 01–02 */}
-      <ScrollIntro intro={dict.intro} hero={dict.hero} examplesHref="#work" contactHref={contact} />
+      <ScrollIntro intro={dict.intro} hero={dict.hero} examplesHref="#work" contactHref={localePath(lang, "/pricing")} />
       {/* 03 */}
       <ScrollStatement
         eyebrow={dict.statement.eyebrow}
@@ -84,11 +83,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       {/* 06 */}
       <CapabilitiesList locale={lang} dict={dict} />
       {/* 07 */}
-      <BusinessDiagnostic t={dict.diagnostic} contactHref={contact} />
+      <PricingSection locale={lang} dict={dict} />
       {/* 08 */}
       <ProcessScroll t={dict.process} />
-      {/* 09 */}
-      <TechnologyGrid t={dict.technology} />
       {/* 10 */}
       <WhyUs t={dict.why} />
       {/* 11 */}
