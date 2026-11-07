@@ -45,3 +45,8 @@ next-env.d.ts
 
 # example environment file (no secrets)
 !.env.example
+
+# Locally installed Higgsfield agent skills (third-party; reinstall with: npx skills add higgsfield-ai/skills)
+/.agents/
+/.claude/skills/
+/skills-lock.json
