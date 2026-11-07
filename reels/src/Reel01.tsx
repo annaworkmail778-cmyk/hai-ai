@@ -18,11 +18,11 @@ import { reel01, type Copy, type Lang } from "./copy";
 
 /* Reel 01 «23:40» — Riseup AI administrator. 1080×1920, 30 fps, 25 s. */
 
-const INK = "#0b0b0c";
-const PAPER = "#f3f2ee";
-const SIGNAL = "#ff5b14";
-const MUTE = "#6b6a66";
-const IG = "linear-gradient(45deg,#f9b234,#ee2a7b 55%,#6228d7)";
+export const INK = "#0b0b0c";
+export const PAPER = "#f3f2ee";
+export const SIGNAL = "#ff5b14";
+export const MUTE = "#6b6a66";
+export const IG = "linear-gradient(45deg,#f9b234,#ee2a7b 55%,#6228d7)";
 
 export const REEL01_FRAMES = 750;
 
@@ -31,15 +31,15 @@ const S = { hook: 0, sleep: 75, brand: 150, chat: 210, panel: 420, morning: 540,
 
 /* ── helpers ─────────────────────────────────────────────────────────── */
 
-function useSpring(delay = 0, config: { damping?: number; stiffness?: number; mass?: number } = {}) {
+export function useSpring(delay = 0, config: { damping?: number; stiffness?: number; mass?: number } = {}) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   return spring({ frame: frame - delay, fps, config: { damping: 14, stiffness: 140, mass: 0.8, ...config } });
 }
 
-const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
+export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
-function Pop({ delay = 0, from = 40, children, style }: { delay?: number; from?: number; children: ReactNode; style?: CSSProperties }) {
+export function Pop({ delay = 0, from = 40, children, style }: { delay?: number; from?: number; children: ReactNode; style?: CSSProperties }) {
   const p = useSpring(delay);
   return (
     <div style={{ opacity: Math.min(1, p * 1.4), transform: `translateY(${(1 - p) * from}px) scale(${0.92 + p * 0.08})`, ...style }}>
@@ -48,7 +48,7 @@ function Pop({ delay = 0, from = 40, children, style }: { delay?: number; from?:
   );
 }
 
-function Glyph({ size = 120, color = "#fff", grow }: { size?: number; color?: string; grow?: [number, number, number] }) {
+export function Glyph({ size = 120, color = "#fff", grow }: { size?: number; color?: string; grow?: [number, number, number] }) {
   const [a, b, c] = grow ?? [1, 1, 1];
   return (
     <svg viewBox="0 0 20 20" width={size} height={size} style={{ overflow: "visible" }}>
@@ -59,7 +59,7 @@ function Glyph({ size = 120, color = "#fff", grow }: { size?: number; color?: st
   );
 }
 
-function IgIcon({ size = 44 }: { size?: number }) {
+export function IgIcon({ size = 44 }: { size?: number }) {
   return (
     <span style={{ width: size, height: size, borderRadius: size / 3.4, background: IG, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
       <svg viewBox="0 0 16 16" width={size * 0.62} height={size * 0.62} fill="none" stroke="#fff" strokeWidth="1.7">
@@ -71,7 +71,7 @@ function IgIcon({ size = 44 }: { size?: number }) {
   );
 }
 
-function TgIcon({ size = 44 }: { size?: number }) {
+export function TgIcon({ size = 44 }: { size?: number }) {
   return (
     <span style={{ width: size, height: size, borderRadius: size, background: "#2aabee", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
       <svg viewBox="0 0 16 16" width={size * 0.58} height={size * 0.58} fill="none" stroke="#fff" strokeWidth="1.6" strokeLinejoin="round">
@@ -81,7 +81,7 @@ function TgIcon({ size = 44 }: { size?: number }) {
   );
 }
 
-function Check({ size = 56, bg = "#e3efe4", color = "#1e5a2b" }: { size?: number; bg?: string; color?: string }) {
+export function Check({ size = 56, bg = "#e3efe4", color = "#1e5a2b" }: { size?: number; bg?: string; color?: string }) {
   return (
     <span style={{ width: size, height: size, borderRadius: size, background: bg, color, display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
       <svg viewBox="0 0 24 24" width={size * 0.55} height={size * 0.55} fill="none" stroke="currentColor" strokeWidth="2.6">
@@ -91,7 +91,7 @@ function Check({ size = 56, bg = "#e3efe4", color = "#1e5a2b" }: { size?: number
   );
 }
 
-function Cursor({ x, y, press }: { x: number; y: number; press: number }) {
+export function Cursor({ x, y, press }: { x: number; y: number; press: number }) {
   return (
     <div style={{ position: "absolute", left: x, top: y, transform: `scale(${1 - press * 0.18})`, transformOrigin: "8px 6px", zIndex: 50, filter: "drop-shadow(0 10px 18px rgba(0,0,0,.35))" }}>
       <svg width="64" height="64" viewBox="0 0 24 24">
@@ -102,7 +102,7 @@ function Cursor({ x, y, press }: { x: number; y: number; press: number }) {
 }
 
 /** Lower-third captions with a word-by-word highlight. Kept inside Instagram's safe zone. */
-function Caption({ text, from, to, dark = true }: { text: string; from: number; to: number; dark?: boolean }) {
+export function Caption({ text, from, to, dark = true }: { text: string; from: number; to: number; dark?: boolean }) {
   const frame = useCurrentFrame();
   const words = text.split(" ");
   const shown = interpolate(frame, [from, to - 10], [0, words.length], clamp);
@@ -269,7 +269,7 @@ function Sleep({ t }: { t: Copy }) {
 
 /* ── 03 Riseup doesn't sleep ────────────────────────────────────────── */
 
-function Brand({ t }: { t: Copy }) {
+export function Brand({ t }: { t: { notSleep: string } }) {
   const frame = useCurrentFrame();
   const g1 = useSpring(14, { damping: 12, stiffness: 160 });
   const g2 = useSpring(19, { damping: 12, stiffness: 160 });
@@ -306,7 +306,7 @@ function Brand({ t }: { t: Copy }) {
 
 /* ── 04 Chat: answer, book ──────────────────────────────────────────── */
 
-function Bubble({ from, label, children, delay }: { from: "them" | "us"; label?: string; children: ReactNode; delay: number }) {
+export function Bubble({ from, label, children, delay }: { from: "them" | "us"; label?: string; children: ReactNode; delay: number }) {
   const us = from === "us";
   return (
     <Pop delay={delay} from={50} style={{ display: "flex", flexDirection: "column", alignItems: us ? "flex-end" : "flex-start", gap: 8 }}>
@@ -601,7 +601,7 @@ function Morning({ t }: { t: Copy }) {
 
 /* ── 07 End card ────────────────────────────────────────────────────── */
 
-function End({ t }: { t: Copy }) {
+export function End({ t }: { t: { endTitle: string; price: string; cta: string; ctaNote: string } }) {
   const frame = useCurrentFrame();
   const logo = useSpring(2, { damping: 12, stiffness: 150 });
   const title = useSpring(14);
@@ -679,7 +679,7 @@ const SFX: Array<[number, string, number]> = [
   [S.end + 80, "tap", 0.8],
 ];
 
-function hasFile(path: string) {
+export function hasFile(path: string) {
   try {
     return getStaticFiles().some((f) => f.name === path);
   } catch {
