@@ -2,6 +2,7 @@ import "./fonts";
 import { Composition } from "remotion";
 import { Reel01, REEL01_FRAMES } from "./Reel01";
 import { Reel02, REEL02_FRAMES } from "./Reel02";
+import { Reel03, REEL03_FRAMES } from "./Reel03";
 
 export function Root() {
   return (
@@ -10,6 +11,8 @@ export function Root() {
       <Composition id="reel01-ru" component={Reel01} durationInFrames={REEL01_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
       <Composition id="reel02-hy" component={Reel02} durationInFrames={REEL02_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "hy" as const }} />
       <Composition id="reel02-ru" component={Reel02} durationInFrames={REEL02_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
+      <Composition id="reel03-hy" component={Reel03} durationInFrames={REEL03_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "hy" as const }} />
+      <Composition id="reel03-ru" component={Reel03} durationInFrames={REEL03_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
     </>
   );
 }
