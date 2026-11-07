@@ -82,7 +82,7 @@
 
 ---
 
-## 6. Instagram Highlights — 6 բաժին, 23 սթորի
+## 6. Instagram Highlights — 6 բաժին, 27 սթորի
 
 **Տեխնիկական.**
 - Ամեն սթորի՝ 1080×1920 MP4, 5–8 վայրկյան։
@@ -194,7 +194,7 @@
 - Facebook cover 1640×624 և YouTube banner 2560×1440՝ լոգոյով, «AI ադմինիստրատոր Instagram-ի և WhatsApp-ի համար» վերնագրով և հեռախոսահամարով
 - YouTube watermark 150×150
 - 6 highlight cover
-- 23 highlight սթորի (MP4)
+- 27 highlight սթորի (MP4)
 - Գնացուցակի կարուսել Instagram-ի համար (8 սլայդ, 1080×1350)
 
 ---
