@@ -1,0 +1,23 @@
+{
+  "name": "riseup-reels",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "reel": "node render.mjs"
+  },
+  "dependencies": {
+    "@fontsource/geist-sans": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/noto-sans-armenian": "^5.3.0",
+    "@remotion/cli": "4.0.541",
+    "@remotion/media-utils": "4.0.541",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.541"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}

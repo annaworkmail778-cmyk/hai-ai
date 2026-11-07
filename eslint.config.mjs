@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     ".old-site-backup/**",
+    // Remotion reels project (own package.json and tooling).
+    "reels/**",
     // Alternate build output (NEXT_DIST_DIR, see next.config.ts).
     ".next-*/**",
   ]),
