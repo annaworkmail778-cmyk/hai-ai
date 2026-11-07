@@ -15,6 +15,7 @@ import {
 } from "remotion";
 import { FONT } from "./fonts";
 import { reel01, type Copy, type Lang } from "./copy";
+import { LOGO } from "./logo";
 
 /* Reel 01 «23:40» — Riseup AI administrator. 1080×1920, 30 fps, 25 s. */
 
@@ -49,12 +50,21 @@ export function Pop({ delay = 0, from = 40, children, style }: { delay?: number;
 }
 
 export function Glyph({ size = 120, color = "#fff", grow }: { size?: number; color?: string; grow?: [number, number, number] }) {
-  const [a, b, c] = grow ?? [1, 1, 1];
+  // grow: [R rises from below, (unused), arrow draws in from the left]
+  const [a, , c] = grow ?? [1, 1, 1];
   return (
-    <svg viewBox="0 0 20 20" width={size} height={size} style={{ overflow: "visible" }}>
-      <rect x="1.5" y="12" width="4" height="6.5" rx="1" fill={color} style={{ transformOrigin: "3.5px 18.5px", transform: `scaleY(${a})` }} />
-      <rect x="7.75" y="8.5" width="4" height="10" rx="1" fill={color} style={{ transformOrigin: "9.75px 18.5px", transform: `scaleY(${b})` }} />
-      <path d="M14 18.5V7.5h-1.6L16 2.5l3.6 5H18v11z" fill={SIGNAL} style={{ transformOrigin: "16px 18.5px", transform: `scaleY(${c})` }} />
+    <svg viewBox={LOGO.markViewBox} width={size * 1.13} height={size} style={{ overflow: "visible" }}>
+      <path fill={color} fillRule="evenodd" d={LOGO.mark} style={{ transformOrigin: "1080px 1205px", transform: `translateY(${(1 - a) * 120}px) scaleY(${0.6 + a * 0.4})`, opacity: Math.min(1, a * 1.5) }} />
+      <path fill={SIGNAL} fillRule="evenodd" d={LOGO.swoosh} style={{ clipPath: `inset(0 ${(1 - c) * 100}% 0 0)` }} />
+    </svg>
+  );
+}
+
+/** The traced "Riseup" wordmark. */
+export function Word({ height = 100, color = INK }: { height?: number; color?: string }) {
+  return (
+    <svg viewBox={LOGO.wordViewBox} height={height} width={height * (1280 / 375)}>
+      <path fill={color} fillRule="evenodd" d={LOGO.word} />
     </svg>
   );
 }
@@ -621,7 +631,7 @@ export function End({ t }: { t: { endTitle: string; price: string; cta: string; 
 
       <div style={{ marginTop: 300, display: "flex", alignItems: "center", gap: 26, transform: `scale(${0.7 + logo * 0.3})`, opacity: logo }}>
         <Glyph size={130} color={INK} grow={[logo, logo, logo]} />
-        <span style={{ fontSize: 120, fontWeight: 700, letterSpacing: "-0.04em", color: INK }}>Riseup</span>
+        <Word height={104} />
       </div>
       <p style={{ margin: "50px 60px 0", textAlign: "center", whiteSpace: "pre-line", fontSize: 68, lineHeight: 1.15, fontWeight: 700, letterSpacing: "-0.02em", color: INK, opacity: title, transform: `translateY(${(1 - title) * 40}px)` }}>
         {t.endTitle}

@@ -110,3 +110,11 @@ grep -rn "YOUR COMPANY\|example\.com\|000 000" src public --include=*.ts --inclu
 Then run `npm run typecheck && npm run lint && npm run build`, open the
 site in all three languages, and share a page link in a messenger to see
 the new Open Graph image.
+
+## Riseup logo (set)
+
+- Original artwork: `public/brand/riseup-logo-original.jpg`
+- Vector files: `public/brand/riseup-logo.svg`, `riseup-logo-white.svg` (mark + wordmark),
+  `riseup-mark.svg`, `riseup-mark-white.svg` (R mark only, use for avatars and favicons)
+- Paths used by the site and the reels: `src/config/logo.ts` (copy in `reels/src/logo.ts`)
+- Favicon: `src/app/[lang]/icon.svg`; home-screen icon: `src/app/[lang]/apple-icon.tsx`

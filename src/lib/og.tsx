@@ -2,6 +2,7 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { brand } from "@/config/brand";
+import { LOGO } from "@/config/logo";
 
 /**
  * Shared pieces for generated Open Graph images (next/og → Satori).
@@ -49,18 +50,17 @@ export function ogFonts() {
   return fonts;
 }
 
-/** Brand glyph + company name, as drawn by the site wordmark. */
+/** Riseup logo (R mark + wordmark), traced from the approved artwork. */
 export function OgWordmark({ color, size = 26 }: { color: string; size?: number }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-      <svg width={size} height={size} viewBox="0 0 20 20">
-        <rect x="1.5" y="12" width="4" height="6.5" rx="1" fill={color} />
-        <rect x="7.75" y="8.5" width="4" height="10" rx="1" fill={color} />
-        <path d="M14 18.5V7.5h-1.6L16 2.5l3.6 5H18v11z" fill={og.signal} />
+    <div style={{ display: "flex", alignItems: "center", gap: size * 0.4 }}>
+      <svg width={size * 1.6} height={size * 1.42} viewBox={LOGO.markViewBox}>
+        <path fill={color} fillRule="evenodd" d={LOGO.mark} />
+        <path fill={og.signal} fillRule="evenodd" d={LOGO.swoosh} />
       </svg>
-      <span style={{ fontSize: size * 0.8, fontWeight: 500, letterSpacing: "-0.01em", color }}>
-        {brand.companyName}
-      </span>
+      <svg width={size * 3.6} height={size * 1.05} viewBox={LOGO.wordViewBox}>
+        <path fill={color} fillRule="evenodd" d={LOGO.word} />
+      </svg>
     </div>
   );
 }

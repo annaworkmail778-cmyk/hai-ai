@@ -6,7 +6,9 @@ import type { Dictionary } from "@/i18n/types";
 import { ButtonLink } from "@/components/ui/Button";
 import { Arrow } from "@/components/ui/Arrow";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { BackToTop, FitText, LocalTime } from "./FooterParts";
+import { BackToTop, LocalTime } from "./FooterParts";
+import { BrandGlyph } from "./Wordmark";
+import { LOGO } from "@/config/logo";
 
 function ColumnTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="label mb-6 text-fg-mute">{children}</h2>;
@@ -96,7 +98,12 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         <div className="mt-24 lg:mt-36">
-          <FitText text={brand.companyName} className="text-fg" />
+          <div role="img" aria-label={brand.companyName} className="flex items-end gap-[3vw] text-fg">
+            <BrandGlyph className="h-auto w-[24%] shrink-0" />
+            <svg viewBox={LOGO.wordViewBox} aria-hidden="true" focusable="false" className="h-auto w-full min-w-0">
+              <path fill="currentColor" fillRule="evenodd" d={LOGO.word} />
+            </svg>
+          </div>
         </div>
 
         <div className="mt-8 flex flex-col gap-5 border-t border-rule py-7 md:flex-row md:items-center md:justify-between">

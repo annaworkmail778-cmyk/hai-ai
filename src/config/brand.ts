@@ -29,16 +29,6 @@ export type SocialLink = {
   href: string;
 };
 
-export type BrandLogo =
-  /** Text wordmark rendered from `companyName` (current placeholder). */
-  | { type: "wordmark" }
-  /**
-   * Final logo file placed in /public/brand/.
-   * Use a single-colour SVG drawn in `currentColor` so it adapts to
-   * dark and light sections automatically.
-   */
-  | { type: "svg"; src: string; width: number; height: number };
-
 export const brand = {
   companyName: COMPANY_NAME,
   /** Registered legal name for the copyright line. */
@@ -56,7 +46,7 @@ export const brand = {
     ru: "AI-администратор, онлайн-запись, система заказов, маркетинг и сайты для бизнеса в Армении.",
   } satisfies Localized,
 
-  logo: { type: "wordmark" } as BrandLogo,
+  /** Logo artwork: public/brand/*.svg; paths used by components live in src/config/logo.ts. */
 
   /**
    * The single accent colour (signal orange). Used sparingly: markers, focus
