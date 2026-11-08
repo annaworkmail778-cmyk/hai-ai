@@ -54,7 +54,7 @@ function Example({
           </Link>
         </h3>
         <p className="label mt-3 text-fg-mute">{c.industry}</p>
-        <dl className="mt-8 space-y-6">
+        <dl className="mt-8 hidden space-y-6 md:block">
           {[
             [t.problem, c.challenge],
             [t.built, c.solution],
@@ -66,7 +66,7 @@ function Example({
             </div>
           ))}
         </dl>
-        <ArrowLink href={href} className="mt-8">
+        <ArrowLink href={href} className="mt-6 md:mt-8">
           {t.open}
         </ArrowLink>
       </div>
@@ -105,7 +105,7 @@ export function FeaturedWork({ locale, dict, projects }: { locale: Locale; dict:
           <p className="col-span-4 self-end text-lead text-fg-mute md:col-span-6 lg:col-span-4 lg:col-start-9">{t.intro}</p>
         </header>
 
-        <div className="mt-16 space-y-24 lg:mt-24 lg:space-y-32">
+        <div className="mt-12 space-y-16 md:mt-16 md:space-y-24 lg:mt-24 lg:space-y-32">
           {projects.map((project, i) => (
             <Example key={project.slug} project={project} index={i} total={projects.length} locale={locale} dict={dict} />
           ))}

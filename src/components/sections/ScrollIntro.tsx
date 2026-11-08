@@ -60,6 +60,8 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
   const [animate, setAnimate] = useState(true);
   const [active, setActive] = useState(true);
   const [ready, setReady] = useState(false);
+  // Phones and narrow tablets: no scroll story, the model sits above the headline.
+  const [compact, setCompact] = useState(false);
 
   // Capability detection runs once on the client.
   useEffect(() => {
@@ -68,6 +70,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
       setAnimate(!reduce);
       setTier(detectTier());
       setMode(supportsWebGL2() ? "webgl" : "fallback");
+      setCompact(window.matchMedia(media.mobile).matches);
     });
     return () => cancelAnimationFrame(id);
   }, []);
@@ -104,7 +107,16 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         progress.current.value = 1;
       });
 
-      mm.add(media.motionOk, () => {
+      // Phones: the model builds itself once on load instead of following the scroll.
+      mm.add(`${media.motionOk} and ${media.mobile}`, () => {
+        const tween = gsap.fromTo(progress.current, { value: 0.12 }, { value: 0.64, duration: 4.2, delay: 0.5, ease: "power2.inOut" });
+        return () => {
+          tween.kill();
+          progress.current.value = 0;
+        };
+      });
+
+      mm.add(`${media.motionOk} and ${media.desktop}`, () => {
         const statementWords = q("[data-statement] [data-word]");
         const buildWords = q("[data-build-title] [data-word]");
         const buildRest = q("[data-build-rest]");
@@ -199,12 +211,12 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
       data-theme="dark"
       data-nav-theme="dark"
       data-nav-solid="false"
-      className="intro relative h-svh bg-black motion-safe:h-[250svh] lg:motion-safe:h-[380vh]"
+      className="intro relative bg-black lg:h-svh lg:motion-safe:h-[380vh]"
     >
-      <div className="sticky top-0 h-svh overflow-hidden">
+      <div className="relative overflow-hidden lg:sticky lg:top-0 lg:h-svh">
         {/* Statement — always in front of the object so every word stays readable;
             on phones it sits below the raised object, on desktop across it. */}
-        <div className="pointer-events-none absolute inset-0 z-[2] flex items-end pb-[14vh] motion-reduce:hidden lg:items-center lg:pb-0">
+        <div className="pointer-events-none absolute inset-0 z-[2] hidden motion-reduce:hidden lg:flex lg:items-center">
           <div className="shell">
             <p
               data-statement
@@ -219,7 +231,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         <div
           role="img"
           aria-label={intro.sceneLabel}
-          className="absolute inset-0 z-[1] transition-opacity duration-[1800ms] ease-out"
+          className="relative z-[1] mt-(--nav-h) h-[40svh] min-h-64 transition-opacity max-lg:[mask-image:linear-gradient(to_bottom,black_70%,transparent)] duration-[1800ms] ease-out lg:absolute lg:inset-0 lg:mt-0 lg:h-auto"
           style={{ opacity: ready || mode === "fallback" ? 1 : 0 }}
         >
           {mode === "webgl" && (
@@ -228,6 +240,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
               pointer={pointer}
               labels={labelRefs}
               tier={tier}
+              compact={compact}
               animate={animate}
               active={active}
               onReady={() => setReady(true)}
@@ -241,7 +254,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         </div>
 
         {/* Layer labels, projected onto the levels each frame. */}
-        <div data-label-layer aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3] motion-reduce:hidden">
+        <div data-label-layer aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3] hidden motion-reduce:hidden lg:block">
           {intro.layers.map((name, i) => (
             <div
               key={name}
@@ -268,21 +281,21 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         {/* Scene 01 — hero: what we do, on the first screen */}
         <div
           data-hero
-          className="shell absolute inset-x-0 bottom-0 z-[4] flex flex-col pb-[max(1.5rem,4vh)] lg:top-0 lg:justify-center lg:pt-(--nav-h) lg:pb-0"
+          className="shell relative z-[4] flex flex-col pb-12 lg:absolute lg:inset-x-0 lg:top-0 lg:bottom-0 lg:justify-center lg:pt-(--nav-h) lg:pb-0"
         >
           <div className="max-w-[40rem] animate-hero-in lg:max-w-[48%]">
-            <p className="label mb-6 flex items-center gap-3 text-mute">
+            <p className="label mb-4 hidden items-center gap-3 text-mute sm:mb-6 sm:flex">
               <span aria-hidden="true" className="inline-block size-1.5 bg-signal" />
               {hero.eyebrow}
             </p>
-            <h1 className="text-display-m font-medium text-paper">{hero.title}</h1>
-            <p className="mt-6 max-w-[38ch] text-lead text-mute">{hero.lead}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <ButtonLink href={examplesHref} variant="solid" arrow="down">
-                {hero.primary}
+            <h1 className="text-heading font-medium text-paper sm:text-display-m">{hero.title}</h1>
+            <p className="mt-4 line-clamp-3 max-w-[38ch] text-body text-mute sm:mt-6 sm:line-clamp-none sm:text-lead">{hero.lead}</p>
+            <div className="mt-5 flex flex-wrap items-center gap-x-8 gap-y-4 sm:mt-8">
+              <ButtonLink href={contactHref} variant="signal" className="max-sm:w-full">
+                {hero.demo}
               </ButtonLink>
-              <ArrowLink href={contactHref} className="text-paper">
-                {hero.secondary}
+              <ArrowLink href={examplesHref} className="text-paper">
+                {hero.primary}
               </ArrowLink>
             </div>
           </div>
@@ -314,7 +327,7 @@ export function ScrollIntro({ intro, hero, examplesHref, contactHref }: Props) {
         </div>
 
         {/* Scene 04 — what we build */}
-        <div className="intro-build shell absolute inset-x-0 bottom-0 z-[4] pb-[max(2rem,6vh)] motion-reduce:hidden lg:top-0 lg:motion-safe:flex lg:flex-col lg:justify-center lg:pt-(--nav-h) lg:pb-0">
+        <div className="intro-build shell absolute inset-x-0 bottom-0 z-[4] hidden pb-[max(2rem,6vh)] lg:top-0 lg:motion-safe:flex lg:flex-col lg:justify-center lg:pt-(--nav-h) lg:pb-0">
           <div className="lg:max-w-[46%]">
             <h2 ref={buildRef} tabIndex={-1} data-build-title className="text-display-m font-medium text-paper outline-none">
               <MaskedWords text={intro.build.title} />

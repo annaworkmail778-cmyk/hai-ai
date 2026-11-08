@@ -17,7 +17,7 @@ export function PlanCard({ plan, locale, dict }: { plan: Plan; locale: Locale; d
   return (
     <article
       className={cn(
-        "relative flex h-full flex-col rounded-md border p-6 lg:p-7",
+        "relative flex h-full flex-col rounded-md border p-6 max-sm:w-[84%] max-sm:shrink-0 max-sm:snap-center lg:p-7",
         plan.popular ? "border-signal bg-fg text-bg" : "border-rule bg-bg",
       )}
     >
@@ -101,6 +101,8 @@ export function PricingPlans({
               stagger={0.08}
               className={cn(
                 "col-span-4 grid gap-4 md:col-span-8 lg:col-span-8",
+                // Phones: swipe through a product's plans instead of a long stack.
+                "max-sm:-mx-(--page-x) max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:overflow-x-auto max-sm:px-(--page-x) max-sm:pb-3 max-sm:[scrollbar-width:none]",
                 list.length > 1 ? "sm:grid-cols-2" : "sm:max-w-[26rem]",
               )}
             >

@@ -18,6 +18,8 @@ export type SystemSceneProps = {
   /** DOM labels projected onto the four levels (top → bottom). */
   labels: RefObject<Array<HTMLElement | null>>;
   tier: SceneTier;
+  /** Narrow screens: the canvas is a box above the headline, framed from a fixed camera. */
+  compact: boolean;
   /** false = reduced motion: render a still composition on demand only. */
   animate: boolean;
   /** false = section offscreen: stop rendering entirely. */
@@ -45,7 +47,7 @@ export default function SystemScene(props: SystemSceneProps) {
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance", stencil: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 0.95;
+        gl.toneMappingExposure = 1.1;
         gl.setClearColor(0x000000, 0);
       }}
       style={{ position: "absolute", inset: 0 }}
@@ -65,7 +67,7 @@ export default function SystemScene(props: SystemSceneProps) {
         shadow-bias={-0.0005}
         shadow-normalBias={0.02}
       />
-      <ambientLight intensity={0.06} />
+      <ambientLight intensity={0.14} />
       <Rig {...props} />
     </Canvas>
   );
@@ -88,7 +90,7 @@ function placeLabel(el: HTMLElement, x: number, y: number, opacity: number) {
   el.style.opacity = opacity.toFixed(3);
 }
 
-function Rig({ progress, pointer, labels, tier, animate, onReady }: SystemSceneProps) {
+function Rig({ progress, pointer, labels, tier, compact, animate, onReady }: SystemSceneProps) {
   const setDpr = useThree((s) => s.setDpr);
   const invalidate = useThree((s) => s.invalidate);
 
@@ -135,6 +137,10 @@ function Rig({ progress, pointer, labels, tier, animate, onReady }: SystemSceneP
     }
 
     const state = sceneState(st.p, tier);
+    if (compact) {
+      // Fixed three-quarter view that fits the whole model in the box above the headline.
+      state.camera = { distance: 11.2, azimuth: (40 + Math.sin(st.time * 0.25) * 6) * (Math.PI / 180), elevation: 17 * (Math.PI / 180), shift: 0, targetY: 0.5 };
+    }
     system.update(state, st.time);
 
     // Camera orbit + lens shift.
@@ -160,7 +166,7 @@ function Rig({ progress, pointer, labels, tier, animate, onReady }: SystemSceneP
     scene.environmentRotation.y = st.time * 0.035;
 
     // Project the four layer labels onto the left-most corner of each level.
-    const els = labels.current;
+    const els = compact ? null : labels.current;
     if (els) {
       system.root.updateMatrixWorld();
       for (let i = 0; i < 4; i++) {
