@@ -82,7 +82,7 @@ export const brand = {
    * Public site URL used for canonical links, sitemap and Open Graph.
    * Set NEXT_PUBLIC_SITE_URL in the deployment environment.
    */
-  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.example.com").replace(/\/$/, ""),
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://riseup-group.com").replace(/\/$/, ""),
 } as const;
 
 export type Brand = typeof brand;
