@@ -5,7 +5,7 @@ import { Geist, Geist_Mono, Noto_Sans_Armenian } from "next/font/google";
 import "@/styles/site.css";
 
 import { brand } from "@/config/brand";
-import { isLocale, locales } from "@/i18n/config";
+import { isLocale, localeMeta, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { cn } from "@/lib/cn";
 import { baseMetadata } from "@/lib/seo";
@@ -37,7 +37,7 @@ const armenian = Noto_Sans_Armenian({
   display: "swap",
 });
 
-// Locales are prerendered. Anything else never reaches this layout (proxy.ts
+// This is the root layout: every page lives under /[lang]. Locales are prerendered. Anything else never reaches this layout (proxy.ts
 // redirects it), and the notFound() guard below covers direct requests.
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -60,26 +60,29 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const dict = getDictionary(lang);
 
   return (
-    <div
-      lang={lang}
-      data-theme="dark"
-      className={cn("site", geist.variable, geistMono.variable, armenian.variable)}
-      style={{ "--color-signal": brand.accent } as CSSProperties}
-    >
-      <a
-        href="#main"
-        className="label fixed top-3 left-3 z-(--z-skip) -translate-y-24 bg-signal px-4 py-3 text-black transition-transform focus-visible:translate-y-0"
-      >
-        {dict.common.skipToContent}
-      </a>
-      <LocaleSync locale={lang} />
-      <SmoothScroll />
-      <Nav locale={lang} labels={dict.nav} email={brand.email} />
-      <main id="main" tabIndex={-1} className="outline-none">
-        {children}
-      </main>
-      <Footer locale={lang} dict={dict} />
-      <CustomCursor viewLabel={dict.common.view} />
-    </div>
+    <html lang={localeMeta[lang].hreflang}>
+      <body className="antialiased">
+        <div
+          data-theme="dark"
+          className={cn("site", geist.variable, geistMono.variable, armenian.variable)}
+          style={{ "--color-signal": brand.accent } as CSSProperties}
+        >
+          <a
+            href="#main"
+            className="label fixed top-3 left-3 z-(--z-skip) -translate-y-24 bg-signal px-4 py-3 text-black transition-transform focus-visible:translate-y-0"
+          >
+            {dict.common.skipToContent}
+          </a>
+          <LocaleSync locale={lang} />
+          <SmoothScroll />
+          <Nav locale={lang} labels={dict.nav} email={brand.email} />
+          <main id="main" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
+          <Footer locale={lang} dict={dict} />
+          <CustomCursor viewLabel={dict.common.view} />
+        </div>
+      </body>
+    </html>
   );
 }

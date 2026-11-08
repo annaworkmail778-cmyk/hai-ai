@@ -71,7 +71,6 @@ with imagery that suggests it was a real engagement.
 | --- | --- | --- |
 | Logo (SVG) | Placeholder glyph + wordmark | `src/config/brand.ts` → `logo` |
 | Favicon / app icons | Placeholder glyph, generated | `src/app/[lang]/icon.tsx`, `apple-icon.tsx` |
-| Legacy `src/app/favicon.ico` | Next.js default triangle from the previous site | Replace with the final mark or delete. |
 | Open Graph images | Generated per locale and per project | `src/app/[lang]/opengraph-image.tsx`, `work/[slug]/opengraph-image.tsx` |
 | 3D intro object | Coded (Three.js), no files needed | `src/components/three/` |
 | About page photography (optional) | Not used | Studio/team photography in the same art direction can be added to the About page if wanted. Use only real people with their consent. |

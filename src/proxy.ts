@@ -13,15 +13,11 @@ const LOCALES = ["hy", "ru", "en"];
 const DEFAULT_LOCALE = "hy";
 const COOKIE = "NEXT_LOCALE";
 
-/** Routes of the previous website that are still served as-is. */
-const LEGACY_PATHS = ["/creation"];
-
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const first = pathname.split("/")[1] ?? "";
   if (LOCALES.includes(first)) return NextResponse.next();
-  if (LEGACY_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return NextResponse.next();
 
   const saved = request.cookies.get(COOKIE)?.value;
   const locale = saved && LOCALES.includes(saved) ? saved : DEFAULT_LOCALE;

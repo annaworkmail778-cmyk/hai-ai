@@ -229,8 +229,8 @@
 }
 
 /*
- * Page-level resets. These are unlayered (and use :root for specificity)
- * so they win over any older global stylesheet still present in the app.
+ * Page-level resets. Unlayered and scoped with :root so they win over
+ * Tailwind's base layer.
  */
 :root {
   scroll-behavior: auto;

@@ -57,7 +57,6 @@ company name, so it rarely needs changing for a rebrand.
    | `src/app/[lang]/icon.tsx` | Browser tab icon (generated PNG) |
    | `src/app/[lang]/apple-icon.tsx` | Home-screen icon (generated PNG) |
    | `src/lib/og.tsx` → `OgWordmark` | Logo on generated Open Graph images |
-   | `src/app/favicon.ico` | **Legacy** icon from the previous site (Next.js default). Replace it with an `.ico` of the new mark, or delete it. |
 
 ## 3. Accent colour
 

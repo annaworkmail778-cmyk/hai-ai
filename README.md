@@ -229,34 +229,9 @@ After the first deploy: set the custom domain, update
 Search Console and Yandex Webmaster, and send a test inquiry through the
 contact form.
 
-## Legacy files from the previous site
+## Previous site
 
-The repository still contains the previous site (`HAI_AI Systems`). Its
-files were left untouched while this site was built:
-
-- `src/app/layout.tsx` (root layout), `src/app/page.tsx`, `src/app/globals.css`,
-  `src/app/creation/`, `src/app/icon.png`, `src/app/favicon.ico`
-- `src/components/*.tsx` (top-level files only), `src/lib/i18n/`, `src/lib/pricing.ts`
-- `public/cinema/`, `public/cinema-hd/`, `public/reels/` (~58 MB), robot and
-  mascot images, `public/creation.html` and similar
-- `.old-site-backup/`
-
-The new site works with them in place: `/` redirects to `/hy`, and the new
-`[lang]` layout renders inside the old root layout. Until the cleanup, that
-costs every page (measured on the production build):
-
-- ~74 KB of extra JavaScript: the old site's dictionaries and pricing data,
-  loaded by its `I18nProvider`
-- two unused font preloads (Sora, Manrope; ~50 KB) and the old `globals.css`
-- `lang="en"` in the initial HTML. The browser corrects it, but crawlers
-  that don't run JavaScript see `en`. The old provider also rewrites
-  `lang`; `LocaleSync` puts it back.
-- `/creation` and the old favicon are still served.
-
-**Recommended cleanup** (one commit, then `npm run build`): delete the files
-above, and turn `src/app/[lang]/layout.tsx` into the root layout by having
-it render `<html lang={lang}>` and `<body>` (moving the font classes onto
-`<html>`). Then remove the `<html lang>` observer in `LocaleSync`
-(`src/components/layout/LanguageSwitcher.tsx`), and `/creation` from
-`LEGACY_PATHS` in `src/proxy.ts`. Uninstall `framer-motion` and
-`lucide-react` if nothing else uses them.
+The repository used to hold an earlier site (`HAI_AI Systems`). Its files
+were removed in November 2026; `src/app/[lang]/layout.tsx` is now the root
+layout and every page lives under `/hy`, `/ru` or `/en`. The old code is
+still in the git history if it is ever needed.
