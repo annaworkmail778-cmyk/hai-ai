@@ -71,7 +71,12 @@ export const brand = {
    * contact page hide the list while it is empty. Example:
    *   { label: "Instagram", href: "https://www.instagram.com/riseup.am" }
    */
-  socialLinks: [] as SocialLink[],
+  socialLinks: [
+    { label: "Instagram", href: "https://www.instagram.com/riseup.group.2026" },
+    { label: "Facebook", href: "https://www.facebook.com/share/1JXRGjXcRz/" },
+    { label: "TikTok", href: "https://www.tiktok.com/@riseup.group.2026" },
+    { label: "YouTube", href: "https://www.youtube.com/@riseup.group.2026" },
+  ] as SocialLink[],
 
   /**
    * Public site URL used for canonical links, sitemap and Open Graph.
