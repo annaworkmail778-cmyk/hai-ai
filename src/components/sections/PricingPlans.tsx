@@ -34,7 +34,7 @@ export function PlanCard({ plan, locale, dict }: { plan: Plan; locale: Locale; d
           <>
             <p className="text-heading leading-none font-medium tabular-nums">{price(plan.setup)}</p>
             <p className={cn("mt-2 text-small", plan.popular ? "text-bg/70" : "text-fg-mute")}>
-              {t.setup} · + {formatAmd(plan.monthly)} {t.perMonth}
+              {plan.monthly > 0 ? `${t.setup} · + ${formatAmd(plan.monthly)} ${t.perMonth}` : t.oneTime}
             </p>
           </>
         ) : (

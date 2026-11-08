@@ -75,7 +75,7 @@ export const HIGHLIGHTS: Highlight[] = [
         body: "Պատասխանում է 24/7, գրանցում է, հիշեցնում այցի մասին։",
         ru: "AI-администратор 24/7",
         bg: "salon",
-        price: "60 000 ֏-ից",
+        price: "45 000 ֏-ից",
         cta: true,
         visual: {
           kind: "chat",
@@ -87,10 +87,10 @@ export const HIGHLIGHTS: Highlight[] = [
           ],
         },
       },
-      { id: "services-2", title: "Պատվերներ", body: "Instagram խանութի պատվերները՝ մեկ վահանակում։", ru: "Заказы из Instagram в одной панели", price: "90 000 ֏-ից", cta: true, visual: { kind: "orders" } },
-      { id: "services-3", title: "Անշարժ գույք", body: "Բոլոր հայտերը մեկ տեղում, ոչ մի կորած գնորդ։", ru: "Все заявки в одном месте", price: "180 000 ֏-ից", cta: true, visual: { kind: "leads" } },
-      { id: "services-4", title: "Մարքեթինգ", body: "Google Maps, կարծիքներ, Instagram կոնտենտ։", ru: "Google Maps, отзывы, Instagram", price: "25 000 ֏/ամիս-ից", cta: true, visual: { kind: "stars" } },
-      { id: "services-5", title: "Կայքեր", body: "Արագ կայք 3 լեզվով։", ru: "Сайты на 3 языках", price: "120 000 ֏-ից", cta: true, visual: { kind: "site" } },
+      { id: "services-2", title: "Պատվերներ", body: "Instagram խանութի պատվերները՝ մեկ վահանակում։", ru: "Заказы из Instagram в одной панели", price: "70 000 ֏-ից", cta: true, visual: { kind: "orders" } },
+      { id: "services-3", title: "Անշարժ գույք", body: "Բոլոր հայտերը մեկ տեղում, ոչ մի կորած գնորդ։", ru: "Все заявки в одном месте", price: "140 000 ֏-ից", cta: true, visual: { kind: "leads" } },
+      { id: "services-4", title: "Մարքեթինգ", body: "Google Maps, կարծիքներ, Instagram կոնտենտ։", ru: "Google Maps, отзывы, Instagram", price: "20 000 ֏/ամիս-ից", cta: true, visual: { kind: "stars" } },
+      { id: "services-5", title: "Կայքեր", body: "Արագ կայք 3 լեզվով։", ru: "Сайты на 3 языках", price: "80 000 ֏-ից", cta: true, visual: { kind: "site" } },
     ],
   },
   {
@@ -105,8 +105,8 @@ export const HIGHLIGHTS: Highlight[] = [
         visual: {
           kind: "prices",
           cards: [
-            { name: "Start · մեկ ալիք", setup: "60 000 ֏", monthly: "20 000 ֏ / ամիս" },
-            { name: "Pro · բոլոր ալիքները + գրանցում", setup: "120 000 ֏", monthly: "35 000 ֏ / ամիս", tag: "Ամենաշատ ընտրվողը" },
+            { name: "Start · մեկ ալիք", setup: "45 000 ֏", monthly: "15 000 ֏ / ամիս" },
+            { name: "Pro · բոլոր ալիքները + գրանցում", setup: "90 000 ֏", monthly: "25 000 ֏ / ամիս", tag: "Ամենաշատ ընտրվողը" },
           ],
         },
       },
@@ -117,8 +117,8 @@ export const HIGHLIGHTS: Highlight[] = [
         visual: {
           kind: "prices",
           cards: [
-            { name: "Պատվերներ", setup: "90 000 ֏-ից", monthly: "25 000 ֏ / ամիս" },
-            { name: "Անշարժ գույք", setup: "180 000 ֏-ից", monthly: "35 000 ֏ / ամիս" },
+            { name: "Պատվերներ", setup: "70 000 ֏-ից", monthly: "20 000 ֏ / ամիս" },
+            { name: "Անշարժ գույք", setup: "140 000 ֏-ից", monthly: "25 000 ֏ / ամիս" },
           ],
         },
       },
@@ -130,8 +130,8 @@ export const HIGHLIGHTS: Highlight[] = [
         visual: {
           kind: "prices",
           cards: [
-            { name: "Google և կարծիքներ", setup: "25 000 ֏ / ամիս" },
-            { name: "Google + Instagram", setup: "60 000 ֏ / ամիս" },
+            { name: "Google և կարծիքներ", setup: "20 000 ֏ / ամիս" },
+            { name: "Google + Instagram", setup: "45 000 ֏ / ամիս" },
           ],
         },
       },
@@ -142,8 +142,8 @@ export const HIGHLIGHTS: Highlight[] = [
         visual: {
           kind: "prices",
           cards: [
-            { name: "Մեկ էջանոց կայք", setup: "120 000 ֏-ից", monthly: "10 000 ֏ / ամիս" },
-            { name: "Ընկերության կայք", setup: "210 000 ֏-ից", monthly: "18 000 ֏ / ամիս" },
+            { name: "Մեկ էջանոց կայք", setup: "80 000 ֏-ից", monthly: "8 000 ֏ / ամիս" },
+            { name: "Ընկերության կայք", setup: "150 000 ֏-ից", monthly: "12 000 ֏ / ամիս" },
           ],
         },
       },

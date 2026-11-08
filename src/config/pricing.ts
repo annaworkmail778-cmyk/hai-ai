@@ -7,7 +7,8 @@ import type { CapabilityId } from "./navigation";
  * lists are translated in src/locales/*.json → pricing.plans.<id>.
  *
  *   setup    one-time payment for building and launching (0 = none)
- *   monthly  monthly fee for hosting, AI usage, support and changes (0 = none)
+ *   monthly  monthly fee for hosting, AI usage, support and changes (0 = none;
+ *            with setup > 0 this is a one-time job, e.g. a video)
  *   from     true shows "from" before the price (final price depends on scope)
  *   popular  highlights the plan as the recommended one
  */
@@ -27,21 +28,27 @@ export const planOrder = [
   "real-estate",
   "marketing-local",
   "marketing-full",
+  "ai-video",
   "landing",
   "website",
+  "shop",
+  "premium-3d",
 ] as const;
 
 export type PlanId = (typeof planOrder)[number];
 
 export const plans: Record<PlanId, Plan> = {
-  "admin-start": { id: "admin-start", product: "ai-admin", setup: 60_000, monthly: 20_000 },
-  "admin-pro": { id: "admin-pro", product: "ai-admin", setup: 120_000, monthly: 35_000, popular: true },
-  orders: { id: "orders", product: "orders", setup: 90_000, monthly: 25_000, from: true },
-  "real-estate": { id: "real-estate", product: "real-estate", setup: 180_000, monthly: 35_000, from: true },
-  "marketing-local": { id: "marketing-local", product: "marketing", setup: 0, monthly: 25_000 },
-  "marketing-full": { id: "marketing-full", product: "marketing", setup: 0, monthly: 60_000 },
-  landing: { id: "landing", product: "websites", setup: 120_000, monthly: 10_000, from: true },
-  website: { id: "website", product: "websites", setup: 210_000, monthly: 18_000, from: true },
+  "admin-start": { id: "admin-start", product: "ai-admin", setup: 45_000, monthly: 15_000 },
+  "admin-pro": { id: "admin-pro", product: "ai-admin", setup: 90_000, monthly: 25_000, popular: true },
+  orders: { id: "orders", product: "orders", setup: 70_000, monthly: 20_000, from: true },
+  "real-estate": { id: "real-estate", product: "real-estate", setup: 140_000, monthly: 25_000, from: true },
+  "marketing-local": { id: "marketing-local", product: "marketing", setup: 0, monthly: 20_000 },
+  "marketing-full": { id: "marketing-full", product: "marketing", setup: 0, monthly: 45_000 },
+  "ai-video": { id: "ai-video", product: "marketing", setup: 25_000, monthly: 0, from: true },
+  landing: { id: "landing", product: "websites", setup: 80_000, monthly: 8_000, from: true },
+  website: { id: "website", product: "websites", setup: 150_000, monthly: 12_000, from: true },
+  shop: { id: "shop", product: "websites", setup: 150_000, monthly: 12_000, from: true },
+  "premium-3d": { id: "premium-3d", product: "websites", setup: 250_000, monthly: 15_000, from: true },
 };
 
 export function plansFor(product: CapabilityId): Plan[] {

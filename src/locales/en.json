@@ -2,7 +2,7 @@
   "meta": {
     "home": {
       "title": "AI administrator, booking, orders & websites for business in Armenia",
-      "description": "Riseup builds AI tools for small businesses in Armenia: an AI administrator for Instagram and WhatsApp, online booking, order systems, Google marketing and websites. Launch prices from 60 000 ֏."
+      "description": "Riseup builds AI tools for small businesses in Armenia: an AI administrator for Instagram and WhatsApp, online booking, order systems, Google marketing and websites. Launch prices from 45 000 ֏."
     },
     "work": {
       "title": "Examples",
@@ -25,7 +25,7 @@
     },
     "pricing": {
       "title": "Prices",
-      "description": "Riseup prices in Armenian dram: AI administrator from 60 000 ֏, orders from 90 000 ֏, marketing from 25 000 ֏ a month, websites from 120 000 ֏."
+      "description": "Riseup prices in Armenian dram: AI administrator from 45 000 ֏, orders from 70 000 ֏, marketing from 20 000 ֏ a month, AI video ads from 25 000 ֏, websites from 80 000 ֏."
     }
   },
   "common": {
@@ -190,7 +190,7 @@
       },
       "marketing": {
         "name": "Instagram & Google marketing",
-        "summary": "Posts every week, a cared-for Google profile, more reviews and a simple monthly report.",
+        "summary": "Posts every week, a cared-for Google profile, more reviews, AI video ads and a clear monthly report.",
         "points": [
           "12–16 posts a month",
           "Google Maps profile setup and care",
@@ -200,7 +200,7 @@
       },
       "websites": {
         "name": "Websites",
-        "summary": "Fast, clear websites in three languages that bring inquiries — from a one-page site to a full company website.",
+        "summary": "Fast websites in three languages that bring enquiries — from one page to an online shop or a premium 3D site.",
         "points": [
           "One-page site or full website",
           "Armenian, Russian and English",
@@ -874,6 +874,16 @@
           "Content plan approved by you"
         ]
       },
+      "ai-video": {
+        "name": "AI ad video",
+        "for": "Realistic video ads made with AI",
+        "features": [
+          "10–15 second ad for Instagram, TikTok or YouTube",
+          "Script, AI footage, music and captions",
+          "Your logo, product and offer",
+          "3 videos for 60 000 ֏"
+        ]
+      },
       "landing": {
         "name": "One-page site",
         "for": "Quick start online",
@@ -893,9 +903,30 @@
           "AI chat or booking can be added",
           "Google visibility"
         ]
+      },
+      "shop": {
+        "name": "Online shop",
+        "for": "Sell online with orders in one dashboard",
+        "features": [
+          "Catalogue, cart and online orders",
+          "Order dashboard with statuses",
+          "New orders in Telegram",
+          "Armenian, Russian and English"
+        ]
+      },
+      "premium-3d": {
+        "name": "Premium 3D website",
+        "for": "A site people remember",
+        "features": [
+          "3D scenes and scroll animations",
+          "Custom design for your brand",
+          "Fast on phones",
+          "Contact form, WhatsApp and Google visibility"
+        ]
       }
     },
     "pageTitle": "Clear prices.",
-    "pageIntro": "Launch prices for our first clients. One-time setup, then a small monthly fee for hosting, AI, support and changes. No hidden costs."
+    "pageIntro": "Launch prices for our first clients. One-time setup, then a small monthly fee for hosting, AI, support and changes. No hidden costs.",
+    "oneTime": "one-time payment · no monthly fee"
   }
 }
