@@ -51,7 +51,7 @@ export const brand = {
   /**
    * The single accent colour (signal orange). Used sparingly: markers, focus
    * rings, the 3D model's light seam, diagrams and generated images.
-   * Change it here; also update src/app/[lang]/icon.svg (a static file).
+   * Change it here; the tab and home-screen icons read it.
    */
   accent: "#ff5b14",
 

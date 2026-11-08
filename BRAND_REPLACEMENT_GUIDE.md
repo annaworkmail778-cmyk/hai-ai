@@ -54,7 +54,7 @@ company name, so it rarely needs changing for a rebrand.
    | File | What it is |
    | --- | --- |
    | `src/components/layout/Wordmark.tsx` → `BrandGlyph` | Placeholder glyph, used while `logo.type` is `"wordmark"` |
-   | `src/app/[lang]/icon.svg` | Browser tab icon (static SVG) |
+   | `src/app/[lang]/icon.tsx` | Browser tab icon (generated PNG) |
    | `src/app/[lang]/apple-icon.tsx` | Home-screen icon (generated PNG) |
    | `src/lib/og.tsx` → `OgWordmark` | Logo on generated Open Graph images |
    | `src/app/favicon.ico` | **Legacy** icon from the previous site (Next.js default). Replace it with an `.ico` of the new mark, or delete it. |
@@ -65,7 +65,7 @@ The single accent (signal orange `#FF5B14`) is `brand.accent` in
 `brand.ts`. It feeds the CSS variable `--color-signal`, the 3D intro's
 light seam, the process diagram, the coded project visuals, Open Graph
 images and the home-screen icon. The only other copy is the static
-`src/app/[lang]/icon.svg`. Keep it a single, sparing accent, and avoid blue.
+`src/app/[lang]/icon.tsx`. Keep it a single, sparing accent, and avoid blue.
 
 The neutral palette (black, ink, graphite, paper, mute grey) and the type
 scale are tokens in `src/styles/site.css` (`@theme`).
@@ -117,4 +117,4 @@ the new Open Graph image.
 - Vector files: `public/brand/riseup-logo.svg`, `riseup-logo-white.svg` (mark + wordmark),
   `riseup-mark.svg`, `riseup-mark-white.svg` (R mark only, use for avatars and favicons)
 - Paths used by the site and the reels: `src/config/logo.ts` (copy in `reels/src/logo.ts`)
-- Favicon: `src/app/[lang]/icon.svg`; home-screen icon: `src/app/[lang]/apple-icon.tsx`
+- Favicon: `src/app/[lang]/icon.tsx`; home-screen icon: `src/app/[lang]/apple-icon.tsx`
