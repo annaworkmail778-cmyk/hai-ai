@@ -56,34 +56,34 @@
     "scroll": "Scroll to see how it works",
     "skip": "Skip",
     "layers": [
-      "AI",
+      "Customers",
       "Automation",
-      "Software",
-      "Data"
+      "Bookings",
+      "Sales"
     ],
     "layerNotes": [
-      "Answers customers and sorts requests",
-      "Does the routine tasks for you",
-      "The apps your team works in",
-      "All your information in one place"
+      "AI replies 24/7 on Instagram, WhatsApp and Telegram",
+      "Repetitive daily work runs by itself",
+      "Visits and orders in one calendar",
+      "More deals and a clear report"
     ],
-    "statement": "Together, they do the routine work for your team.",
-    "sceneLabel": "3D model of a business system: four connected layers — data, software, automation and AI.",
+    "statement": "You save hours every day, and the business keeps growing.",
+    "sceneLabel": "3D model: four layers — customers, automation, bookings and sales — with an orange growth arrow rising through them.",
     "build": {
       "title": "What Riseup does for you",
       "items": [
-        "Answers Instagram & WhatsApp 24/7",
-        "Books visits and reminds clients",
-        "Takes orders for online shops",
-        "Websites and Google marketing"
+        "Replies to customers 24/7",
+        "Books visits and takes orders",
+        "Automates the daily routine",
+        "Websites, marketing and AI ads"
       ],
       "cta": "See how it works"
     }
   },
   "hero": {
-    "eyebrow": "AI tools for business in Armenia",
-    "title": "Your clients get an answer in seconds. Even at night.",
-    "lead": "Riseup answers messages, books visits, takes orders and brings reviews — for salons, clinics, shops, agencies and cafés.",
+    "eyebrow": "AI and automation for businesses in Armenia",
+    "title": "More customers. More sales. Less routine.",
+    "lead": "Riseup automates the repetitive work of your business: replies to customers, bookings, orders, reports and marketing. You save time and focus on growth.",
     "primary": "See how it works",
     "secondary": "See prices"
   },
@@ -733,34 +733,27 @@
   },
   "contact": {
     "eyebrow": "Free demo",
-    "title": "Tell us about your business.",
-    "intro": "Write a few words. We'll reply with a short demo of how Riseup would work for you, and a clear price.",
+    "title": "Leave your number.",
+    "intro": "Write your name and phone number. We'll call or message you on WhatsApp, find out what your business needs and show you a free demo.",
     "direct": "Or write directly",
     "privacy": "We use your details only to reply to your message.",
     "noscript": "The form needs JavaScript to send. You can always email us at {email}.",
     "fields": {
       "name": "Name",
-      "company": "Company",
-      "contact": "Email or phone",
-      "business": "What does your business do?",
-      "improve": "What would you like Riseup to do?",
-      "process": "What process currently takes too much time?",
-      "areas": "Areas of interest"
+      "contact": "Phone / WhatsApp",
+      "company": "Business name or Instagram"
     },
     "placeholders": {
-      "name": "Your full name",
-      "company": "Company name",
-      "contact": "you@company.com or +374 …",
-      "business": "For example: beauty salon in Yerevan, 4 masters",
-      "improve": "Answering Instagram, online booking, orders, Google reviews…",
-      "process": "For example: we answer the same questions in Direct all day"
+      "name": "e.g. Anna",
+      "contact": "+374 77 123 456",
+      "company": "e.g. Bella Studio or @bella.studio"
     },
     "optional": "Optional",
     "submit": "Send message",
     "sending": "Sending…",
     "errors": {
       "required": "This field is required.",
-      "contact": "Enter a valid email address or phone number.",
+      "contact": "Enter a phone number (or an email).",
       "tooShort": "Please add a little more detail.",
       "tooLong": "Please keep this under {max} characters.",
       "summary": "Please check the highlighted fields.",
@@ -770,7 +763,7 @@
     },
     "success": {
       "title": "Thank you.",
-      "text": "Your message is on its way. We will reply with next steps.",
+      "text": "Thank you! We'll call or message you on WhatsApp soon.",
       "dev": "Development mode: no delivery channel is configured, so the message was logged on the server instead of being sent.",
       "again": "Send another message"
     }

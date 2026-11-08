@@ -4,9 +4,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
 import { StudioEnvironment } from "./StudioEnvironment";
-import { createSystem } from "./SystemModel";
+import { createSystem, FOOTPRINT, PLATE } from "./GrowthModel";
 import { sceneState, type SceneTier } from "./choreography";
-import { FOOTPRINT, PLATE } from "./system-geometry";
 
 export type SceneProgress = { value: number };
 export type PointerState = { x: number; y: number };

@@ -47,12 +47,9 @@ function describe(payload: ContactPayload, receivedAt: string) {
   const time = new Date(receivedAt).toLocaleString("en-GB", { timeZone: brand.address.timeZone, dateStyle: "short", timeStyle: "short" });
   return [
     ["Անուն", payload.name],
-    ["Ընկերություն", payload.company || "—"],
-    ["Կոնտակտ", payload.contact],
-    ["Բիզնես", payload.business],
-    ["Ինչ է ուզում", payload.improve],
-    ["Դանդաղ գործընթաց", payload.process || "—"],
-    ["Ոլորտներ", areas.length ? areas.join(", ") : "—"],
+    ["Հեռախոս / կոնտակտ", payload.contact],
+    ["Բիզնես", payload.company || "—"],
+    ...(areas.length ? ([["Ոլորտներ", areas.join(", ")]] as const) : []),
     ["Կայքի լեզու", payload.locale.toUpperCase()],
     ["Ստացվել է", `${time} (Երևան)`],
   ] as const;

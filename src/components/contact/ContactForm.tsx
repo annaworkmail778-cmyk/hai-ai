@@ -13,7 +13,6 @@ import {
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { interpolate, pad2 } from "@/i18n/format";
-import { cn } from "@/lib/cn";
 import { Arrow } from "@/components/ui/Arrow";
 import { scrollToTarget } from "@/components/motion/scroll-store";
 import {
@@ -45,8 +44,6 @@ type ApiResponse = {
   fields?: ContactErrors;
 };
 
-const MULTILINE = new Set<ContactField>(["business", "improve", "process"]);
-
 const noop = () => () => {};
 /** False during SSR and hydration, true once React runs in the browser. */
 const useHydrated = () => useSyncExternalStore(noop, () => true, () => false);
@@ -63,26 +60,17 @@ function withError(errors: ContactErrors, field: ContactField, error: FieldError
  * enforces, never reports delivery the server did not confirm, and keeps the
  * visitor's text when anything goes wrong.
  */
-export function ContactForm({
-  t,
-  areas,
-  email,
-  locale,
-}: {
-  t: Labels;
-  areas: Array<{ id: ContactArea; name: string }>;
-  email: string;
-  locale: Locale;
-}) {
+export function ContactForm({ t, email, locale }: { t: Labels; email: string; locale: Locale }) {
   const uid = useId();
   const hydrated = useHydrated();
   const [values, setValues] = useState<ContactValues>(emptyValues);
+  // An area handed over by a link (?area=sales) still travels with the lead.
   const [selected, setSelected] = useState<ContactArea[]>([]);
   const [errors, setErrors] = useState<ContactErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [trap, setTrap] = useState("");
-  const fields = useRef<Partial<Record<ContactField, HTMLInputElement | HTMLTextAreaElement | null>>>({});
+  const fields = useRef<Partial<Record<ContactField, HTMLInputElement | null>>>({});
   const resultRef = useRef<HTMLDivElement>(null);
 
   // Pre-select an area handed over by the homepage diagnostic (?area=sales).
@@ -116,7 +104,7 @@ export function ContactForm({
     }
   };
 
-  const onChange = (field: ContactField) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (field: ContactField) => (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setValues((v) => ({ ...v, [field]: value }));
     // Errors already on screen update live, so they disappear as soon as the text is fixed.
@@ -129,9 +117,6 @@ export function ContactForm({
     if (!value.trim() && !submitted) return;
     setErrors((current) => withError(current, field, validateField(field, value)));
   };
-
-  const toggleArea = (id: ContactArea) =>
-    setSelected((current) => (current.includes(id) ? current.filter((a) => a !== id) : [...current, id]));
 
   const focusFirstInvalid = (found: ContactErrors) => {
     const first = CONTACT_FIELDS.find((f) => found[f]);
@@ -269,28 +254,17 @@ export function ContactForm({
                   <span>{t.fields[field]}</span>
                   {!required && <span className="label shrink-0 text-fg-mute">{t.optional}</span>}
                 </label>
-                {MULTILINE.has(field) ? (
-                  <textarea
-                    {...props}
-                    ref={(el) => {
-                      fields.current[field] = el;
-                    }}
-                    rows={2}
-                    className={cn(control, "field-sizing-content min-h-[4.75rem] resize-none")}
-                  />
-                ) : (
-                  <input
-                    {...props}
-                    ref={(el) => {
-                      fields.current[field] = el;
-                    }}
-                    type="text"
-                    autoComplete={field === "name" ? "name" : field === "company" ? "organization" : "email"}
-                    spellCheck={field === "contact" ? false : undefined}
-                    autoCapitalize={field === "contact" ? "none" : undefined}
-                    className={control}
-                  />
-                )}
+                <input
+                  {...props}
+                  ref={(el) => {
+                    fields.current[field] = el;
+                  }}
+                  type={field === "contact" ? "tel" : "text"}
+                  inputMode={field === "contact" ? "tel" : undefined}
+                  autoComplete={field === "name" ? "given-name" : field === "contact" ? "tel" : "organization"}
+                  spellCheck={field === "contact" ? false : undefined}
+                  className={control}
+                />
                 {error && (
                   <p id={errorId} className="mt-3 flex items-center gap-2 text-small text-fg">
                     <span aria-hidden="true" className="size-1.5 shrink-0 bg-signal" />
@@ -302,43 +276,6 @@ export function ContactForm({
           );
         })}
 
-        <div role="group" aria-labelledby={`${uid}-areas`} className={row}>
-          <span aria-hidden="true" className="label pt-1 text-fg-mute">
-            {pad2(CONTACT_FIELDS.length + 1)}
-          </span>
-          <div>
-            <p id={`${uid}-areas`} className="flex items-baseline justify-between gap-4 text-small font-medium text-fg">
-              <span>{t.fields.areas}</span>
-              <span className="label shrink-0 text-fg-mute">{t.optional}</span>
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {areas.map((area) => {
-                const checked = selected.includes(area.id);
-                return (
-                  <li key={area.id}>
-                    <label
-                      className={cn(
-                        "inline-flex cursor-pointer items-center gap-2.5 rounded-xs border px-3.5 py-2 text-small transition-colors duration-(--dur-micro) has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-signal",
-                        checked ? "border-fg bg-fg text-bg" : "border-rule-strong text-fg-mute hover:border-fg hover:text-fg",
-                      )}
-                    >
-                      <input
-                        type="checkbox"
-                        name="areas"
-                        value={area.id}
-                        checked={checked}
-                        onChange={() => toggleArea(area.id)}
-                        className="sr-only"
-                      />
-                      <span aria-hidden="true" className={cn("size-1.5 shrink-0", checked ? "bg-signal" : "border border-current")} />
-                      {area.name}
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
       </div>
 
       {status.kind === "failed" && (

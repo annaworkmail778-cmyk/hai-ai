@@ -22,8 +22,8 @@ export type DemoLabels = {
   screens: string;
 };
 
-const STEP_MS = 6000;
-const LAST_STEP_MS = 9000;
+const STEP_MS = 4200;
+const LAST_STEP_MS = 6000;
 
 const subscribeReduced = (cb: () => void) => {
   const q = window.matchMedia(media.reducedMotion);
@@ -79,7 +79,7 @@ export function DemoPlayer({
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.45 });
+    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.3 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -126,8 +126,6 @@ export function DemoPlayer({
       ref={rootRef}
       aria-label={labels.region}
       className={cn("@container", className)}
-      onPointerEnter={() => setHold(true)}
-      onPointerLeave={() => setHold(false)}
       onFocus={() => setHold(true)}
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHold(false);
@@ -151,7 +149,21 @@ export function DemoPlayer({
         ))}
       </div>
 
-      <DemoStage id={id} locale={locale} step={step} shownSide={shownSide} />
+      <div className="relative">
+        <DemoStage id={id} locale={locale} step={step} shownSide={shownSide} />
+        {/* What is happening right now, on top of the screens. */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center px-4 @2xl:bottom-6">
+          <p
+            key={step}
+            className="flex max-w-full animate-demo-chip items-center gap-2.5 rounded-full bg-signal py-2 pr-4 pl-2 text-small font-medium text-black shadow-[0_12px_32px_-12px_rgb(255_91_20/0.8)] motion-reduce:animate-none"
+          >
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black text-[0.7rem] text-paper tabular-nums">
+              {step + 1}
+            </span>
+            <span className="truncate">{current.title}</span>
+          </p>
+        </div>
+      </div>
 
       {/* Caption + controls */}
       <div className="mt-6 grid gap-5 @3xl:grid-cols-[minmax(0,1fr)_auto] @3xl:items-start">
@@ -195,11 +207,11 @@ export function DemoPlayer({
               onClick={() => go(i)}
               className="group block w-full py-1 text-left"
             >
-              <span className="relative block h-0.5 overflow-hidden bg-rule-strong">
+              <span className="relative block h-1 overflow-hidden rounded-full bg-rule-strong">
                 {/* The current bar is driven by the clock; others are simply full or empty. */}
                 <span
                   ref={i === step ? barRef : undefined}
-                  className="absolute inset-0 block origin-left bg-fg"
+                  className="absolute inset-0 block origin-left bg-signal"
                   style={i === step ? undefined : { transform: i < step ? "scaleX(1)" : "scaleX(0)" }}
                 />
               </span>

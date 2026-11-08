@@ -107,6 +107,7 @@
   --animate-demo-float: demo-float 9s ease-in-out infinite;
   --animate-demo-shimmer: demo-shimmer 1.6s linear infinite;
   --animate-demo-bar: demo-bar 1.1s var(--ease-out) both;
+  --animate-demo-chip: demo-chip 0.5s var(--ease-out) both;
   --animate-hero-in: hero-in 1.1s var(--ease-out) both;
 
   @keyframes demo-in {
@@ -137,6 +138,10 @@
   @keyframes demo-bar {
     from { transform: scaleY(0); }
     to { transform: scaleY(1); }
+  }
+  @keyframes demo-chip {
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to { opacity: 1; transform: none; }
   }
   @keyframes demo-progress {
     from { transform: scaleX(0); }
@@ -442,19 +447,24 @@
   cursor: text;
 }
 
+/* Brand-orange cursor: visible on black, paper and photos alike. */
 .cursor-dot,
 .cursor-ring {
-  mix-blend-mode: difference;
   border-radius: var(--radius-full);
   will-change: transform;
 }
 .cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-paper);
+  width: 10px;
+  height: 10px;
+  background: var(--color-signal);
+  box-shadow:
+    0 0 0 2px rgb(0 0 0 / 0.35),
+    0 0 14px 2px rgb(255 91 20 / 0.55);
   transition: opacity var(--dur-micro) linear, scale var(--dur-ui) var(--ease-out);
 }
-.cursor-dot[data-state="link"],
+.cursor-dot[data-state="link"] {
+  scale: 0.6;
+}
 .cursor-dot[data-state="view"],
 .cursor-dot[data-state="hidden"] {
   scale: 0;
@@ -462,9 +472,10 @@
 .cursor-ring {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgb(243 242 238 / 0.55);
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgb(255 91 20 / 0.75);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.18);
   transition:
     width var(--dur-ui) var(--ease-out),
     height var(--dur-ui) var(--ease-out),
@@ -473,14 +484,14 @@
     scale var(--dur-micro) var(--ease-out);
 }
 .cursor-ring[data-state="link"] {
-  width: 58px;
-  height: 58px;
-  border-color: var(--color-paper);
+  width: 64px;
+  height: 64px;
+  border-color: var(--color-signal);
+  background: rgb(255 91 20 / 0.16);
 }
 .cursor-ring[data-state="view"] {
   width: 108px;
   height: 108px;
-  mix-blend-mode: normal;
   background: var(--color-signal);
   border-color: var(--color-signal);
 }
@@ -490,7 +501,7 @@
   border-color: transparent;
 }
 .cursor-ring.is-pressed {
-  scale: 0.86;
+  scale: 0.82;
 }
 .cursor-label {
   color: var(--color-black);

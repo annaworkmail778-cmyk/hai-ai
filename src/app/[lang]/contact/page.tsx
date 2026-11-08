@@ -4,7 +4,6 @@ import { brand } from "@/config/brand";
 import { isLocale, localePath } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { interpolate } from "@/i18n/format";
-import { isContactArea, type ContactArea } from "@/lib/contact/schema";
 import { jsonLd, pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Arrow } from "@/components/ui/Arrow";
@@ -27,9 +26,6 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
   const t = dict.contact;
-  const areas = dict.diagnostic.categories
-    .filter((c) => isContactArea(c.id))
-    .map((c) => ({ id: c.id as ContactArea, name: c.name }));
   const tel = brand.phone.replace(/[^\d+]/g, "");
 
   const structuredData = {
@@ -65,7 +61,7 @@ export default async function ContactPage({ params }: PageProps<"/[lang]/contact
                 {interpolate(t.noscript, { email: brand.email })}
               </p>
             </noscript>
-            <ContactForm t={t} areas={areas} email={brand.email} locale={lang} />
+            <ContactForm t={t} email={brand.email} locale={lang} />
           </div>
 
           <aside aria-label={t.direct} className="col-span-4 md:col-span-8 lg:col-span-4 lg:row-start-1">

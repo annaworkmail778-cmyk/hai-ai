@@ -9,18 +9,16 @@ import { defaultLocale, isLocale, type Locale } from "@/i18n/config";
 export const CONTACT_AREAS = ["sales", "operations", "support", "marketing", "booking", "data"] as const;
 export type ContactArea = (typeof CONTACT_AREAS)[number];
 
-export const CONTACT_FIELDS = ["name", "company", "contact", "business", "improve", "process"] as const;
+/** Kept short on purpose: a name and a way to call back. The details are asked on the call. */
+export const CONTACT_FIELDS = ["name", "contact", "company"] as const;
 export type ContactField = (typeof CONTACT_FIELDS)[number];
 
 type Rule = { required: boolean; min?: number; max: number };
 
 export const CONTACT_RULES: Record<ContactField, Rule> = {
   name: { required: true, max: 120 },
-  company: { required: false, max: 160 },
   contact: { required: true, max: 160 },
-  business: { required: true, min: 8, max: 1500 },
-  improve: { required: true, min: 8, max: 2000 },
-  process: { required: false, min: 8, max: 2000 },
+  company: { required: false, max: 160 },
 };
 
 export type FieldErrorCode = "required" | "contact" | "tooShort" | "tooLong";
@@ -46,7 +44,7 @@ export function isContactArea(value: unknown): value is ContactArea {
 }
 
 export function emptyValues(): ContactValues {
-  return { name: "", company: "", contact: "", business: "", improve: "", process: "" };
+  return { name: "", contact: "", company: "" };
 }
 
 function clean(value: unknown) {
