@@ -4,6 +4,7 @@ import { Reel01, REEL01_FRAMES } from "./Reel01";
 import { Reel02, REEL02_FRAMES } from "./Reel02";
 import { Reel03, REEL03_FRAMES } from "./Reel03";
 import { Reel04, REEL04_FRAMES } from "./Reel04";
+import { Reel05, REEL05_FRAMES } from "./Reel05";
 import { HIGHLIGHTS } from "./hl/data";
 import { StoryFrame, STORY_FRAMES } from "./hl/Story";
 import { CarouselSlide, Cover, FbCover, SLIDES, Watermark, YtBanner } from "./hl/Stills";
@@ -19,6 +20,8 @@ export function Root() {
       <Composition id="reel03-ru" component={Reel03} durationInFrames={REEL03_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
       <Composition id="reel04-hy" component={Reel04} durationInFrames={REEL04_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "hy" as const }} />
       <Composition id="reel04-ru" component={Reel04} durationInFrames={REEL04_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
+      <Composition id="reel05-hy" component={Reel05} durationInFrames={REEL05_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "hy" as const }} />
+      <Composition id="reel05-ru" component={Reel05} durationInFrames={REEL05_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
 
       {HIGHLIGHTS.flatMap((hl) =>
         hl.stories.map((s, i) => (
