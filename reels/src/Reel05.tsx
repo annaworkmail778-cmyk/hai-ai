@@ -2,12 +2,13 @@ import type { ReactNode } from "react";
 import { AbsoluteFill, Audio, Easing, Img, interpolate, random, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { FONT } from "./fonts";
 import type { Lang } from "./copy";
-import { Brand, Check, clamp, Cursor, End, hasFile, IgIcon, INK, PAPER, Pop, SIGNAL, TgIcon, useSpring } from "./Reel01";
+import { Check, clamp, Cursor, End, Glyph, hasFile, IgIcon, INK, PAPER, Pop, SIGNAL, TgIcon, useSpring, Word } from "./Reel01";
 
 /* Reel 05 «ԿԱՏԱԼՈԳ» — Meta ad for shops with a large range and no proper catalogue. 1080×1920, 30 fps, 23 s. */
 
-export const REEL05_FRAMES = 690;
-const S = { hook: 0, pain: 90, turn: 195, split: 255, product: 450, end: 555 };
+/* Timeline follows the voice-over (voice/reel-05-hy.mp3, 28.9 s). */
+export const REEL05_FRAMES = 888;
+const S = { hook: 0, pain: 186, turn: 378, split: 435, product: 645, end: 735 };
 
 const PRODUCTS = [1, 2, 3, 4, 5, 6].map((n) => `products/p${n}.jpg`);
 const PRICES = ["32 000 ֏", "24 500 ֏", "18 900 ֏", "145 000 ֏", "39 000 ֏", "52 000 ֏"];
@@ -111,9 +112,9 @@ function Hook({ t }: { t: T }) {
   const frame = useCurrentFrame();
   const slam = useSpring(2, { damping: 11, stiffness: 220, mass: 0.6 });
   const phone = useSpring(6, { damping: 15, stiffness: 120 });
-  const count = Math.min(47, Math.round(interpolate(frame, [10, 80], [3, 47], clamp)));
-  const shake = frame > 10 && frame < 85 && frame % 5 === 0 ? (random(`h${frame}`) - 0.5) * 16 : 0;
-  const visible = Math.floor(interpolate(frame, [10, 80], [0, t.pings.length], clamp));
+  const count = Math.min(47, Math.round(interpolate(frame, [10, 150], [3, 47], clamp)));
+  const shake = frame > 10 && frame < 155 && frame % 6 === 0 ? (random(`h${frame}`) - 0.5) * 16 : 0;
+  const visible = Math.floor(interpolate(frame, [10, 150], [0, t.pings.length], clamp));
   return (
     <AbsoluteFill style={{ background: INK, alignItems: "center" }}>
       <h1
@@ -155,9 +156,9 @@ function Hook({ t }: { t: T }) {
 
 function Pain({ t }: { t: T }) {
   const frame = useCurrentFrame();
-  const hour = interpolate(frame, [0, 70], [14, 19], clamp);
+  const hour = interpolate(frame, [0, 120], [14, 19], clamp);
   const time = `${String(Math.floor(hour)).padStart(2, "0")}:${String(Math.floor((hour % 1) * 60)).padStart(2, "0")}`;
-  const gone = interpolate(frame, [78, 92], [0, 1], clamp);
+  const gone = interpolate(frame, [140, 160], [0, 1], clamp);
   return (
     <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 30%, #fff, ${PAPER} 60%)`, alignItems: "center" }}>
       <div style={{ marginTop: 200, display: "flex", alignItems: "center", gap: 16, padding: "14px 28px", borderRadius: 50, background: INK, color: "#fff", fontSize: 40, fontWeight: 900, fontVariantNumeric: "tabular-nums" }}>
@@ -179,15 +180,15 @@ function Pain({ t }: { t: T }) {
             </Pop>
             <div style={{ alignSelf: "flex-end", display: "grid", gridTemplateColumns: "repeat(3, 160px)", gap: 10 }}>
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <Pop key={i} delay={12 + i * 9} from={20}>
+                <Pop key={i} delay={14 + i * 14} from={20}>
                   <Thumb i={i} size={160} radius={16} />
                 </Pop>
               ))}
             </div>
-            <Pop delay={70} from={30} style={{ alignSelf: "flex-start" }}>
+            <Pop delay={112} from={30} style={{ alignSelf: "flex-start" }}>
               <span style={{ display: "inline-block", padding: "18px 26px", borderRadius: 30, background: "#efede7", color: INK, fontSize: 34 }}>{t.thinking}</span>
             </Pop>
-            <p style={{ margin: 0, alignSelf: "flex-end", fontSize: 24, color: "#8a8983", opacity: interpolate(frame, [76, 82], [0, 1], clamp) }}>{t.seen}</p>
+            <p style={{ margin: 0, alignSelf: "flex-end", fontSize: 24, color: "#8a8983", opacity: interpolate(frame, [120, 126], [0, 1], clamp) }}>{t.seen}</p>
           </div>
           <div style={{ position: "absolute", inset: 0, zIndex: 10, background: `rgba(11,11,12,${0.55 * gone})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ padding: "22px 34px", borderRadius: 40, background: "#ff3b30", color: "#fff", fontSize: 38, fontWeight: 900, opacity: gone, transform: `scale(${0.8 + gone * 0.2})` }}>{t.left}</span>
@@ -206,20 +207,60 @@ function PainCaption({ text }: { text: string }) {
   );
 }
 
+/* ── 03 Turn: a calm, light logo reveal ───────────────────────────── */
+
+function Turn({ text }: { text: string }) {
+  const frame = useCurrentFrame();
+  const mark = useSpring(0, { damping: 18, stiffness: 90 });
+  const arrow = interpolate(frame, [6, 26], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const word = useSpring(14, { damping: 18, stiffness: 110 });
+  const sweep = interpolate(frame, [10, 40], [-120, 120], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const glow = 0.35 + 0.25 * Math.sin(frame / 10);
+  const zoom = interpolate(frame, [0, 57], [1, 1.06]);
+  const words = text.split(" ");
+  return (
+    <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 42%, #2b160b 0%, #120c09 38%, #050505 75%)", alignItems: "center", justifyContent: "center", transform: `scale(${zoom})` }}>
+      <div style={{ position: "absolute", width: 900, height: 900, borderRadius: 900, background: `radial-gradient(circle, rgba(255,91,20,${glow}), transparent 62%)`, filter: "blur(20px)", transform: `scale(${0.7 + mark * 0.3})` }} />
+      <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 44, marginTop: -60 }}>
+        <div style={{ position: "relative", opacity: mark, filter: `blur(${(1 - mark) * 14}px)`, transform: `scale(${0.82 + mark * 0.18}) translateY(${(1 - mark) * 40}px)` }}>
+          <Glyph size={230} grow={[mark, mark, arrow]} />
+          {/* soft light sweep across the mark */}
+          <div style={{ position: "absolute", inset: -20, overflow: "hidden", borderRadius: 30, mixBlendMode: "screen", pointerEvents: "none" }}>
+            <div style={{ position: "absolute", top: 0, bottom: 0, width: 120, left: `${50 + sweep / 2}%`, background: "linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent)", transform: "skewX(-18deg)" }} />
+          </div>
+        </div>
+        <div style={{ opacity: word, transform: `translateY(${(1 - word) * 24}px)`, letterSpacing: `${(1 - word) * 0.12}em` }}>
+          <Word height={86} color="#fff" />
+        </div>
+        <p style={{ margin: "10px 60px 0", textAlign: "center", fontSize: 76, lineHeight: 1.1, fontWeight: 900, color: "#fff" }}>
+          {words.map((w, i) => {
+            const k = interpolate(frame, [20 + i * 4, 32 + i * 4], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+            return (
+              <span key={i} style={{ display: "inline-block", marginRight: "0.25em", opacity: k, transform: `translateY(${(1 - k) * 30}px)`, color: i === words.length - 1 ? SIGNAL : undefined }}>
+                {w}
+              </span>
+            );
+          })}
+        </p>
+      </div>
+    </AbsoluteFill>
+  );
+}
+
 /* ── 04 Split: without a catalogue vs with one ────────────────────── */
 
 function Split({ t }: { t: T }) {
   const frame = useCurrentFrame();
   const title = useSpring(2);
-  const takeover = interpolate(frame, [160, 190], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const scroll = interpolate(frame, [0, 150], [0, -520], clamp);
+  const takeover = interpolate(frame, [180, 205], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const scroll = interpolate(frame, [0, 180], [0, -520], clamp);
   // Right side: cursor taps the first card, then "Order", then confirmation.
-  const cx = interpolate(frame, [40, 66, 96, 112], [820, 690, 690, 760], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const cy = interpolate(frame, [40, 66, 96, 112], [1500, 1010, 1010, 1270], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  const press1 = interpolate(frame, [66, 70, 76], [0, 1, 0], clamp);
-  const press2 = interpolate(frame, [112, 116, 122], [0, 1, 0], clamp);
-  const opened = frame >= 70;
-  const done = frame >= 116;
+  const cx = interpolate(frame, [80, 106, 134, 150], [820, 690, 690, 760], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const cy = interpolate(frame, [80, 106, 134, 150], [1500, 1010, 1010, 1270], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const press1 = interpolate(frame, [106, 110, 116], [0, 1, 0], clamp);
+  const press2 = interpolate(frame, [150, 154, 160], [0, 1, 0], clamp);
+  const opened = frame >= 110;
+  const done = frame >= 154;
 
   const label = (text: string, color: string) => (
     <p style={{ margin: "0 0 18px", display: "flex", alignItems: "center", gap: 12, fontSize: 30, fontWeight: 900, color: "#fff" }}>
@@ -247,13 +288,13 @@ function Split({ t }: { t: T }) {
             <Pop delay={20}>
               <span style={{ display: "inline-block", padding: "14px 22px", borderRadius: 26, background: INK, color: "#fff", fontSize: 28 }}>{t.askPrice}</span>
             </Pop>
-            <Pop delay={60}>
+            <Pop delay={70}>
               <span style={{ display: "inline-block", padding: "12px 20px", borderRadius: 26, background: "#efede7", color: "#8a8983", fontSize: 24 }}>{t.wait}</span>
             </Pop>
-            <Pop delay={100}>
+            <Pop delay={120}>
               <span style={{ display: "inline-block", padding: "14px 22px", borderRadius: 26, background: "#efede7", color: INK, fontSize: 28 }}>{t.thinking}</span>
             </Pop>
-            <Pop delay={128}>
+            <Pop delay={160}>
               <span style={{ display: "inline-block", padding: "14px 22px", borderRadius: 26, background: "#ff3b30", color: "#fff", fontSize: 26, fontWeight: 900 }}>✕ {t.lost}</span>
             </Pop>
           </div>
@@ -292,7 +333,7 @@ function Split({ t }: { t: T }) {
             </div>
           ) : (
             <div style={{ padding: "8px 20px" }}>
-              <Pop delay={70} from={20}>
+              <Pop delay={110} from={20}>
                 <Thumb i={0} size={420} radius={22} />
                 <p style={{ margin: "18px 4px 0", fontSize: 34, fontWeight: 900, color: INK }}>{t.names[0]}</p>
                 <p style={{ margin: "4px 4px 0", fontSize: 34, fontWeight: 900, color: SIGNAL }}>{PRICES[0]}</p>
@@ -309,7 +350,7 @@ function Split({ t }: { t: T }) {
           )}
         </div>
       </div>
-      {frame >= 40 && frame < 150 && takeover === 0 && <Cursor x={cx} y={cy} press={Math.max(press1, press2)} />}
+      {frame >= 80 && frame < 178 && takeover === 0 && <Cursor x={cx} y={cy} press={Math.max(press1, press2)} />}
     </AbsoluteFill>
   );
 }
@@ -318,7 +359,7 @@ function Split({ t }: { t: T }) {
 
 function Product({ t }: { t: T }) {
   const phone = useSpring(0, { damping: 16, stiffness: 120 });
-  const tg = useSpring(30, { damping: 13, stiffness: 160 });
+  const tg = useSpring(10, { damping: 13, stiffness: 160 });
   return (
     <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 35%, #2a1408, ${INK} 65%)`, alignItems: "center" }}>
       <div style={{ marginTop: 330, transform: `translateY(${(1 - phone) * 200}px) scale(${0.92 + phone * 0.08})`, opacity: phone }}>
@@ -355,7 +396,7 @@ function Product({ t }: { t: T }) {
       </div>
       <div style={{ position: "absolute", left: 70, right: 70, top: 1230, display: "flex", flexDirection: "column", gap: 16 }}>
         {t.points.map((p, i) => (
-          <Pop key={p} delay={40 + i * 12} from={30}>
+          <Pop key={p} delay={24 + i * 12} from={30}>
             <div style={{ display: "flex", alignItems: "center", gap: 20, padding: "22px 28px", borderRadius: 30, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.12)" }}>
               <Check size={56} bg={SIGNAL} color={INK} />
               <span style={{ fontSize: 34, fontWeight: 900, color: "#fff", lineHeight: 1.2 }}>{p}</span>
@@ -370,26 +411,23 @@ function Product({ t }: { t: T }) {
 /* ── Sound design ─────────────────────────────────────────────────── */
 
 const SFX: Array<[number, string, number]> = [
-  [0, "bass", 0.9],
-  [2, "glitch", 0.5],
-  ...[12, 20, 28, 36, 44, 52, 60, 68, 76].map((f) => [f, "pops", 0.35] as [number, string, number]),
-  [S.pain - 4, "whoosh", 0.55],
-  [S.pain + 6, "typing", 0.4],
-  [S.pain + 70, "ding", 0.5],
-  [S.pain + 80, "buzz", 0.6],
-  [S.turn - 4, "glitch", 0.6],
-  [S.turn, "laser", 0.7],
-  [S.turn + 24, "bass", 0.8],
-  [S.split - 4, "whoosh", 0.6],
-  [S.split + 66, "tap", 0.8],
-  [S.split + 112, "tap", 0.8],
-  [S.split + 118, "ding", 0.6],
-  [S.split + 128, "buzz", 0.4],
-  [S.split + 160, "whoosh", 0.6],
-  [S.product + 30, "chime", 0.6],
-  [S.product + 40, "pops", 0.45],
-  [S.end, "chime", 0.7],
-  [S.end + 80, "tap", 0.8],
+  [0, "bass", 0.7],
+  ...[12, 28, 44, 60, 76, 92, 108, 124, 140].map((f) => [f, "pops", 0.25] as [number, string, number]),
+  [S.pain - 4, "whoosh", 0.4],
+  [S.pain + 10, "typing", 0.25],
+  [S.pain + 112, "ding", 0.35],
+  [S.pain + 140, "buzz", 0.35],
+  [S.turn - 6, "whoosh", 0.45],
+  [S.turn + 8, "chime", 0.45],
+  [S.split - 4, "whoosh", 0.4],
+  [S.split + 106, "tap", 0.6],
+  [S.split + 150, "tap", 0.6],
+  [S.split + 156, "ding", 0.45],
+  [S.split + 180, "whoosh", 0.4],
+  [S.product + 10, "chime", 0.45],
+  [S.product + 24, "pops", 0.3],
+  [S.end, "chime", 0.5],
+  [S.end + 80, "tap", 0.6],
 ];
 
 export function Reel05({ lang }: { lang: Lang }) {
@@ -398,7 +436,7 @@ export function Reel05({ lang }: { lang: Lang }) {
   const scenes: Array<[number, number, ReactNode]> = [
     [S.hook, S.pain - S.hook, <Hook t={t} />],
     [S.pain, S.turn - S.pain, <Pain t={t} />],
-    [S.turn, S.split - S.turn, <Brand t={{ notSleep: t.turn }} />],
+    [S.turn, S.split - S.turn, <Turn text={t.turn} />],
     [S.split, S.product - S.split, <Split t={t} />],
     [S.product, S.end - S.product, <Product t={t} />],
     [S.end, REEL05_FRAMES - S.end, <End t={t} />],
