@@ -7,6 +7,7 @@ import { Reel04, REEL04_FRAMES } from "./Reel04";
 import { Reel05, REEL05_FRAMES } from "./Reel05";
 import { HIGHLIGHTS } from "./hl/data";
 import { lbFrames, LeadBookingDemo } from "./lb/LeadBooking";
+import { CONTEST_FRAMES, ContestVideo } from "./contest/Contest";
 import { StoryFrame, STORY_FRAMES } from "./hl/Story";
 import { CarouselSlide, Cover, FbCover, SLIDES, Watermark, YtBanner } from "./hl/Stills";
 
@@ -28,6 +29,9 @@ export function Root() {
         <Composition key={`lb-${lang}-h`} id={`lb-${lang}-16x9`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
         <Composition key={`lb-${lang}-v`} id={`lb-${lang}-9x16`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
       ])}
+
+      <Composition id="contest-hy-9x16" component={ContestVideo} durationInFrames={CONTEST_FRAMES} fps={30} width={1080} height={1920} />
+      <Composition id="contest-hy-4x5" component={ContestVideo} durationInFrames={CONTEST_FRAMES} fps={30} width={1080} height={1350} />
 
       {HIGHLIGHTS.flatMap((hl) =>
         hl.stories.map((s, i) => (
