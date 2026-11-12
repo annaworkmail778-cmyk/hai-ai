@@ -14,6 +14,8 @@ import { Footer } from "@/components/layout/Footer";
 import { LocaleSync } from "@/components/layout/LanguageSwitcher";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { CustomCursor } from "@/components/cursor/CustomCursor";
+import { ContestBanner } from "@/components/contest/ContestBanner";
+import { localePath } from "@/i18n/config";
 
 /* Latin + Cyrillic display/body face. */
 const geist = Geist({
@@ -81,6 +83,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           </main>
           <Footer locale={lang} dict={dict} />
           <CustomCursor viewLabel={dict.common.view} />
+          <ContestBanner href={localePath(lang, "/contest")} text={dict.contest.banner} short={dict.contest.bannerShort} until={dict.contest.bannerUntil} cta={dict.contest.bannerCta} close={dict.contest.close} />
         </div>
       </body>
     </html>

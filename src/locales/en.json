@@ -26,6 +26,10 @@
     "pricing": {
       "title": "Prices",
       "description": "Riseup prices in Armenian dram: AI administrator from 45 000 ֏, orders from 70 000 ֏, marketing from 20 000 ֏ a month, AI video ads from 25 000 ֏, websites from 80 000 ֏."
+    },
+    "contest": {
+      "title": "Giveaway: a free website for your business",
+      "description": "From 13 to 25 November Riseup is giving away a free website, an AI administrator and an AI video ad to businesses in Armenia. How to enter and the rules."
     }
   },
   "common": {
@@ -922,5 +926,101 @@
     "pageTitle": "Clear prices.",
     "pageIntro": "Launch prices for our first clients. One-time setup, then a small monthly fee for hosting, AI, support and changes. No hidden costs.",
     "oneTime": "one-time payment · no monthly fee"
+  },
+  "contest": {
+    "eyebrow": "Giveaway",
+    "title": "A free website for your business",
+    "intro": "From 13 to 25 November Riseup is giving away a free website and two more prizes to businesses in Armenia. Winners are announced live on 26 November.",
+    "banner": "Giveaway: a free website for your business",
+    "bannerShort": "Free website giveaway",
+    "bannerUntil": "until 25 November",
+    "bannerCta": "Details",
+    "prizesTitle": "Prizes",
+    "prizes": [
+      {
+        "place": "1st place",
+        "name": "One-page website",
+        "text": "In 3 languages, with a contact form and a WhatsApp button. Hosting free for 3 months.",
+        "value": "worth 80 000 ֏"
+      },
+      {
+        "place": "2nd place",
+        "name": "AI administrator for Instagram",
+        "text": "Replies to customers 24/7 and collects enquiries.",
+        "value": "Setup at 50% off"
+      },
+      {
+        "place": "3rd place",
+        "name": "AI video ad",
+        "text": "A short video ad for your product or service.",
+        "value": "worth 25 000 ֏"
+      }
+    ],
+    "discount": "Every participant gets 20% off any Riseup service until 30 November.",
+    "howTitle": "How to enter",
+    "howNote": "Pick any network. One business, one entry.",
+    "platforms": [
+      {
+        "name": "Instagram",
+        "steps": [
+          "Follow @riseup.group.2026",
+          "Comment «ՄԱՍՆԱԿՑՈՒՄ» (or «I'M IN») with your business name and field under the giveaway post",
+          "Tag one friend who has a business"
+        ],
+        "bonus": "Bonus: share the post to your Stories and tag @riseup.group.2026 (+1 chance)"
+      },
+      {
+        "name": "Facebook",
+        "steps": [
+          "Like the Riseup page",
+          "Comment «ՄԱՍՆԱԿՑՈՒՄ» (or «I'M IN») with your business name and field under the giveaway post"
+        ],
+        "bonus": ""
+      },
+      {
+        "name": "TikTok",
+        "steps": [
+          "Follow @riseup.group.2026",
+          "Comment «ՄԱՍՆԱԿՑՈՒՄ» (or «I'M IN») with your business name under the giveaway video"
+        ],
+        "bonus": ""
+      }
+    ],
+    "example": "For example: «I'M IN — Ani Beauty, beauty salon, Hrazdan»",
+    "datesTitle": "Key dates",
+    "dates": [
+      [
+        "13 November",
+        "Giveaway starts"
+      ],
+      [
+        "25 November",
+        "Last day to enter — until 23:59 Yerevan time"
+      ],
+      [
+        "26 November",
+        "Winners announced live on Instagram"
+      ]
+    ],
+    "rulesTitle": "Giveaway rules",
+    "rules": [
+      "The organiser is Riseup (sole proprietor).",
+      "The giveaway runs from 13 to 25 November 2026 inclusive. Winners will be announced on 26 November in a live stream on Riseup's Instagram and published on all our pages.",
+      "Businesses and self-employed people operating in Armenia can take part.",
+      "One business, one entry. Repeated comments from the same business do not add chances (except the Instagram Stories bonus).",
+      "Winners are drawn at random from all valid entries. The draw is recorded.",
+      "Prizes: 1. one-page website (hosting free for the first 3 months, then at list price), 2. AI administrator for Instagram, setup at 50% off, 3. AI video ad.",
+      "Prizes cannot be exchanged for cash or transferred to another person.",
+      "Winners must contact us within 3 days of the announcement, otherwise a new winner will be drawn.",
+      "Entry is free and no purchase is required.",
+      "Riseup staff and their family members cannot take part.",
+      "The giveaway is run by Riseup and is in no way associated with, sponsored or endorsed by Instagram, Facebook (Meta) or TikTok."
+    ],
+    "videoLabel": "Giveaway video",
+    "join": "Enter on Instagram",
+    "noWaitTitle": "Don't want to wait?",
+    "noWaitText": "Need a website, an AI administrator or automation now? Write to us and we'll show you, for free, what we can do for your business.",
+    "noWaitCta": "Get a free demo",
+    "close": "Close"
   }
 }
