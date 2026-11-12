@@ -443,6 +443,9 @@ const SFX: Array<[number, string, number]> = [
   [f(32.3), "chime", 0.45],
 ];
 
+/** Voice only (requested): set to true to bring back the music and sound effects. */
+const WITH_MUSIC_AND_SFX = false;
+
 export function ContestVideo() {
   const scenes: Array<[keyof typeof T, ReactNode]> = [
     ["hook", <Hook />],
@@ -465,13 +468,16 @@ export function ContestVideo() {
         );
       })}
       <Subtitles />
-      {SFX.map(([from, name, volume], i) => (
-        <Sequence key={i} from={from} layout="none">
-          <Audio src={staticFile(`sfx/${name}.mp3`)} volume={volume} />
-        </Sequence>
-      ))}
+      {WITH_MUSIC_AND_SFX &&
+        SFX.map(([from, name, volume], i) => (
+          <Sequence key={i} from={from} layout="none">
+            <Audio src={staticFile(`sfx/${name}.mp3`)} volume={volume} />
+          </Sequence>
+        ))}
       <Audio src={staticFile("voice/contest-hy.mp3")} volume={1} />
-      <Audio src={staticFile("music/lb-demo.mp3")} startFrom={f(14)} volume={(fr) => interpolate(fr, [0, 20, end - 45, end], [0, 1, 1, 0], clamp) * 0.22} />
+      {WITH_MUSIC_AND_SFX && (
+        <Audio src={staticFile("music/lb-demo.mp3")} startFrom={f(14)} volume={(fr) => interpolate(fr, [0, 20, end - 45, end], [0, 1, 1, 0], clamp) * 0.22} />
+      )}
     </AbsoluteFill>
   );
 }
