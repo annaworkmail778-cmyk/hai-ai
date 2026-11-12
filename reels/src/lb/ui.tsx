@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
 import { Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { LOGO } from "../logo";
 import type { Status } from "./config";
@@ -23,11 +23,22 @@ export const C = {
   greyBg: "#efede7",
   red: "#e5484d",
 };
+/**
+ * Scene time. Scenes are animated against BASE_SCENES; when a language's voice-over
+ * makes a scene longer or shorter, SceneShell provides the stretch factor and every
+ * animation inside reads this scaled frame instead of the raw one.
+ */
+export const TimeScale = createContext(1);
+export function useSceneFrame() {
+  const frame = useCurrentFrame();
+  return frame / useContext(TimeScale);
+}
+
 export const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 export const ease = Easing.bezier(0.16, 1, 0.3, 1);
 
 export function useIn(delay = 0, config: { damping?: number; stiffness?: number } = {}) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const { fps } = useVideoConfig();
   return spring({ frame: frame - delay, fps, config: { damping: 18, stiffness: 120, mass: 0.8, ...config } });
 }
@@ -168,7 +179,7 @@ export function MessageBubble({ from, children, label, s = 1, appear = 1 }: { fr
 }
 
 export function TypingIndicator({ s = 1 }: { s?: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   return (
     <div style={{ alignSelf: "flex-end", display: "flex", gap: 6 * s, padding: `${14 * s}px ${18 * s}px`, borderRadius: 22 * s, background: "#18181b" }}>
       {[0, 1, 2].map((k) => (
@@ -182,7 +193,7 @@ export type ChatItem = { from: "customer" | "riseup" | "system"; at: number; nod
 
 /** A conversation that grows over time; RiseUp messages are preceded by a typing indicator. */
 export function Conversation({ items, s = 1, assistant, typingFrames = 24 }: { items: ChatItem[]; s?: number; assistant: string; typingFrames?: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const { fps } = useVideoConfig();
   const typing = items.find((m) => m.from === "riseup" && frame >= m.at - typingFrames && frame < m.at);
   return (
@@ -211,7 +222,7 @@ export function Conversation({ items, s = 1, assistant, typingFrames = 24 }: { i
 /* ── Booking ─────────────────────────────────────────────────────── */
 
 export function SlotPicker({ day, slots, picked, pickedAt, s = 1 }: { day: string; slots: string[]; picked: number; pickedAt: number; s?: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   return (
     <div style={{ marginTop: 10 * s }}>
       <p style={{ margin: `0 0 ${8 * s}px`, fontSize: 15 * s, fontWeight: 700, color: "rgba(255,255,255,.6)", textTransform: "uppercase", letterSpacing: "0.06em" }}>{day}</p>
@@ -287,7 +298,7 @@ export function Notification({ app, title, text, s = 1, dark = true }: { app: st
 /* ── Backgrounds ─────────────────────────────────────────────────── */
 
 export function StageBg({ children, glowX = "70%", glowY = "40%" }: { children?: ReactNode; glowX?: string; glowY?: string }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const drift = Math.sin(frame / 60) * 3;
   return (
     <div style={{ position: "absolute", inset: 0, background: `radial-gradient(circle at ${glowX} ${glowY}, #1d1a19 0%, ${C.bg2} 30%, ${C.bg} 70%)`, overflow: "hidden" }}>
@@ -300,7 +311,7 @@ export function StageBg({ children, glowX = "70%", glowY = "40%" }: { children?:
 
 /** Headline block used on the side (16:9) or top (9:16) of a scene. */
 export function Headline({ eyebrow, title, size, delay = 4, maxWidth }: { eyebrow?: string; title: string; size: number; delay?: number; maxWidth?: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const words = title.split(" ");
   return (
     <div style={{ maxWidth }}>

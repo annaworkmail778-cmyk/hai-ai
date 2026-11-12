@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { AbsoluteFill, Audio, Easing, getStaticFiles, Img, interpolate, random, Sequence, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { FONT } from "../fonts";
-import { FPS, LB_COPY, SCENES, SITE, subtitleCues, TOTAL_SECONDS, type LbCopy, type LbLang, type SceneId } from "./config";
+import { BASE_SCENES, FPS, LB_COPY, SCENE_IDS, SITE, subtitleCues, TIMELINE, totalSeconds, type LbCopy, type LbLang, type SceneId } from "./config";
 import {
   AppointmentCard,
   C,
@@ -21,12 +21,14 @@ import {
   StageBg,
   StatusPill,
   TgIcon,
+  TimeScale,
   useIn,
+  useSceneFrame,
   Wordmark,
   type ChatItem,
 } from "./ui";
 
-export const LB_FRAMES = TOTAL_SECONDS * FPS;
+export const lbFrames = (lang: LbLang) => Math.round(totalSeconds(lang) * FPS);
 const f = (sec: number) => Math.round(sec * FPS);
 
 function useWide() {
@@ -43,11 +45,15 @@ function hasFile(path: string) {
 }
 
 /** Fade + slight scale at the edges of every scene, so cuts feel like one continuous piece. */
-function SceneShell({ children, dur }: { children: ReactNode; dur: number }) {
+function SceneShell({ children, dur, k }: { children: ReactNode; dur: number; k: number }) {
   const frame = useCurrentFrame();
   const inP = interpolate(frame, [0, 14], [0, 1], { ...clamp, easing: ease });
   const outP = interpolate(frame, [dur - 12, dur], [0, 1], clamp);
-  return <AbsoluteFill style={{ opacity: inP * (1 - outP), transform: `scale(${1.015 - inP * 0.015 + outP * 0.02})` }}>{children}</AbsoluteFill>;
+  return (
+    <AbsoluteFill style={{ opacity: inP * (1 - outP), transform: `scale(${1.015 - inP * 0.015 + outP * 0.02})` }}>
+      <TimeScale.Provider value={k}>{children}</TimeScale.Provider>
+    </AbsoluteFill>
+  );
 }
 
 /** Content box that keeps clear of the subtitle band. */
@@ -86,7 +92,7 @@ function Points({ items, starts, size }: { items: string[]; starts: number[]; si
 /* ── 1 · The problem ─────────────────────────────────────────────── */
 
 function Problem({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const photo = interpolate(frame, [0, 70], [1, 0], { ...clamp, easing: Easing.in(Easing.cubic) });
   const zoom = interpolate(frame, [0, 80], [1.04, 1.35], clamp);
@@ -147,7 +153,7 @@ function Problem({ t }: { t: LbCopy }) {
 /* ── 2 · Meet RiseUp ─────────────────────────────────────────────── */
 
 function Intro({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const collapse = interpolate(frame, [0, 30], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   const mark = useIn(22, { damping: 20, stiffness: 90 });
@@ -197,7 +203,7 @@ function Intro({ t }: { t: LbCopy }) {
 export const CHAT_AT = [10, 70, 125, 165, 205, 245];
 
 function DetailsCard({ t, s }: { t: LbCopy; s: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const rows: Array<[string, string, number]> = [
     [t.dashboard.columns[1], t.dashboard.rows[0][1], CHAT_AT[2] + 6],
     [t.dashboard.columns[0], t.dashboard.rows[0][0], CHAT_AT[4] + 6],
@@ -249,7 +255,7 @@ function Chat({ t }: { t: LbCopy }) {
 const BK = { day: 12, offer: 52, tap: 118, request: 140, step1: 150, step2: 214 };
 
 function MiniCalendar({ t, s }: { t: LbCopy; s: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const on = frame >= BK.request;
   const pulse = 0.6 + 0.4 * Math.sin(frame / 6);
   return (
@@ -275,7 +281,7 @@ function MiniCalendar({ t, s }: { t: LbCopy; s: number }) {
 }
 
 function Steps({ t, s }: { t: LbCopy; s: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const rows: Array<[string, number, boolean]> = [
     [t.booking.stepRequest, BK.step1, true],
     [t.booking.stepConfirm, BK.step2, false],
@@ -300,7 +306,7 @@ function Steps({ t, s }: { t: LbCopy; s: number }) {
 }
 
 function Booking({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const ph = phoneSize(wide);
   const s = ph.s;
@@ -358,7 +364,7 @@ function Booking({ t }: { t: LbCopy }) {
 const DB = { newRow: 30, kpi: 40, cursor: 170, click: 205, confirmed: 210, toast: 225 };
 
 function Kpi({ label, from, to, at, s }: { label: string; from: number; to: number; at: number; s: number }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const v = Math.round(interpolate(frame, [at, at + 20], [from, to], clamp));
   const bump = interpolate(frame, [at, at + 6, at + 18], [0, 1, 0], clamp);
   return (
@@ -370,7 +376,7 @@ function Kpi({ label, from, to, at, s }: { label: string; from: number; to: numb
 }
 
 function Dashboard({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const d = t.dashboard;
   const win = useIn(0, { damping: 20, stiffness: 100 });
@@ -532,7 +538,7 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 const FU = { divider: 40, follow: 92, tag: 118, notify: 175 };
 
 function FollowUp({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const ph = phoneSize(wide);
   const s = ph.s;
@@ -601,7 +607,7 @@ function NodeIcon({ i, size }: { i: number; size: number }) {
 }
 
 function Value({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const n = t.value.nodes.length;
   const node = wide ? 150 : 132;
@@ -650,7 +656,7 @@ function Value({ t }: { t: LbCopy }) {
 /* ── 8 · Call to action ──────────────────────────────────────────── */
 
 function Cta({ t }: { t: LbCopy }) {
-  const frame = useCurrentFrame();
+  const frame = useSceneFrame();
   const wide = useWide();
   const mark = useIn(2, { damping: 20, stiffness: 90 });
   const arrow = interpolate(frame, [8, 30], [0, 1], { ...clamp, easing: ease });
@@ -709,10 +715,11 @@ function Subtitles({ lang }: { lang: LbLang }) {
 
 /* ── Sound ───────────────────────────────────────────────────────── */
 
-function sfx(): Array<[number, string, number]> {
-  const at = (id: SceneId, offset = 0) => f(SCENES[id][0]) + offset;
+function sfx(lang: LbLang): Array<[number, string, number]> {
+  const tl = TIMELINE[lang];
+  const at = (id: SceneId, offset = 0) => f(tl[id][0]) + Math.round(offset * stretch(lang, id));
   return [
-    ...[0, 1, 2, 3, 4, 5].map((i) => [70 + i * 16, "pops", 0.22] as [number, string, number]),
+    ...[0, 1, 2, 3, 4, 5].map((i) => [at("problem", 70 + i * 16), "pops", 0.22] as [number, string, number]),
     [at("intro") - 4, "whoosh", 0.35],
     [at("intro", 30), "chime", 0.35],
     ...CHAT_AT.map((a, i) => [at("chat", a), i % 2 ? "ding" : "pops", 0.25] as [number, string, number]),
@@ -734,6 +741,13 @@ function sfx(): Array<[number, string, number]> {
 
 /* ── Composition ─────────────────────────────────────────────────── */
 
+/** How much longer (or shorter) a scene is in this language than its base design. */
+function stretch(lang: LbLang, id: SceneId) {
+  const [s, e] = TIMELINE[lang][id];
+  const [bs, be] = BASE_SCENES[id];
+  return (e - s) / (be - bs);
+}
+
 const SCENE_VIEWS: Record<SceneId, (t: LbCopy) => ReactNode> = {
   problem: (t) => <Problem t={t} />,
   intro: (t) => <Intro t={t} />,
@@ -750,20 +764,22 @@ export function LeadBookingDemo({ lang }: { lang: LbLang }) {
   const voice = `voice/lb-demo-${lang}.mp3`;
   const music = "music/lb-demo.mp3";
   const withVoice = hasFile(voice);
-  const end = LB_FRAMES;
+  const end = lbFrames(lang);
   return (
     <AbsoluteFill style={{ fontFamily: FONT, background: C.bg }}>
-      {(Object.keys(SCENES) as SceneId[]).map((id) => {
-        const [s, e] = SCENES[id];
+      {SCENE_IDS.map((id) => {
+        const [s, e] = TIMELINE[lang][id];
         const dur = f(e) - f(s);
         return (
           <Sequence key={id} from={f(s)} durationInFrames={dur} name={id}>
-            <SceneShell dur={dur}>{SCENE_VIEWS[id](t)}</SceneShell>
+            <SceneShell dur={dur} k={stretch(lang, id)}>
+              {SCENE_VIEWS[id](t)}
+            </SceneShell>
           </Sequence>
         );
       })}
       <Subtitles lang={lang} />
-      {sfx().map(([from, name, volume], i) => (
+      {sfx(lang).map(([from, name, volume], i) => (
         <Sequence key={`sfx${i}`} from={from} layout="none">
           <Audio src={staticFile(`sfx/${name}.mp3`)} volume={volume} />
         </Sequence>
@@ -772,7 +788,7 @@ export function LeadBookingDemo({ lang }: { lang: LbLang }) {
       {hasFile(music) && (
         <Audio
           src={staticFile(music)}
-          volume={(fr) => interpolate(fr, [0, 30, end - 60, end], [0, 1, 1, 0], clamp) * (withVoice ? 0.16 : 0.32)}
+          volume={(fr) => interpolate(fr, [0, 30, end - 60, end], [0, 1, 1, 0], clamp) * (withVoice ? 0.2 : 0.32)}
         />
       )}
     </AbsoluteFill>

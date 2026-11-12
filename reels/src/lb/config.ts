@@ -1,7 +1,9 @@
 /**
  * RiseUp Lead-to-Booking System — product demo.
  * Every visible word, voice-over line and subtitle lives here, per language.
- * Both languages share one timeline (SCENES), so they stay in sync.
+ * Both languages have the same scenes in the same order. Each language has
+ * its own timeline (TIMELINE), matched to its recorded voice-over; animations
+ * inside a scene are designed for BASE_SCENES and stretched to fit.
  *
  * What the demo shows is limited to what the current RiseUp setup does
  * (n8n + ManyChat assistant): replies on Instagram, collects details,
@@ -13,8 +15,12 @@
 export type LbLang = "en" | "hy";
 export const FPS = 30;
 
-/** Scene start/end in seconds. Change here and every scene, subtitle and sound follows. */
-export const SCENES = {
+export const SCENE_IDS = ["problem", "intro", "chat", "booking", "dashboard", "followup", "value", "cta"] as const;
+export type SceneId = (typeof SCENE_IDS)[number];
+type Timeline = Record<SceneId, readonly [number, number]>;
+
+/** Scene lengths the animations were designed for (seconds). */
+export const BASE_SCENES: Timeline = {
   problem: [0, 8],
   intro: [8, 14],
   chat: [14, 25],
@@ -23,9 +29,41 @@ export const SCENES = {
   followup: [49, 59],
   value: [59, 68],
   cta: [68, 75],
-} as const;
-export type SceneId = keyof typeof SCENES;
-export const TOTAL_SECONDS = 75;
+};
+
+/**
+ * Per-language timeline, cut at the pauses between paragraphs of the voice-over
+ * (public/voice/lb-demo-{lang}.mp3). Re-measure when a new recording comes in:
+ *   ffmpeg -i voice.mp3 -af silencedetect=noise=-40dB:d=0.2 -f null -
+ */
+export const TIMELINE: Record<LbLang, Timeline> = {
+  // ElevenLabs "Jessica", 61.2 s
+  en: {
+    problem: [0, 10.55],
+    intro: [10.55, 14.22],
+    chat: [14.22, 23.02],
+    booking: [23.02, 32.5],
+    dashboard: [32.5, 41.1],
+    followup: [41.1, 49.42],
+    value: [49.42, 55.9],
+    cta: [55.9, 63.5],
+  },
+  // ElevenLabs "Aram", 77.2 s
+  hy: {
+    problem: [0, 12.6],
+    intro: [12.6, 18.6],
+    chat: [18.6, 29.1],
+    booking: [29.1, 40.62],
+    dashboard: [40.62, 50.5],
+    followup: [50.5, 62.42],
+    value: [62.42, 70.45],
+    cta: [70.45, 79.5],
+  },
+};
+
+export const totalSeconds = (lang: LbLang) => TIMELINE[lang].cta[1];
+/** Where the recorded voice ends (the last scene holds a little longer). */
+const VOICE_END: Record<LbLang, number> = { en: 60.95, hy: 76.95 };
 
 export const SITE = "riseup-group.com";
 
@@ -256,12 +294,12 @@ export const LB_COPY: Record<LbLang, LbCopy> = { en, hy };
 /** Subtitle cues for one language: each scene's voice line split into short chunks, spread over the scene. */
 export function subtitleCues(lang: LbLang) {
   const cues: Array<{ start: number; end: number; text: string }> = [];
-  (Object.keys(SCENES) as SceneId[]).forEach((id) => {
-    const [s, e] = SCENES[id];
+  SCENE_IDS.forEach((id) => {
+    const [s, e] = TIMELINE[lang][id];
     const chunks = splitLine(LB_COPY[lang].voice[id]);
     const total = chunks.reduce((n, c) => n + c.length, 0);
     let t = s + 0.35;
-    const span = e - s - 0.7;
+    const span = Math.min(e, VOICE_END[lang] + 0.3) - s - 0.6;
     chunks.forEach((c) => {
       const d = (c.length / total) * span;
       cues.push({ start: t, end: t + d, text: c });

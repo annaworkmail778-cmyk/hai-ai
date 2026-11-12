@@ -6,7 +6,7 @@ import { Reel03, REEL03_FRAMES } from "./Reel03";
 import { Reel04, REEL04_FRAMES } from "./Reel04";
 import { Reel05, REEL05_FRAMES } from "./Reel05";
 import { HIGHLIGHTS } from "./hl/data";
-import { LB_FRAMES, LeadBookingDemo } from "./lb/LeadBooking";
+import { lbFrames, LeadBookingDemo } from "./lb/LeadBooking";
 import { StoryFrame, STORY_FRAMES } from "./hl/Story";
 import { CarouselSlide, Cover, FbCover, SLIDES, Watermark, YtBanner } from "./hl/Stills";
 
@@ -25,8 +25,8 @@ export function Root() {
       <Composition id="reel05-ru" component={Reel05} durationInFrames={REEL05_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang: "ru" as const }} />
 
       {(["en", "hy"] as const).flatMap((lang) => [
-        <Composition key={`lb-${lang}-h`} id={`lb-${lang}-16x9`} component={LeadBookingDemo} durationInFrames={LB_FRAMES} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
-        <Composition key={`lb-${lang}-v`} id={`lb-${lang}-9x16`} component={LeadBookingDemo} durationInFrames={LB_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
+        <Composition key={`lb-${lang}-h`} id={`lb-${lang}-16x9`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
+        <Composition key={`lb-${lang}-v`} id={`lb-${lang}-9x16`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
       ])}
 
       {HIGHLIGHTS.flatMap((hl) =>

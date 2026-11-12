@@ -1,6 +1,6 @@
 # RiseUp Lead-to-Booking System — product demo video
 
-75-second animated product demo in English and Armenian, in 16:9 (1920×1080) and 9:16 (1080×1920), 30 fps.
+Animated product demo in English (63.5 s) and Armenian (79.5 s), in 16:9 (1920×1080) and 9:16 (1080×1920), 30 fps, with ElevenLabs voice-over (English: Jessica, Armenian: Aram).
 
 ## Files
 
@@ -13,7 +13,7 @@
 | Reusable UI (phone, chat, typing, slots, appointment card, status pill, notification, logo) | `src/lb/ui.tsx` |
 | Compositions | `lb-en-16x9`, `lb-en-9x16`, `lb-hy-16x9`, `lb-hy-9x16` in `src/Root.tsx` |
 | Background music | `public/music/lb-demo.mp3` (original, synthesized for this project, so no licensing questions) |
-| Voice-over (optional) | `public/voice/lb-demo-en.mp3`, `public/voice/lb-demo-hy.mp3` — picked up automatically |
+| Voice-over | `public/voice/lb-demo-en.mp3`, `public/voice/lb-demo-hy.mp3` — picked up automatically |
 
 `out/` is not committed. Render it with the command below.
 
@@ -31,8 +31,8 @@ npm run studio                                         # preview and edit in Rem
 ## Change things
 
 - **Text, prices, names, CTA, URL:** `src/lb/config.ts` (`LB_COPY.en`, `LB_COPY.hy`).
-- **Scene length:** `SCENES` in `src/lb/config.ts` (seconds). Subtitles follow automatically. Animation cues inside a scene are frame offsets at the top of each scene in `LeadBooking.tsx` (`CHAT_AT`, `BK`, `DB`, `FU`).
-- **Voice-over:** drop an MP3 at `public/voice/lb-demo-{lang}.mp3` and render again. The music is lowered automatically while a voice track exists. If the recording is longer or shorter than a scene, adjust `SCENES`.
+- **Scene timing:** `TIMELINE` in `src/lb/config.ts` — one timeline per language, cut at the pauses between the voice-over paragraphs. Animations are designed for `BASE_SCENES` and stretched to each scene's real length, so changing `TIMELINE` is enough. Subtitles and sound effects follow.
+- **New voice-over:** replace `public/voice/lb-demo-{lang}.mp3`, find the paragraph pauses with `ffmpeg -i public/voice/lb-demo-hy.mp3 -af silencedetect=noise=-40dB:d=0.2 -f null -`, update `TIMELINE` (and `VOICE_END`) for that language and render again. The music is lowered automatically while a voice track exists.
 - **Brand:** colours in `src/lb/ui.tsx` (`C`), logo paths in `src/logo.ts` (shared with the website).
 
 ## Product accuracy
