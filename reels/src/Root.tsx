@@ -8,6 +8,8 @@ import { Reel05, REEL05_FRAMES } from "./Reel05";
 import { HIGHLIGHTS } from "./hl/data";
 import { lbFrames, LeadBookingDemo } from "./lb/LeadBooking";
 import { CONTEST_FRAMES, ContestVideo } from "./contest/Contest";
+import { DEVELOPER_FRAMES, DeveloperDemo } from "./sales/DeveloperDemo";
+import { SOLAR_FRAMES, SolarDemo } from "./sales/SolarDemo";
 import { StoryFrame, STORY_FRAMES } from "./hl/Story";
 import { CarouselSlide, Cover, FbCover, SLIDES, Watermark, YtBanner } from "./hl/Stills";
 
@@ -28,6 +30,13 @@ export function Root() {
       {(["en", "hy"] as const).flatMap((lang) => [
         <Composition key={`lb-${lang}-h`} id={`lb-${lang}-16x9`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
         <Composition key={`lb-${lang}-v`} id={`lb-${lang}-9x16`} component={LeadBookingDemo} durationInFrames={lbFrames(lang)} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
+      ])}
+
+      {(["en", "hy"] as const).flatMap((lang) => [
+        <Composition key={`dev-${lang}-h`} id={`dev-${lang}-16x9`} component={DeveloperDemo} durationInFrames={DEVELOPER_FRAMES} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
+        <Composition key={`dev-${lang}-v`} id={`dev-${lang}-9x16`} component={DeveloperDemo} durationInFrames={DEVELOPER_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
+        <Composition key={`solar-${lang}-h`} id={`solar-${lang}-16x9`} component={SolarDemo} durationInFrames={SOLAR_FRAMES} fps={30} width={1920} height={1080} defaultProps={{ lang }} />,
+        <Composition key={`solar-${lang}-v`} id={`solar-${lang}-9x16`} component={SolarDemo} durationInFrames={SOLAR_FRAMES} fps={30} width={1080} height={1920} defaultProps={{ lang }} />,
       ])}
 
       <Composition id="contest-hy-9x16" component={ContestVideo} durationInFrames={CONTEST_FRAMES} fps={30} width={1080} height={1920} />
