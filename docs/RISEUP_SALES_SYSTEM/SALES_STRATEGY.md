@@ -48,6 +48,7 @@ For direct businesses:
 ## Forecast (assumptions, not history)
 
 > **Superseded by the 2026-11-22 audit:** the revised base is **≈ $3,080**, and P($5k) is ~20–25% on the current plan (~35–40% with the levers). See `REVISED_5000_REVENUE_SCENARIOS.md`. The figures below are the original estimate.
+
 From the CRM **Calculator** tab (channel mix):
 
 | Scenario | 30-day cash |

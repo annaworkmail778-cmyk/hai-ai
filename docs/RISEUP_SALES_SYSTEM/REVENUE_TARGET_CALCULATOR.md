@@ -18,6 +18,7 @@ The live version is the CRM **Calculator** tab (orange = inputs).
 ## 2. Channel-mix model (original version; superseded)
 
 > **Revised on 2026-11-22.** The CRM Calculator now holds the revised assumptions: base ≈ $3,080, conservative ≈ $990, aggressive ≈ $8,340, plus a contest + network channel. See `REVISED_5000_REVENUE_SCENARIOS.md` for the audit and the $5,000 path. The table below is kept for history.
+
 | Channel | Contacts (30 d) | Contact → paid (C / B / A) | Average cash (C / B / A) | Base deals | **Base cash** |
 |---|---|---|---|---|---|
 | Warm leads / old contacts | 6 | 20% / 33% / 50% | $350 / $450 / $600 | 2.0 | $891 |
