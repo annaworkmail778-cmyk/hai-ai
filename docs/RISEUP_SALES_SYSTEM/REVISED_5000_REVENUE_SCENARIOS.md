@@ -43,16 +43,17 @@ Other gaps in the old model:
 | **$5,000 on the current plan** | **~20–25%** (lower than the earlier 30–35%) |
 | **$5,000 with the §3 levers executed** | **~35–40%** |
 
-## 3. The $5,000 path: what must happen (target ≈ $5,260, a 5% buffer)
+## 3. The $5,000 path: what must happen (target ≈ $5,340, a 7% buffer)
 | Channel | Paid deals needed | Example deal mix (approved prices) | Cash by Day 30 | vs base |
 |---|---|---|---|---|
 | **Agency white-label** | **6** | 4 paid tests: 2 × 100,000 ֏ ($258), 1 × $250 (RU), 1 × $300 (EU). Then 2 follow-on deposits: WL-3 RU 50% of $950 = $475, and WL-1 AM 50% of 180,000 ֏ = $232 | **$1,773** | +$479 |
-| **Contest + personal network** | **5** | DC-1 AI Admin Pro at contest price 72,000 ֏ + first month 25,000 ֏ = 97,000 ֏ ($250). 100% upfront, since it's ≤ 100,000 ֏ | **$1,225** | +$769 |
+| **Contest participants** | **3** | DC-1 AI Admin Pro at the contest price: 72,000 ֏ + first month 20,000 ֏ = 92,000 ֏ ($237). 100% upfront, since it's ≤ 100,000 ֏ | **$711** | |
+| **Personal network** | **2** | DC-1 AI Admin Pro at list price: 90,000 ֏ + 25,000 ֏ = $296 | **$593** | (contest + network +$848) |
 | **Upwork / Contra** | **4** | Fixed-price n8n/automation jobs, ~$250 net each, delivered in ≤ 3 days | **$1,000** | +$435 |
 | **Warm / existing clients** | **2** | Real estate client: DC-3 Business deposit 50% of 300,000 ֏ = 150,000 ֏ ($387). HosDog: AI order assistant 90,000 ֏ + care plan 20,000 ֏ = $284 | **$671** | +$167 |
 | **Direct cold (walk-in + call)** | **2** | DC-1 AI Admin Pro 90,000 ֏ + first month 25,000 ֏ = $296 | **$592** | +$329 |
 | Creators | 0 | Inbound only | $0 | — |
-| **Total** | **19** | | **$5,261** | **+$2,179** |
+| **Total** | **19** | | **$5,340** | **+$2,258** |
 
 **Not counted (upside):** Babasyan's balance (unknown), a WL-R retainer ($950–1,200 prepaid), Shtigen's extension (≈ 100,000 ֏ deposit).
 - One WL-R retainer would replace about 4 small deals. That is the single best way to cut both risk and delivery load.
@@ -69,20 +70,58 @@ Other gaps in the old model:
 | 7 | **Retainer ask:** after the first delivered agency test, offer WL-R 30 h | +$950–1,200 (≈ 30% chance) | 30 min |
 | 8 | **Monthly fee up front:** every DC-1 sale collects month 1 with the setup (already in the approved terms) | +$64 per deal | 0 |
 
-## 5. Capacity check for the $5,000 path
-| Work | Hours |
-|---|---|
-| 4 paid tests × 8 h | 32 |
-| 2 follow-on projects, ~50% delivered in month 1 (2 × 25 h × 50%) | 25 |
-| Warm: real estate ~50% of 30 h, HosDog 10 h | 25 |
-| 7 × DC-1 AI Admin from the n8n + ManyChat template, **≤ 6 h each** | 42 |
-| 4 Upwork jobs × 7 h | 28 |
-| **Total** | **152 h** |
+## 5. Capacity plan: 140 delivery hours (CRM Calculator, Block 3)
+**Delivery capacity is 140 h** over 30 days (A ≈ 100 h, B ≈ 40 h, after a 15% buffer). **Sales time isn't counted as capacity.**
+- Only the hours delivered **inside** the 30 days count. A deposit-only project uses part of its hours now and the rest after Day 30.
 
-**Capacity is about 130–155 h** (see `FINAL_REVENUE_OPTIMIZATION.md` §5).
-- The path is **at the capacity limit**, and only works if DC-1 is template-based and Upwork jobs stay small.
-- Remaining balances carry about 40 h of delivery into Dec/Jan.
-- **Implication:** after Day 14, prefer one larger deposit (WL-3, WL-R) over several new small deals.
+| # | Deal | Cash by D30 | Total h | h in 30 d | Template | $/h | Priority |
+|---|---|---|---|---|---|---|---|
+| 1 | **Real estate client** DC-3 Business, 50% of 300,000 ֏ | $387 | **35** | 12 | Partial (L2 lead flow) | $32 | P1 |
+| 2 | **WL-3 RU follow-on**, 50% of $950 | $475 | **25** | 8 | Partial | $59 | P1 |
+| 3 | WL-1 AM follow-on, 50% of 180,000 ֏ | $232 | 14 | 5 | Yes (landing template) | $46 | P2 |
+| 4 | HosDog AI order assistant + care | $284 | 10 | 10 | Partial (DC-1 template) | $28 | P1 |
+| 5–8 | 4 agency pilots (2 × 100,000 ֏, $250, $300) | $1,066 | 4 × 8 | 32 | Partial (n8n/landing components) | $31–38 | P1 |
+| 9–12 | 4 Upwork fixed-price jobs (net) | $1,000 | 4 × 7 | 28 | Partial (n8n) | $36 | 2 × P2, 2 × P3 |
+| 13–15 | 3 contest DC-1 Pro (92,000 ֏) | $711 | 3 × 6 | 18 | **Yes** | $40 | P1 (30 Nov deadline) |
+| 16–17 | 2 network DC-1 Pro (115,000 ֏) | $593 | 2 × 6 | 12 | **Yes** | $49 | P1 |
+| 18–19 | 2 direct cold DC-1 Pro (115,000 ֏) | $592 | 2 × 6 | 12 | **Yes** | $49 | P3 |
+| | **Total** | **$5,339** | 186 | **137** | | | |
+
+**Result:** the $5,000 path fits with 3 spare hours, so there is **no slack**. The deals that need the most time are #1, #2, the four Upwork jobs together, #3 and #4.
+
+**Templates:**
+
+| Template use | Services |
+|---|---|
+| Full | DC-1 Start/Pro (n8n + ManyChat JSON + the client's Sheet), WL-1 / Landing (site template), AI video (Remotion) |
+| Partial | WL-0 pilots, Upwork n8n jobs, DC-3 Entry, HosDog-type ordering add-ons |
+| None (custom, avoid this month) | WL-2, WL-4, DC-2 Business, Premium 3D |
+
+**Priority order when capacity is constrained:**
+1. **Never postpone:** contest orders (public deadline), warm clients, pilots already paid.
+2. **Postpone the delivery start, not the collection:**
+   - Follow-on projects (#2, #3) get a December start date, agreed in writing. The deposit is still collected now.
+   - This is the main lever, because a deposit with a later start uses almost no in-month hours.
+3. **Pause first (P3):**
+   - Cold direct DC-1 (#18–19): stop cold direct outreach.
+   - Upwork jobs 3–4: stop new proposals after Day 20 unless the job takes ≤ 2 days.
+   - Pausing all P3 frees 26 h but cuts cash to ≈ $4,250. Replace that cash with **one WL-R retainer or a WL-3 deposit with a December start**, not with more small deals.
+
+**Protect sales time (≥ 25%, the target is 50%):**
+
+| | Hours |
+|---|---|
+| Working time (2 × 9 h × 26 days) | 468 |
+| **Floor: sales + follow-ups (25%)** | **117** |
+| Plan: A 3.5 h + B 5.5 h a day | 234 (50%) |
+| Delivery | 140 (30%) |
+| Admin | 94 (20%) |
+
+Rules:
+- Person A's sales time never drops below **2.5 h/day**. The 09:30–12:30 call block is fixed.
+- Person B's sales time never drops below **5 h/day**.
+- If delivery would break these floors, apply the postponement order above instead of cutting sales.
+- Log delivery hours daily in the report.
 
 ## 6. Price decision
 **No approved price is changed.** Reasons:
@@ -90,7 +129,4 @@ Other gaps in the old model:
 2. The −20% contest discount was promised publicly and stays valid until 30 Nov only.
 3. Lowering prices would push the deal count above delivery capacity.
 
-**One terms clarification, which needs founder approval:**
-- Apply the contest −20% to the **setup fee only, not to monthly fees**.
-- Commercial reason: monthly margin on the entry packages is already thin (`FINAL_PRICING_AND_PAYMENT_TERMS.md` §2).
-- If the public promise ("any service") is read as including monthly fees, honour it for the participants.
+**Contest discount:** applied per the final policy in `OBJECTION_HANDLING.md` → *Contest discount policy*: 20% off setup fees and the first monthly payment for orders accepted by 30 Nov, list price from month 2.

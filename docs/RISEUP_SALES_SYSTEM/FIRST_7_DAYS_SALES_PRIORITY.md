@@ -7,18 +7,37 @@
 
 **Offers to push:**
 1. **WL-0 Pilot task** for agencies (100,000 ֏ / $250 / $300, 100% upfront).
-2. **DC-1 AI Admin Pro** (contest price 72,000 ֏ until 30 Nov; list price 90,000 ֏) + first month prepaid.
+2. **DC-1 AI Admin Pro:** contest price 72,000 ֏ + first month 20,000 ֏ for orders accepted by 30 Nov (policy: `OBJECTION_HANDLING.md`); list price 90,000 ֏ + 25,000 ֏/month.
 3. **Upwork fixed-price automation** ($200–500, ≤ 3-day delivery).
 
 **Scripts:** `SALES_SCRIPTS_HY_RU_EN.md` (v2) · **Leads:** verify-first list in `FINAL_REVENUE_OPTIMIZATION.md` §2.4 · **No new demo builds this week** (use L2, L5 and 60-sec screen recordings).
 
-## Blockers to clear on Day 1 (before 10:00)
-| # | Task | Owner | Why |
+## Day 1 readiness checklist (Mon 23 Nov)
+### A. Essential: these block the first payment. Finish by 12:00
+| ✓ | Item | Done when | Owner |
 |---|---|---|---|
-| 1 | Fill the legal entity, tax ID and Ameriabank AMD + USD/EUR receiving details into the invoice template (`docs/RISEUP_BUSINESS_LAUNCH/INVOICE_TEMPLATE.md` + editable .docx) | A | Without this, no deposit can be collected |
-| 2 | Check our own records of what was agreed and paid with HosDog, the real estate client, Babasyan and Shtigen | A | Never mention money before checking |
-| 3 | Import the CRM into Google Sheets; mark L051 Invalid (duplicate of L003) | B | Single source of truth |
-| 4 | Make sure the DC-1 n8n + ManyChat template deploys in ≤ 6 h (client Sheet: services, prices, FAQ) | A (in the day's delivery block) | Protects capacity for the contest deals |
+| ☐ | **Invoice details** | `INVOICE_TEMPLATE.md` + the editable .docx have the real legal name, legal form, registration no., tax ID (ՀՎՀՀ), address and numbering (RU-2026-0001). No `{{…}}` is left in the header or payment block | A |
+| ☐ | **Payment collection readiness** | Ameriabank AMD account no. + USD/EUR SWIFT receiving details (holder, IBAN/account, SWIFT, intermediary bank) are in the invoice. The bank has confirmed incoming fees. The accountant has been asked about the tax line and invoice format (`[ACCOUNTANT REVIEW]` in the template) | A |
+| ☐ | **Warm client status verification** | For HosDog, the real estate client, Babasyan and Shtigen, your own records show what was agreed, delivered, paid and unpaid. Written in each Leads row's Notes before any call | A |
+| ☐ | **CRM import** | Google Sheets copy created and shared with B (Editor), time zone Yerevan. Dashboard shows 76 leads. L051 marked Invalid (duplicate of L003) | B |
+| ☐ | **Demo links** | L2 Lead-to-Booking (en + hy) and L5 Developer Sales OS (en + hy) uploaded as **unlisted** links from `reels/out/lead-booking/` and `reels/out/sales-demos/`. Links pasted into the CRM README and the scripts | A |
+| ☐ | **First outreach messages** | 15 v2 first messages drafted with a personal first line for the first verified T1 leads (`SALES_SCRIPTS_HY_RU_EN.md` §1). Contest DM text ready (§2, contest version) | B |
+
+### B. Day 1, not blocking: finish by 18:00
+| ✓ | Item | Done when | Owner |
+|---|---|---|---|
+| ☐ | **Contest participant list** | Every valid entry (13 Nov to today) from Instagram/Facebook/TikTok comments is in Leads with Source = "Contest Nov 2026", the business name, and the public handle only. Entries keep coming until 25 Nov 23:59, so update daily | B |
+| ☐ | **Personal network list** | 20 business owners the founder knows are written into Leads (Source = "Personal network", owner A). 5 personal messages sent | A |
+| ☐ | Upwork/Contra profiles live; 6 jobs shortlisted; 3 proposals sent | Profiles approved (if approval is pending, keep going without them) | B / A |
+| ☐ | DC-1 template check (n8n + ManyChat + client Sheet) deploys in ≤ 6 h | Test run done | A |
+
+### C. Later this week (don't let these delay selling)
+- L1 site tour (60 s) and the capability statement PDF with links (Day 2–3).
+- Payoneer check.
+- Domain email.
+- Lawyer review of the templates.
+- Website text fixes (need your approval to deploy).
+- L3/L4 demos: **frozen** until a paying prospect needs them.
 
 ## Day by day
 **Count columns** follow the CRM Daily Plan targets:
@@ -37,11 +56,11 @@
 ### Day 1: Mon 23 Nov · cash target $0 (cumulative $0)
 | Time | Person A | Person B |
 |---|---|---|
-| 08:30–10:00 | Blockers 1–2 | Blocker 3; list contest participants into Leads (Source = "Contest Nov 2026", Sales channel = Direct business, Stage = Ready to Contact; only their public Instagram handle) |
+| 08:30–10:00 | Checklist A: invoice + payment details, warm-client records | Checklist A: CRM import; list contest participants into Leads (Source = "Contest Nov 2026", Sales channel = Direct business, Stage = Ready to Contact; only their public Instagram handle) |
 | 10:00–12:30 | **Warm calls:** HosDog, real estate client, Babasyan, Shtigen (warm-lead scripts). Then **write 20 network names** and send 5 personal messages | Verify 15 leads from the first group (CRM partners, fulfilment buyers, agencies) |
 | 13:30–15:00 | Calls: Apollon Lab, iNFOEXPERT, B2B Development (pilot task, 100,000 ֏) | **15 first messages** to the T1 leads just verified (v2 §1) |
 | 15:00–16:30 | Proposals + invoices for any warm "yes" (same day). Upwork: 3 proposals from B's shortlist | Reply to every contest comment within 1 h; shortlist 6 Upwork jobs (filters in `UPWORK_CONTRA_PLAYBOOK.md`) |
-| 16:30–18:00 | Delivery block: DC-1 template check (blocker 4) | Research 15 new T1/T2 leads (Bitrix24/Kommo partner directories, Clutch AM/GE/KZ) |
+| 16:30–18:00 | Delivery block: DC-1 template check (checklist B) | Research 15 new T1/T2 leads (Bitrix24/Kommo partner directories, Clutch AM/GE/KZ) |
 | 18:00 | 10-min review | Daily report |
 
 **Counts (L / M / F / C / D / P / UW / W):** 30 / 25 / 0 / 7 / 0 / 1 / 3 / 9.
@@ -77,7 +96,7 @@
 ### Day 4: Thu 26 Nov · cash target $150 (cumulative $150)
 | Person A | Person B |
 |---|---|
-| **Call every contest participant who replied.** Close DC-1 Pro (72,000 ֏ + first month, 100% upfront); invoice on the call | **Personal offer to every non-winner** (v2 §2 contest version): "−20% valid until Monday 30 Nov" |
+| **Call every contest participant who replied.** Close DC-1 Pro (72,000 ֏ + first month 20,000 ֏ = 92,000 ֏, 100% upfront); invoice on the call; month 2 at list price, stated in writing | **Personal offer to every non-winner** (v2 §2 contest version): "−20% valid until Monday 30 Nov" |
 | 3 calls to agencies with an open thread; 1–2 demos | 20 first messages; F1 to Day 2 sends |
 | Upwork: 5 proposals; start the first paid delivery if a deposit arrived | Verify 15 leads; chase unpaid invoices from Days 1–3 (polite, with the payment details) |
 
@@ -126,3 +145,11 @@ Warm contacts are extra volume on top of the CRM targets. Expect the "Actual: fi
 | ≥ $600 verified and ≥ 2 pilots or DC-1 deals in delivery | On the $5,000 path |
 | $150–600 | Behind. Week 2 goes 70% to the channel with the best reply rate |
 | $0 | The diagnosis from the Day 5 checkpoint takes priority over volume |
+
+## Capacity guard for the week
+Delivery is capped at **≈ 33 h/week** (A ≈ 23 h, B ≈ 10 h), the 140 h plan in `REVISED_5000_REVENUE_SCENARIOS.md` §5.
+- A's 09:30–12:30 call block stays free of delivery.
+- At most 3 active deliveries.
+- A deposit beyond that gets a written start date, and is still collected now.
+- **Execution rules:** `CRM_SETUP_AND_USAGE.md` §8. Every qualified opportunity has an owner, a next action, a follow-up date and an expected payment. **Won only after the payment is verified.**
+

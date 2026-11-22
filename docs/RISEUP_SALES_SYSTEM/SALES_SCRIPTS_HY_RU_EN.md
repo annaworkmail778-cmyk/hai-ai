@@ -61,7 +61,7 @@ Prices to quote by market:
 > Hi! I noticed [observation: questions in your comments go unanswered / there's no booking link]. RISEUP sets up an AI front desk that answers 24/7 with your own prices and services and books the visit, so no inquiry gets lost. Want a 2-minute video of how it would answer your customers?
 
 **Contest participants (26–30 Nov), HY:**
-> Բարև Ձեզ, [Name]։ Շնորհակալություն RISEUP-ի մրցույթին մասնակցելու համար։ Ինչպես խոստացել էինք, բոլոր մասնակիցներին գործում է **20% զեղչ մինչև նոյեմբերի 30-ը**։ Օրինակ՝ AI ադմինիստրատոր Pro-ն (Instagram/WhatsApp պատասխաններ + ամրագրում + հիշեցումներ) 90 000 ֏-ի փոխարեն **72 000 ֏** է, պատրաստ է 3–5 օրում։ Ուզո՞ւմ եք՝ ցույց տամ, թե ինչպես այն կաշխատի հենց Ձեր բիզնեսի համար։
+> Բարև Ձեզ, [Name]։ Շնորհակալություն RISEUP-ի մրցույթին մասնակցելու համար։ Ինչպես խոստացել էինք, բոլոր մասնակիցներին գործում է **20% զեղչ մինչև նոյեմբերի 30-ը**։ Օրինակ՝ AI ադմինիստրատոր Pro-ն (Instagram/WhatsApp պատասխաններ + ամրագրում + հիշեցումներ) 90 000 ֏-ի փոխարեն **72 000 ֏** է, իսկ առաջին ամսավճարը՝ 25 000 ֏-ի փոխարեն 20 000 ֏ (երկրորդ ամսից՝ սովորական գնով)։ Պատրաստ է 3–5 օրում, զեղչը գործում է նոյեմբերի 30-ը ներառյալ հաստատված պատվերների համար։ Ուզո՞ւմ եք՝ ցույց տամ, թե ինչպես այն կաշխատի հենց Ձեր բիզնեսի համար։
 
 ## 3. Cold call · v2 (call only after a message or a visit)
 | Step | HY | RU | EN |

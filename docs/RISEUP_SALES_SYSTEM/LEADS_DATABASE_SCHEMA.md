@@ -40,7 +40,7 @@ Cell colours:
 | AP | Stage probability | **Formula** from Lists | auto |
 | AQ | Weighted value USD | **Formula** = value × probability | auto |
 | AR | Open? | **Formula** (No when Paid — Won or Lost) | auto |
-| AS–AZ | Stage dates: First contact, Replied, Interested, Demo/Meeting, Proposal, Won, Paid, Lost | Date: type the date **when the lead reaches that stage** | owner |
+| AS–AZ | Stage dates: First contact, Replied, Interested, Demo/Meeting, Proposal, Accepted, Paid, Lost | Date: type the date **when the lead reaches that stage** | owner |
 | BA | Notes | Text | all |
 
 ## Rules

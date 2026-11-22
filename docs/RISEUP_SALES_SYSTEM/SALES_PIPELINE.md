@@ -19,7 +19,7 @@
 | 10 | Demo Delivered | Demo or discovery done | A | — | 30% | 1 (proposal ≤ 24 h) |
 | 11 | Proposal Sent | Written proposal + price sent | A | Proposal date | 40% | 7 |
 | 12 | Negotiation | Discussing scope/price/terms | A | — | 55% | 5 |
-| 13 | Won — Awaiting Payment | Accepted; invoice sent; **not cash** | A | Won date | 85% | 3 |
+| 13 | Accepted — Awaiting Payment | Proposal accepted, invoice sent. **Not won, not cash** | A | Accepted date | 85% | 3 |
 | 14 | Paid — Won | Deposit/payment **verified** | A | Paid date | 100% | — |
 | 15 | Lost | Said no / no reply after F4 + 30 d | owner | Lost date | 0% | — |
 | 16 | Follow-up Later | Not now; date agreed | owner | Next follow-up date | 2% | — |
@@ -28,8 +28,9 @@
 
 ## Moving rules
 - **Contacted vs First Contact Sent:** use Contacted when a live conversation happened but there's no written reply yet.
-- **Won — Awaiting Payment** requires a Deal row with "Signed / accepted?" = Yes and an Invoice row.
-- **Paid — Won** only after a Payments row with Verified in bank = Yes. If a deal is only partially paid, keep it in stage 13 until the deposit is verified, then move it to 14 and track the balance in Deals.
+- **Accepted — Awaiting Payment** requires a Deal row with "Signed / accepted?" = Yes, an Invoice row, and the Expected next payment + date filled.
+- **A deal is WON only when payment is verified.** Stage **Paid — Won** is set only after a Payments row with Verified in bank = Yes. The Dashboard counts "Deals WON" from verified payments only.
+- If a deal is only partially paid, keep it in stage 13 until the deposit is verified, then move it to 14 and track the balance in Deals.
 - **Lost:** write the reason in Notes (price / timing / no need / no reply / chose a competitor).
 - Skipping stages is allowed, e.g. Replied → Meeting Scheduled. Fill the stage dates you passed.
 

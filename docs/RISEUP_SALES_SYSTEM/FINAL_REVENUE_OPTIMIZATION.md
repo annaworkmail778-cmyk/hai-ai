@@ -156,7 +156,7 @@ Each offer is scored 1–5 on each criterion. Weights:
 | Admin | 1 h: invoices, payment verification | 1.5 h: daily report, research |
 | **Delivery capacity (−15% buffer)** | ≈ 100 h | ≈ 40 h |
 
-**Total ≈ 140 h of delivery in 30 days.** The $5,000 path needs about 152 h, so the rules below are mandatory.
+**Total ≈ 140 h of delivery in 30 days.** The revised $5,000 path needs 137 in-month hours (`REVISED_5000_REVENUE_SCENARIOS.md` §5), with no slack, so the rules below are mandatory.
 
 **Capacity rules:**
 1. **WIP limit:** at most **3 active deliveries** at once. Further deposits get a start date, not a parallel start.
@@ -177,7 +177,7 @@ Values and probabilities are estimates. Statuses are unconfirmed.
 
 | # | Opportunity | Offer | Cash possible by Day 30 | Probability (judgment) | Owner | First action |
 |---|---|---|---|---|---|---|
-| 1 | **Contest participants** (estimate 50–150 per the contest plan; count unconfirmed) | DC-1 Pro at −20% (72,000 ֏ + first month), website packages −20% | $750–1,250 (5 deals × ~$250) | Medium | B → A | 26 Nov: personal message to every non-winner; the offer ends 30 Nov |
+| 1 | **Contest participants** (estimate 50–150 per the contest plan; count unconfirmed) | DC-1 Pro at −20% (72,000 ֏ + first month 20,000 ֏), website packages −20% (policy in `OBJECTION_HANDLING.md`) | $750–1,250 (5 deals × ~$250) | Medium | B → A | 26 Nov: personal message to every non-winner; the offer ends 30 Nov |
 | 2 | **Real estate client** (site already delivered) | DC-3 Business, deposit 150,000–225,000 ֏ + monthly | $387–580 | 25% | A | Day 1 call: inquiry volume, where leads get lost; book a demo |
 | 3 | **HosDog / Bistro** (ordering system delivered) | AI order assistant (90,000 ֏) + care plan; ask for 2 referrals and permission to show the work | ~$284 + referrals | 35% | A | Day 1 call; check our records first |
 | 4 | **Alexander Babasyan** (portfolio in progress) | Agreed balance (if any) + hosting/support | Unknown | Unknown | A | Day 1: confirm the agreed price and the unpaid amount; set the delivery date |
@@ -194,12 +194,13 @@ Next in line: L004 Andava (50–249 staff), L060 Spalato Consulting, L059 Flowmo
 | Channel | Cash needed | Paid deals | Share |
 |---|---|---|---|
 | Agency white-label | $1,773 | 6 | 34% |
-| Contest + personal network | $1,225 | 5 | 23% |
+| Contest participants | $711 | 3 | 13% |
+| Personal network | $593 | 2 | 11% |
 | Upwork / Contra | $1,000 | 4 | 19% |
 | Warm / existing clients | $671 | 2 | 13% |
 | Direct cold (walk-in + call) | $592 | 2 | 11% |
 | Creators | $0 | 0 | 0% |
-| **Total** | **$5,261** | **19** | |
+| **Total** | **$5,340** | **19** | |
 
 Details and deal mix: `REVISED_5000_REVENUE_SCENARIOS.md` §3.
 

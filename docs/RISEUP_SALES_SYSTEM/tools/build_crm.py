@@ -38,7 +38,7 @@ thin = Side(style="thin", color="DDDDDD")
 
 STAGES = ["New Lead", "Researching", "Ready to Contact", "First Contact Sent", "Contacted", "Replied", "Interested",
           "Demo Requested", "Meeting Scheduled", "Demo Delivered", "Proposal Sent", "Negotiation",
-          "Won — Awaiting Payment", "Paid — Won", "Lost", "Follow-up Later"]
+          "Accepted — Awaiting Payment", "Paid — Won", "Lost", "Follow-up Later"]
 STAGE_PROB = [0.01, 0.01, 0.02, 0.03, 0.04, 0.08, 0.15, 0.2, 0.25, 0.3, 0.4, 0.55, 0.85, 1.0, 0.0, 0.02]
 MARKETS = ["Armenia", "Russian-speaking", "Europe/US", "Other"]
 COUNTRIES = ["Armenia", "Georgia", "Kazakhstan", "Russia", "Germany", "Netherlands", "United Kingdom", "United States",
@@ -147,7 +147,7 @@ LEAD_COLS = ["Lead ID", "Company", "Date added", "Website", "Instagram", "Linked
             [f"Score: {k} (0-5)" for k, _ in SCORE_KEYS] + \
             ["Lead score", "Grade", "Score reason", "Stage probability", "Weighted value USD", "Open?",
              "First contact date", "Replied date", "Interested date", "Demo/Meeting date", "Proposal date",
-             "Won date", "Paid date", "Lost date", "Notes"]
+             "Accepted date", "Paid date", "Lost date", "Notes"]
 
 
 def map_segment(seg, market):
@@ -215,7 +215,7 @@ def build_leads(wb, L):
         ev, sp = f"{c['Est. deal value USD']}{i}", f"{c['Stage probability']}{i}"
         ws[f"{c['Weighted value USD']}{i}"] = f'=IF(OR({ev}="",{sp}=""),"",{ev}*{sp})'
         for name in ("Date added", "Next follow-up date", "Last contact date", "Suggested follow-up", "First contact date",
-                     "Replied date", "Interested date", "Demo/Meeting date", "Proposal date", "Won date", "Paid date", "Lost date"):
+                     "Replied date", "Interested date", "Demo/Meeting date", "Proposal date", "Accepted date", "Paid date", "Lost date"):
             ws[f"{c[name]}{i}"].number_format = "yyyy-mm-dd"
         for name in ("Last contact date", "Follow-ups sent", "Suggested follow-up", "Follow-up status", "Days since contact",
                      "Lead score", "Grade", "Stage probability", "Weighted value USD", "Open?"):
@@ -265,7 +265,8 @@ DEAL_COLS = ["Deal ID", "Lead ID", "Company", "Sales channel", "Market", "Servic
              "Discount %", "Final contract value", "Payment structure", "First payment %", "Deposit required",
              "Signed / accepted?", "Invoiced (orig)", "Collected (orig, verified)", "Remaining balance (orig)",
              "Deposit received?", "FX units per USD", "Final value USD", "Collected USD", "Remaining USD",
-             "Next due date", "Last payment date", "Payment status", "Project status", "Owner", "Notes"]
+             "Next due date", "Last payment date", "Payment status", "Project status", "Owner", "Notes",
+             "Expected next payment (orig)", "Expected payment date", "Expected next payment USD"]
 
 
 def build_deals(wb, L):
@@ -293,6 +294,9 @@ def build_deals(wb, L):
             "Y": (f'=IF(J{i}="","",IF(P{i}>=J{i},"Paid in full",IF(P{i}>0,IF(AND(W{i}<>"",W{i}<TODAY()),"Partially paid – overdue","Partially paid"),'
                   f'IF(O{i}=0,IF(N{i}="Yes","Signed – not invoiced","Proposal – not signed"),IF(AND(W{i}<>"",W{i}<TODAY()),"Invoice overdue","Invoiced – awaiting payment")))))'),
         }
+        f["AE"] = f'=IF(OR(AC{i}="",S{i}=""),"",AC{i}/S{i})'
+        ws[f"AD{i}"].number_format = "yyyy-mm-dd"
+        ws[f"AE{i}"].number_format = '"$"#,##0'
         for col, formula in f.items():
             ws[f"{col}{i}"] = formula
             ws[f"{col}{i}"].fill = CALC_FILL
@@ -313,7 +317,7 @@ def build_deals(wb, L):
     ws.conditional_formatting.add(ys, CellIsRule(operator="equal", formula=['"Paid in full"'], fill=GREEN))
     ws.conditional_formatting.add(ys, FormulaRule(formula=['ISNUMBER(SEARCH("overdue",Y2))'], fill=RED))
     ws.conditional_formatting.add(ys, FormulaRule(formula=['ISNUMBER(SEARCH("Partially",Y2))'], fill=AMBER))
-    ws.auto_filter.ref = f"A1:AB{r}"
+    ws.auto_filter.ref = f"A1:AE{r}"
 
 
 INV_COLS = ["Invoice No", "Deal ID", "Issue date", "Due date", "Description", "Amount (orig)", "Currency",
@@ -453,7 +457,9 @@ def build_dashboard(wb, lc):
     kpi(ws, 25, "Interested", f'=COUNT({L_("Interested date")})')
     kpi(ws, 26, "Demos / meetings booked", f'=COUNT({L_("Demo/Meeting date")})')
     kpi(ws, 27, "Proposals sent", f'=COUNT({L_("Proposal date")})')
-    kpi(ws, 28, "Deals won (signed/accepted)", '=COUNTIF(Deals!$N:$N,"Yes")')
+    kpi(ws, 28, "Deals WON (payment verified)", '=COUNTIF(Deals!$P:$P,">0")', None, "Won = at least one verified payment")
+    kpi(ws, 18, "    Expected payments next 7 days (USD)", '=SUMIFS(Deals!$AE:$AE,Deals!$AD:$AD,">="&TODAY(),Deals!$AD:$AD,"<="&(TODAY()+7))', money, "Expected, not cash")
+    kpi(ws, 38, "Accepted deals still awaiting first payment", '=COUNTIFS(Deals!$N:$N,"Yes",Deals!$P:$P,0)', None, "Chase today")
     kpi(ws, 29, "Payments received (verified count)", f'=COUNTIF({P_VER},"Yes")')
     kpi(ws, 30, "Average payment (USD)", "=IFERROR(B6/B29,0)", money)
     kpi(ws, 31, "Conversion: contacted → interested", "=IFERROR(B25/B22,0)", "0%")
@@ -719,6 +725,75 @@ def build_calculator(wb):
     ws[f"A{38 + shift}"] = ("Reading: cold outreach alone needs ~960 contacts at Base, more than 2 people can do. "
                  "The target depends on warm leads, Upwork and agency deals with bigger deposits.")
     ws[f"A{39 + shift}"] = "Replace assumptions with real rates from the Dashboard after Day 7 (response rate, proposal → won)."
+    build_capacity_block(ws, 42 + shift)
+
+
+CAPACITY_DEALS = [  # deal, channel, cash USD by Day 30, total hours, hours inside 30 days, template, priority
+    ("Agency pilot AM (100,000 AMD)", "Agency", 258, 8, 8, "Partial", "P1"),
+    ("Agency pilot AM (100,000 AMD)", "Agency", 258, 8, 8, "Partial", "P1"),
+    ("Agency pilot RU ($250)", "Agency", 250, 8, 8, "Partial", "P1"),
+    ("Agency pilot EU ($300)", "Agency", 300, 8, 8, "Partial", "P1"),
+    ("WL-3 RU follow-on, 50% deposit of $950", "Agency", 475, 25, 8, "Partial", "P1"),
+    ("WL-1 AM follow-on, 50% deposit of 180,000", "Agency", 232, 14, 5, "Yes", "P2"),
+    ("Real estate client DC-3 Business, 50% of 300,000", "Warm", 387, 35, 12, "Partial", "P1"),
+    ("HosDog AI order assistant 90,000 + care 20,000", "Warm", 284, 10, 10, "Partial", "P1"),
+    ("Contest DC-1 Pro 72,000 + 1st month 20,000", "Contest", 237, 6, 6, "Yes", "P1"),
+    ("Contest DC-1 Pro 72,000 + 1st month 20,000", "Contest", 237, 6, 6, "Yes", "P1"),
+    ("Contest DC-1 Pro 72,000 + 1st month 20,000", "Contest", 237, 6, 6, "Yes", "P1"),
+    ("Network DC-1 Pro 90,000 + 1st month 25,000", "Network", 296, 6, 6, "Yes", "P1"),
+    ("Network DC-1 Pro 90,000 + 1st month 25,000", "Network", 296, 6, 6, "Yes", "P1"),
+    ("Direct cold DC-1 Pro 90,000 + 25,000", "Direct", 296, 6, 6, "Yes", "P3"),
+    ("Direct cold DC-1 Pro 90,000 + 25,000", "Direct", 296, 6, 6, "Yes", "P3"),
+    ("Upwork fixed-price automation (net)", "Upwork", 250, 7, 7, "Partial", "P2"),
+    ("Upwork fixed-price automation (net)", "Upwork", 250, 7, 7, "Partial", "P2"),
+    ("Upwork fixed-price automation (net)", "Upwork", 250, 7, 7, "Partial", "P3"),
+    ("Upwork fixed-price automation (net)", "Upwork", 250, 7, 7, "Partial", "P3"),
+]
+
+
+def build_capacity_block(ws, top):
+    money = '"$"#,##0'
+    ws[f"A{top}"] = "BLOCK 3: capacity check of the $5,000 path (delivery hours only; sales time is NOT capacity)"
+    ws[f"A{top}"].font = Font(bold=True)
+    ws[f"A{top + 1}"], ws[f"B{top + 1}"] = "Delivery capacity, hours in 30 days", 140
+    ws[f"B{top + 1}"].fill = IN_FILL
+    heads = ["Deal", "Channel", "Cash by Day 30 USD", "Total hours", "Hours inside 30 days", "Template?", "Priority", "Cash per in-month hour"]
+    h = top + 3
+    for j, t in enumerate(heads, 1):
+        c = ws.cell(row=h, column=j, value=t)
+        c.fill, c.font = H_FILL, H_FONT
+        c.alignment = Alignment(wrap_text=True)
+    for k, row in enumerate(CAPACITY_DEALS, h + 1):
+        for j, v in enumerate(row, 1):
+            c = ws.cell(row=k, column=j, value=v)
+            c.fill = IN_FILL
+        ws[f"C{k}"].number_format = money
+        ws[f"H{k}"] = f'=IF(E{k}=0,"",C{k}/E{k})'
+        ws[f"H{k}"].number_format = money
+        ws[f"H{k}"].fill = CALC_FILL
+    last = h + len(CAPACITY_DEALS)
+    t = last + 1
+    ws[f"A{t}"] = "TOTAL"
+    ws[f"A{t}"].font = Font(bold=True)
+    for col in "CDE":
+        ws[f"{col}{t}"] = f"=SUM({col}{h + 1}:{col}{last})"
+        ws[f"{col}{t}"].font = Font(bold=True)
+    ws[f"C{t}"].number_format = money
+    rows = [("Spare delivery hours (capacity − in-month hours)", f"=B{top + 1}-E{t}", None),
+            ("Cash if all P3 deals are postponed", f'=C{t}-SUMIFS(C{h + 1}:C{last},G{h + 1}:G{last},"P3")', money),
+            ("Hours if all P3 deals are postponed", f'=E{t}-SUMIFS(E{h + 1}:E{last},G{h + 1}:G{last},"P3")', None),
+            ("Working hours, 2 people × 9 h × 26 days", "=2*9*26", None),
+            ("Minimum sales + follow-up time (25%)", f"=ROUND(B{t + 4}*0.25,0)", None),
+            ("Planned sales time (A 3.5 h + B 5.5 h per day × 26)", "=(3.5+5.5)*26", None),
+            ("Planned sales share", f"=B{t + 6}/B{t + 4}", "0%")]
+    for k, (lab, fml, fmt) in enumerate(rows, t + 1):
+        ws[f"A{k}"] = lab
+        ws[f"B{k}"] = fml
+        ws[f"B{k}"].fill = CALC_FILL
+        if fmt:
+            ws[f"B{k}"].number_format = fmt
+    ws.conditional_formatting.add(f"B{t + 1}", CellIsRule(operator="lessThan", formula=["0"], fill=RED))
+    ws.conditional_formatting.add(f"B{t + 1}", CellIsRule(operator="greaterThanOrEqual", formula=["0"], fill=GREEN))
 
 
 def build_readme(wb):

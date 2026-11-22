@@ -34,7 +34,9 @@ Each count is based on the stage-date columns in Leads, so it counts leads that 
 | Interested | COUNT(Interested date) |
 | Demos / meetings | COUNT(Demo/Meeting date) |
 | Proposals sent | COUNT(Proposal date) |
-| Deals won (signed/accepted) | COUNTIF(Deals Signed = Yes) |
+| Deals WON (payment verified) | COUNTIF(Deals Collected > 0) |
+| Accepted deals still awaiting first payment | COUNTIFS(Signed = Yes, Collected = 0) |
+| Expected payments next 7 days | SUMIFS(Deals Expected next payment USD, Expected payment date within 7 days). Not cash |
 | Payments (verified count) | COUNTIF(Payments Verified = Yes) |
 | Average payment | collected ÷ payments |
 | Conversion rates | contacted → interested → proposal → won |

@@ -43,7 +43,7 @@ To import into a Google Sheets tab: File → Import → Upload → "Insert new s
 | Got a reply | Activities: Type = Reply received. Leads: Stage = Replied or Interested + the stage date + the Score inputs |
 | Booked a call/demo | Leads: Stage = Meeting Scheduled, Demo/Meeting date, Next action = "Demo 26 Nov 11:00" |
 | Sent a proposal | Deals: new row (Lead ID, Service, Currency, Price, Discount, Structure). Activities: Type = Proposal. Leads: Stage = Proposal Sent + Proposal date + Est. deal value USD |
-| Client accepted | Deals: Signed = Yes. Invoices: new row (Invoice No, Deal ID, dates, amount, currency). Leads: Stage = Won — Awaiting Payment + Won date |
+| Client accepted | Deals: Signed = Yes. Invoices: new row (Invoice No, Deal ID, dates, amount, currency). Leads: Stage = Accepted — Awaiting Payment + Accepted date. Deals: Expected next payment + Expected payment date |
 | Money arrived | Payments: new row (Date, Deal ID, Invoice No, Amount, Currency, Method, Reference). **Verified = Yes only after you see it in the bank.** Leads: Stage = Paid — Won + Paid date |
 | Lost | Leads: Stage = Lost + Lost date + the reason in Notes |
 
@@ -68,3 +68,23 @@ To import into a Google Sheets tab: File → Import → Upload → "Insert new s
 ## 7. Rebuilding the workbook
 `python3 docs/RISEUP_SALES_SYSTEM/tools/build_crm.py` regenerates **empty** template files from the lead CSV.
 - **Warning:** never run it over a CRM that already contains real data. Live data belongs in Google Sheets.
+
+## 8. Sales execution rules (mandatory)
+For **every qualified opportunity** (a positive reply, or the qualification gate passed):
+
+| # | Rule | Where in the CRM |
+|---|---|---|
+| 1 | Record it | Leads row (search first; no duplicates) |
+| 2 | Assign an owner | Leads → Assigned to (A or B); Deals → Owner |
+| 3 | Define the next action | Leads → Next action (verb + what + who, e.g. "A: send proposal + invoice") |
+| 4 | Set a follow-up date | Leads → Next follow-up date (never empty while the lead is open) |
+| 5 | Record the expected payment | Deals → Expected next payment (orig) + Expected payment date (as soon as a price is discussed) |
+| 6 | Track actual payment separately | Payments tab only, Verified in bank? = Yes after you see the money |
+| 7 | **Won only when paid** | Stage stays **Accepted — Awaiting Payment** until a verified payment exists. Then set **Paid — Won** |
+| 8 | Update after the payment | Deals → set Expected next payment to the next instalment (balance / month 2), or clear it |
+
+**Evening check (B, 5 minutes):**
+- Dashboard "Active leads with NO next action" = 0.
+- "Accepted deals still awaiting first payment" → each one gets a reminder tomorrow.
+- "Expected payments next 7 days" → A confirms each payer.
+
