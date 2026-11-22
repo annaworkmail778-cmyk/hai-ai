@@ -52,7 +52,7 @@ These prices are **proposals for founder approval**. They are consistent with th
 | Initial payment | 100% upfront for Start; 50/50 for Pro |
 | Monthly support | 15,000 / 25,000 AMD (includes AI usage within normal volume) |
 | Exclusions | WhatsApp (only via the official API, quoted separately), ads, ManyChat Pro fee if the client's volume needs it |
-| Demo needed | Lead-to-Booking video (exists, hy + en) + the live assistant on Rise's own Instagram (if configured; **NEEDS CONFIRMATION**) |
+| Demo needed | Lead-to-Booking video (exists, hy + en) + the live assistant on RISEUP's own Instagram (if configured; **NEEDS CONFIRMATION**) |
 
 ## 5. Website + Booking + Automation
 | | |

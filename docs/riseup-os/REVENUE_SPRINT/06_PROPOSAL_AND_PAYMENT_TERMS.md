@@ -37,7 +37,7 @@
 8. Հաջորդ քայլը
    Հաստատեք պատասխանով → ուղարկում ենք հաշիվը → կանխավճարից հետո սկսում ենք [ամսաթիվ]։
 
-Rise · [անուն, հեռախոս] · riseup-group.com
+RISEUP · [անուն, հեռախոս] · riseup-group.com
 ```
 
 ## Payment terms by package
@@ -56,9 +56,9 @@ Rise · [անուն, հեռախոս] · riseup-group.com
 2. The final payment is due within 3 business days of go-live/acceptance. The client checks the system within 5 business days; silence means acceptance.
 3. Anything outside the written scope is a change request (10,000 AMD/hour or a fixed quote, approved in writing first).
 4. Monthly support: invoiced on the 1st, due by the 5th. Support pauses if unpaid for 15 days. Either side can cancel with 30 days' notice.
-5. Accounts (Instagram, Meta, Google, domain) belong to the client. Rise works with granted access, which is removed when the work ends on request.
-6. Rise does not guarantee sales results. It guarantees the agreed functionality.
-7. Third-party fees and outages (Meta, ManyChat, inverter platforms) are outside Rise's responsibility. Rise will help to restore service.
+5. Accounts (Instagram, Meta, Google, domain) belong to the client. RISEUP works with granted access, which is removed when the work ends on request.
+6. RISEUP does not guarantee sales results. It guarantees the agreed functionality.
+7. Third-party fees and outages (Meta, ManyChat, inverter platforms) are outside RISEUP's responsibility. RISEUP will help to restore service.
 8. Personal data of the client's customers is processed only to deliver the service.
 
 ## Invoice text (hy, for the deposit)

@@ -1,4 +1,4 @@
-# Rise — Emergency Revenue Sprint
+# RISEUP — Emergency Revenue Sprint
 
 **Goal:** $4,000 in **actual cash received**, as fast as realistically possible.
 **Rate assumption:** 1 USD ≈ 388 AMD, so **$4,000 ≈ 1,552,000 AMD**. Confirm with the bank rate.
@@ -8,7 +8,7 @@
 
 The following are **paused**. Nothing is deleted.
 
-- Rise Command Center implementation, admin dashboard, agent runtime (`docs/riseup-os/COMMAND_CENTER/` stays as the plan for later).
+- RISEUP Command Center implementation, admin dashboard, agent runtime (`docs/riseup-os/COMMAND_CENTER/` stays as the plan for later).
 - New infrastructure, website redesign, technical experiments.
 
 Allowed coding is limited to:

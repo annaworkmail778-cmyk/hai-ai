@@ -101,7 +101,7 @@ executor(approval_id) ──▶ re-read row FOR UPDATE ──▶ checks:
 | Excessive agency (LLM03:2026; ASI02 tool misuse, ASI03 privilege abuse) | Per-agent tool allow-list in the DB. Gateway validation. Scoped DB role. Approval executor |
 | Unbounded consumption | Per-run, per-agent and global cost caps checked before each call. Anthropic Console spend limit. `max_uses` on web search |
 | Sensitive data disclosure | Knowledge scoped by classification and client. Redaction of emails and phones in `agent_steps` excerpts unless needed. No secrets ever placed in prompts |
-| Fabrication | Output schemas require `sources[]`. The UI shows "unsourced" warnings. The approved-claims list is used for anything said about Rise |
+| Fabrication | Output schemas require `sources[]`. The UI shows "unsourced" warnings. The approved-claims list is used for anything said about RISEUP |
 | Supply chain (model/provider change) | Model pinned per agent version. Changes audited |
 
 ## 8. Audit logging (OWASP Logging Cheat Sheet)

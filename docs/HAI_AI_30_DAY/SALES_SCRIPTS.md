@@ -1,3 +1,5 @@
+> Prices in these scripts follow `docs/RISEUP_BUSINESS_LAUNCH/FINAL_PRICING_AND_PAYMENT_TERMS.md` (updated 2026-11-22).
+
 # Sales Scripts: Armenian, Russian, English, Creators
 
 **Rules:**
@@ -21,7 +23,7 @@
 
 > Բարև Ձեզ, [Name]։
 >
-> Տեսա, որ [Agency]-ն առաջարկում է [their service]։ Մենք HAI-AI-ն ենք՝ երկու հոգանոց թիմ Երևանից։ Գործակալությունների համար, նրանց բրենդով, իրականացնում ենք կայքեր, landing էջեր, CRM ինտեգրացիաներ, n8n ավտոմատացումներ և AI օգնականներ։
+> Տեսա, որ [Agency]-ն առաջարկում է [their service]։ Մենք RISEUP-ն ենք՝ երկու հոգանոց թիմ Երևանից։ Գործակալությունների համար, նրանց բրենդով, իրականացնում ենք կայքեր, landing էջեր, CRM ինտեգրացիաներ, n8n ավտոմատացումներ և AI օգնականներ։
 >
 > Եթե ունեք նախագծեր, որոնք ներքին թիմը չի հասցնում, կարող ենք սկսել փոքր վճարովի թեստային առաջադրանքից (100 000 ֏, 3–5 օր)՝ որակը ստուգելու համար։
 >
@@ -29,16 +31,16 @@
 >
 > Հարմա՞ր է 15 րոպե զանգ այս շաբաթ։
 >
-> [Name Surname], HAI-AI · [phone] · [portfolio]
+> [Name Surname], RISEUP · [phone] · [portfolio]
 
 ### 1.2 Instagram DM
 > Բարև Ձեզ։ [Agency]-ի [recent post/project]-ը շատ լավն էր 👏 Մենք գործակալությունների համար, նրանց բրենդով, կայքեր և ավտոմատացումներ ենք պատրաստում։ Կարո՞ղ եմ 1 րոպեանոց օրինակ ուղարկել։
 
 ### 1.3 WhatsApp
-> Բարև Ձեզ, [Name]։ [Name Surname]-ն եմ, HAI-AI-ից։ Գործակալություններին օգնում ենք իրականացնել կայքեր, CRM ինտեգրացիաներ և AI օգնականներ՝ նրանց բրենդով, առանց նոր ծրագրավորող վարձելու։ Ահա 1 րոպեանոց օրինակ՝ [demo link]։ Եթե հետաքրքիր է, կզանգե՞մ 10 րոպեով։
+> Բարև Ձեզ, [Name]։ [Name Surname]-ն եմ, RISEUP-ից։ Գործակալություններին օգնում ենք իրականացնել կայքեր, CRM ինտեգրացիաներ և AI օգնականներ՝ նրանց բրենդով, առանց նոր ծրագրավորող վարձելու։ Ահա 1 րոպեանոց օրինակ՝ [demo link]։ Եթե հետաքրքիր է, կզանգե՞մ 10 րոպեով։
 
 ### 1.4 Phone call (90 seconds)
-1. «Բարև Ձեզ, [Name]-ն եմ, HAI-AI-ից։ Մեկ րոպե ունե՞ք»
+1. «Բարև Ձեզ, [Name]-ն եմ, RISEUP-ից։ Մեկ րոպե ունե՞ք»
 2. «Աշխատում ենք գործակալությունների հետ որպես արտաքին տեխնիկական թիմ. կայքեր, ավտոմատացումներ, AI օգնականներ Ձեր բրենդով»
 3. **Question:** «Հիմա ո՞վ է Ձեզ մոտ իրականացնում կայքերն ու ինտեգրացիաները. ներքին թիմը, թե ֆրիլանսերները»
 4. **Listen.** Bridge: «Եթե լինեն նախագծեր, որոնք չեք հասցնում, մենք կարող ենք վերցնել»
@@ -52,7 +54,7 @@
 | Situation | Response |
 |---|---|
 | Interested | «Շատ լավ։ Ասեք, խնդրեմ, ինչ նախագիծ ունեք մտքում, և 15 րոպե զանգ նշանակենք։ Զանգից հետո կուղարկեմ հստակ առաջարկ ու ժամկետ» |
-| Price? | «Թեստային առաջադրանքը 100 000 ֏ է, 3–5 օրում։ Կայքերը՝ 250 000 ֏-ից, ավտոմատացումները՝ 300 000 ֏-ից։ Վերջնական գինը՝ ծավալից կախված, գրավոր առաջարկով» |
+| Price? | «Թեստային առաջադրանքը 100 000 ֏ է, 3–5 օրում։ Landing էջը՝ 180 000 ֏-ից, կայքերը՝ 350 000 ֏-ից, ավտոմատացումներն ու AI օգնականները՝ 400 000 ֏-ից, վեբ հավելվածները՝ 800 000 ֏-ից։ Վերջնական գինը՝ ծավալից կախված, գրավոր առաջարկով» |
 | We have a tech team | «Հասկանալի է։ Շատերը մեզ օգտագործում են պիկային ծանրաբեռնվածության ժամանակ կամ AI/ավտոմատացման նախագծերի համար, որոնք թիմի հիմնական ուղղությունը չեն» |
 | Examples? | «Ահա 3 օրինակ՝ [site], [automation demo], [dashboard demo]։ Փոքր թեստը ամենալավ ձևն է որակը ստուգելու համար» |
 | Not needed | «Հասկանալի է, շնորհակալություն։ Եթե պետք լինի, կարող եմ գրել 2–3 ամսից» |
@@ -69,7 +71,7 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 
 > Здравствуйте, [Name]!
 >
-> Увидел, что [Agency] делает [their service]. Мы HAI-AI, команда разработки из Еревана. Работаем для агентств под их брендом: сайты, лендинги, интеграции с CRM (Kommo, Bitrix24), n8n-автоматизация и AI-ассистенты в WhatsApp, Telegram и Instagram.
+> Увидел, что [Agency] делает [their service]. Мы RISEUP, команда разработки из Еревана. Работаем для агентств под их брендом: сайты, лендинги, интеграции с CRM (Kommo, Bitrix24), n8n-автоматизация и AI-ассистенты в WhatsApp, Telegram и Instagram.
 >
 > Если есть проекты, которые не успевает внутренняя команда, предлагаем начать с платного тестового задания ($250, 3–5 дней), чтобы вы оценили качество без риска.
 >
@@ -77,16 +79,16 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 >
 > Удобно созвониться на 15 минут на этой неделе?
 >
-> [Имя], HAI-AI · [Telegram] · [portfolio]
+> [Имя], RISEUP · [Telegram] · [portfolio]
 
 ### 2.2 LinkedIn
 > [Name], добрый день! Мы делаем white-label разработку для агентств: сайты, CRM-интеграции, автоматизацию и AI-ассистентов. Можно отправить короткий пример?
 
 ### 2.3 Telegram / WhatsApp
-> Здравствуйте, [Name]! Я [Имя] из HAI-AI. Помогаем агентствам брать больше проектов без найма разработчиков: делаем сайты, интеграции и AI-ботов под вашим брендом. Вот пример на минуту: [demo link]. Если интересно, созвонимся на 10 минут?
+> Здравствуйте, [Name]! Я [Имя] из RISEUP. Помогаем агентствам брать больше проектов без найма разработчиков: делаем сайты, интеграции и AI-ботов под вашим брендом. Вот пример на минуту: [demo link]. Если интересно, созвонимся на 10 минут?
 
 ### 2.4 Call script
-1. «Здравствуйте, [Name]! [Имя], HAI-AI. Удобно минуту?»
+1. «Здравствуйте, [Name]! [Имя], RISEUP. Удобно минуту?»
 2. «Мы внешняя команда разработки для агентств: сайты, CRM, автоматизация, AI-боты, всё под вашим брендом».
 3. «Кто у вас сейчас делает разработку: свои люди или фрилансеры? Бывает, что не хватает рук?»
 4. «Можем начать с платного теста на $250. Отправлю примеры в Telegram?»
@@ -99,7 +101,7 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 | Situation | Response |
 |---|---|
 | Interested | «Отлично! Какой проект сейчас актуален? Созвонимся на 15 минут, после звонка пришлю чёткое предложение со сроками и ценой» |
-| Price? | «Тест — $250 (3–5 дней). Сайты — от $600, автоматизация и AI-ассистенты — от $700, веб-приложения — от $1 200. Точная цена — после брифа, письменно» |
+| Price? | «Тест — $250 (3–5 дней). Лендинг — от $500, сайт — от $950, автоматизация и AI-ассистенты — от $950, веб-приложения — от $1 800. Ежемесячная ёмкость: 30 ч — $950. Точная цена — после брифа, письменно» |
 | We have our own team | «Понимаю. Нас обычно подключают на пики загрузки или на AI- и интеграционные задачи, которые не в фокусе вашей команды» |
 | Examples? | «Вот 3 примера: [site], [automation], [dashboard]. Лучший способ проверить качество — небольшой платный тест» |
 | Not needed | «Понял, спасибо! Если не против, напишу через пару месяцев» |
@@ -113,7 +115,7 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 
 > Hi [Name],
 >
-> I saw [Agency] recently [launched X / is hiring a developer / added AI automation]. We're HAI-AI, a two-person build team in Yerevan working white-label for agencies: websites, client dashboards, CRM integrations, n8n/GoHighLevel automations and AI assistants, usually delivered in 3–10 days.
+> I saw [Agency] recently [launched X / is hiring a developer / added AI automation]. We're RISEUP, a two-person build team in Yerevan working white-label for agencies: websites, client dashboards, CRM integrations, n8n/GoHighLevel automations and AI assistants, usually delivered in 3–10 days.
 >
 > If you have projects your team can't take on this month, we start with a $300 paid test task, so you can judge quality before anything bigger.
 >
@@ -121,7 +123,7 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 >
 > Open to a 15-minute call this week?
 >
-> [Name] · HAI-AI · [portfolio] · [LinkedIn]
+> [Name] · RISEUP · [portfolio] · [LinkedIn]
 
 ### 3.2 LinkedIn connection note (≤ 300 characters)
 > Hi [Name], I run a small white-label build team (sites, dashboards, n8n/GHL automations, AI assistants) for agencies like [Agency]. Happy to connect and share a 60-second example if useful.
@@ -144,7 +146,7 @@ Use `docs/riseup-os/REVENUE_SPRINT/WARM_LEAD_ACTIONS.md` (warm leads) and `05_OU
 
 ### 3.6 Agency partnership proposal (send after the call)
 ```
-White-Label Delivery Partnership — [Agency] × HAI-AI
+White-Label Delivery Partnership — [Agency] × RISEUP
 1. What we deliver under your brand: websites, dashboards/web apps, CRM integrations, n8n/GHL automations, AI assistants, AI video.
 2. How we work: you own the client; we work from your brief; NDA; communication via your Slack or Telegram; 2 revision rounds.
 3. Start: paid test task — [deliverable], $300, 3–5 days, prepaid.
@@ -197,8 +199,8 @@ Next step: confirm the test task → invoice → kickoff call.
 1. Validation sprint (1 week): offer concept + landing + pre-sale checkout + 3 story scripts. Fee $300 / 120,000 AMD, prepaid.
 2. Go/no-go: build only if ≥ $500 pre-sold (or ≥ 30 pre-orders).
 3. Build: product + delivery automation + analytics. Build fee $500–1,500, or a minimum guarantee.
-4. Revenue share: 20–40% to HAI-AI for 6–12 months (negotiable vs build fee).
-5. Creator: content, promotion, expertise. HAI-AI: product, tech, payments, analytics.
+4. Revenue share: 20–40% to RISEUP for 6–12 months (negotiable vs build fee).
+5. Creator: content, promotion, expertise. RISEUP: product, tech, payments, analytics.
 ```
 
 ### 4.5 Revenue-share variants

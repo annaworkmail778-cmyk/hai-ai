@@ -4,7 +4,7 @@
 
 | Asset | Location | Classification | Use |
 |---|---|---|---|
-| riseup-group.com (3 languages, 3D, interactive demos, Telegram lead delivery) | this repo (`src/`) | **Ready to sell** (brand is "Rise") | Proof of build quality → Loom 1 |
+| riseup-group.com (3 languages, 3D, interactive demos, Telegram lead delivery) | this repo (`src/`) | **Ready to sell** (brand is "RISEUP") | Proof of build quality → Loom 1 |
 | Lead-to-Booking demo (en 63.5 s / hy 79.5 s; 16:9 + 9:16; with voice) | `reels/out/lead-booking/` (render: `render-lb.mjs`) | **Ready to sell** | AI assistant / booking offers (A2, D2) |
 | Developer Sales OS demo (30 s, en/hy) | `reels/out/sales-demos/` | **Ready to sell** | Lead systems, CRM (A2, D1) |
 | Solar Alerts demo (30 s, en/hy) | `reels/out/sales-demos/` | **Ready to sell** (niche) | Automation/monitoring examples |
@@ -16,8 +16,8 @@
 | AI admin (n8n + ManyChat) | n8n account | **Needs a new recording** (test Instagram account) | A2/D2 live demo |
 | n8n workflow canvas | n8n account | **Needs a new recording** | Loom 3 for agencies/Upwork |
 | Command Center docs | `docs/riseup-os/COMMAND_CENTER/` | **Not commercially useful** now | — |
-| HAI-AI Partnership PDF | — | **[MISSING]** | Replace with the capability sheet below |
-| hai-ai.systems | — | **[UNVERIFIED]** | Check in a browser; don't link until verified |
+| Old HAI-AI Partnership PDF (historical) | — | **[MISSING]** | Replace with the capability sheet below |
+| hai-ai.systems (old domain) | — | **Outdated** | Do not use |
 
 ## Maximum-priority demo plan (build nothing else)
 

@@ -1,4 +1,4 @@
-# Rise Command Center — Readiness Report
+# RISEUP Command Center — Readiness Report
 
 Prepared 2026-11-15. Status: **architecture proposed, awaiting owner approval. No implementation has started.** No code, database, deployment, DNS or environment variables were changed; only documentation was added.
 
@@ -22,7 +22,7 @@ Everything in the platform: auth with MFA, data model, DAL, admin UI, agent runt
 - **Approvals enforced by the backend executor and DB grants.** Agents can only request; humans decide; the executor re-verifies the approval and payload hash before any side effect. Sending is a manual handoff in the MVP.
 - **MVP agents:** Market Research → Lead Qualification → Outreach. The other six are phased in once there is data and a measured need.
 
-## 4. Why this is right for Rise
+## 4. Why this is right for RISEUP
 - **Fastest path:** it reuses the existing stack, brand and deploy, and adds only two services (Supabase and the Anthropic API).
 - **Cheapest:** about $45–50/month fixed in production, plus capped AI usage. The $20 Vercel Pro is needed for the public site anyway.
 - **Secure by construction:** no browser access to the database, MFA everywhere, backend-enforced approvals, and agents without external tools.

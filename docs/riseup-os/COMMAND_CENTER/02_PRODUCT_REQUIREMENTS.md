@@ -1,12 +1,12 @@
 # 02 — Product Requirements
 
-**Product:** Rise Command Center, a private, authenticated business operating system at `https://riseup-group.com/admin`.
+**Product:** RISEUP Command Center, a private, authenticated business operating system at `https://riseup-group.com/admin`.
 **Users:**
 - **Owner** (the founder): everything, including final approvals.
 - **Team member** (research and operations): CRM, research, drafts and tasks; no finance-sensitive actions or high-risk approvals by default.
 - **Agent service identities:** scoped tools only.
 
-**Primary goal:** help Rise collect real cash, starting with $6,000 in 40 days (a target, not a forecast), and measure it honestly.
+**Primary goal:** help RISEUP collect real cash, starting with $6,000 in 40 days (a target, not a forecast), and measure it honestly.
 
 **30-second rule:** opening `/admin` must answer three questions. How much cash has actually arrived versus the target? What is stuck or waiting on me? What are the top 3 revenue actions today?
 
@@ -161,7 +161,7 @@
 - **Documents:** company profile, brand, products, pricing, scripts, proposals, technical docs, requirements, project docs, research, SOPs.
 - **Fields:** classification (`public`, `internal`, `confidential`, `client:<id>`) and owner.
 - **Agent retrieval** is filtered by the agent's allowed classifications and the run's client scope, so one client's data never reaches another client's run.
-- **"Approved claims" list:** the only facts outreach and proposal agents may state about Rise. This implements the Phase 1 rule: never invent achievements.
+- **"Approved claims" list:** the only facts outreach and proposal agents may state about RISEUP. This implements the Phase 1 rule: never invent achievements.
 - **Retrieval method:** MVP uses tags + Postgres full-text search. Vector search (pgvector) is added only if FTS proves insufficient.
 
 ## K. Settings and Integrations (P0: users, roles, agent limits, integration status; P2: OAuth connections)

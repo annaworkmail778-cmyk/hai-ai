@@ -8,7 +8,7 @@
 | When they run | Only while someone is running Claude Code (a terminal or cloud session) | On demand from the UI or on a schedule, without a developer present |
 | State | The session transcript | `agent_runs`, `agent_steps` and the business tables in Postgres |
 | Permissions | Claude Code tool permissions + hooks | **Tool Gateway + DB grants + the approval executor** (enforced by the backend) |
-| Use for Rise | Build, test and review the Command Center; draft migrations; code review | Research, qualification, outreach drafts, proposals, briefings |
+| Use for RISEUP | Build, test and review the Command Center; draft migrations; code review | Research, qualification, outreach drafts, proposals, briefings |
 
 **Claude Code subagents are not persistent production agents.** They cannot be "left running" for the business. Runtime agents must be implemented in the application: a model call loop + tools + queue + logs. The agent *definitions* (purpose, prompts, tool lists) can be authored in the repo and reviewed like code, but they are executed by the app's runtime.
 

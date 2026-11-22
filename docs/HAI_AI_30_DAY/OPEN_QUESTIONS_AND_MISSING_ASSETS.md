@@ -3,9 +3,9 @@
 ## Critical questions (answer on Day 1; the default applies if there's no answer)
 | # | Question | Why it matters | Default |
 |---|---|---|---|
-| 1 | **Brand for outreach: HAI-AI or Rise?** The live site riseup-group.com is branded "Rise"; this plan says HAI-AI | Prospects click the link; a mismatch reduces trust | Messages signed **HAI-AI**, portfolio = riseup-group.com described as "our build" until hai-ai.systems is verified. Don't rebuild any site this month |
-| 2 | **Is hai-ai.systems live, and what does it show?** | It could not be reached or found in search | Do not link it until checked in a browser |
-| 3 | **Where is the HAI-AI Partnership PDF?** | Not in the repo | Replaced by the Day-2 one-page capability sheet; send the PDF if it exists so we can reuse it |
+| 1 | ~~Brand for outreach~~ **RESOLVED 2026-11-22: the brand is RISEUP; website riseup-group.com** | — | — |
+| 2 | ~~hai-ai.systems~~ **RESOLVED: outdated domain; do not use** | — | — |
+| 3 | **Where is the old HAI-AI Partnership PDF?** (historical name) | Not in the repo | Replaced by the Day-2 one-page capability sheet; send the PDF if it exists so we can reuse it |
 | 4 | Status of the warm leads (HosDog, real estate client, Babasyan, Shtigen): payments, agreements, permission to show work | Fastest cash and case studies | Treated as unconfirmed |
 | 5 | **Payment rails:** SWIFT receiving details and fees from the bank; does a Payoneer account exist? | International cash | Bank SWIFT invoice first; Payoneer if available |
 | 6 | Legal status (sole proprietor) → invoice format, tax rate | Net cash, compliant invoices | Ask the accountant this week; reserve 10% |

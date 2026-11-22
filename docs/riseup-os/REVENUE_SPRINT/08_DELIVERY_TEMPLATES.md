@@ -31,7 +31,7 @@ Goal: deliver each package in its stated time, with the same steps every time, s
 | **Weekly summary** | 1, 2, 3 | Schedule (Mon 09:00) → Sheets aggregate → Telegram message / Looker Studio link | |
 | **Solar poll + alert** | 3 | Schedule hourly → platform API/export → per-site rules → Telegram alert → log row | Confirm vendor API terms per client |
 | **Booking** | 4, 5 | Google Calendar free/busy → offer slots → create the event after confirmation | Existing AI admin flow |
-| **Website starter** | 5 | The current Next.js site structure (locales, contact API with honeypot + rate limit, Telegram delivery) as a template repo | Strip Rise content; per-client repo |
+| **Website starter** | 5 | The current Next.js site structure (locales, contact API with honeypot + rate limit, Telegram delivery) as a template repo | Strip RISEUP content; per-client repo |
 
 **n8n licensing:** for client work, prefer the **client's own n8n instance** (self-host or n8n Cloud on their account) until the licence question in Phase 1 doc 06 is resolved.
 
@@ -43,7 +43,7 @@ Goal: deliver each package in its stated time, with the same steps every time, s
 2. Որտեղ է աշխատում. ծառայություններ և հաշիվներ (ում անունով են)
 3. Ինչպես օգտագործել ամեն օր (քայլեր, սքրինշոթներ)
 4. Ինչ անել, եթե… (չի պատասխանում, ծանուցում չի գալիս, Sheets-ը դատարկ է)
-5. Ով ունի մուտք (Rise-ի մուտքը կարող եք հեռացնել [ինչպես])
+5. Ով ունի մուտք (RISEUP-ի մուտքը կարող եք հեռացնել [ինչպես])
 6. Սպասարկում. ինչ է ներառված, ինչպես դիմել, պատասխանի ժամկետ
 7. Փոփոխությունների պատմություն
 ```

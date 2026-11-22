@@ -10,7 +10,7 @@ Status key: `NEEDS CONFIRMATION` → `CONFIRMED ACTIVE` / `NOT INTERESTED` / `PA
 ## 1. Alexander Babasyan: portfolio website
 | | |
 |---|---|
-| What we know | Rise is building his portfolio site ("in preparation", `plan-60-days.md` §0.4) |
+| What we know | RISEUP is building his portfolio site ("in preparation", `plan-60-days.md` §0.4) |
 | What we don't know | Whether it is paid, the agreed price, what remains, the deadline |
 | Status | NEEDS CONFIRMATION |
 | Goal (14 days) | Deliver and collect any agreed balance. Add hosting/support monthly. Get a testimonial |
@@ -32,7 +32,7 @@ Status key: `NEEDS CONFIRMATION` → `CONFIRMED ACTIVE` / `NOT INTERESTED` / `PA
 ## 2. HosDog / Bistro: ordering site + dashboard + printer
 | | |
 |---|---|
-| What we know | Delivered by Rise. Online ordering, dashboard, automatic receipt printer. The strongest case (`plan-60-days.md` §0.1). hosdog.am is the site |
+| What we know | Delivered by RISEUP. Online ordering, dashboard, automatic receipt printer. The strongest case (`plan-60-days.md` §0.1). hosdog.am is the site |
 | What we don't know | Whether it's still running, who hosts it, whether support is paid, how satisfied they are, monthly order volume |
 | Status | NEEDS CONFIRMATION |
 | Goal (14 days) | (a) AI order assistant sold and delivered, (b) monthly support agreed, (c) testimonial + 2 restaurant introductions |
@@ -54,7 +54,7 @@ Status key: `NEEDS CONFIRMATION` → `CONFIRMED ACTIVE` / `NOT INTERESTED` / `PA
 ## 3. Existing real estate client: site auto-updated from a WhatsApp group
 | | |
 |---|---|
-| What we know | Rise built a site that updates itself from WhatsApp group listings (`plan-60-days.md` §0.2) |
+| What we know | RISEUP built a site that updates itself from WhatsApp group listings (`plan-60-days.md` §0.2) |
 | What we don't know | Who the contact is, whether the site still runs, inquiry volume, the team size, current CRM |
 | Status | NEEDS CONFIRMATION |
 | Goal (14 days) | Real Estate CRM pilot signed (50% deposit by day 3–5), go-live by day 10, balance collected. Introductions to developers |
@@ -76,7 +76,7 @@ Status key: `NEEDS CONFIRMATION` → `CONFIRMED ACTIVE` / `NOT INTERESTED` / `PA
 ## 4. Shtigen: hourly data → Telegram automation
 | | |
 |---|---|
-| What we know | Rise built an automation that sends data to staff via Telegram every hour (`plan-60-days.md` §0.3). Earlier founder messages describe it as inverter limits, i.e. solar-related |
+| What we know | RISEUP built an automation that sends data to staff via Telegram every hour (`plan-60-days.md` §0.3). Earlier founder messages describe it as inverter limits, i.e. solar-related |
 | What we don't know | Whether it still runs, whether it was paid, number of sites, inverter brands, API access, decision maker |
 | Status | NEEDS CONFIRMATION |
 | Goal (14 days) | Solar alerts extension: 60% deposit by day 6–8, go-live by day 12. Permission to show the workflow (blurred) as a reference. Introductions |

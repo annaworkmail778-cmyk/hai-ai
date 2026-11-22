@@ -40,7 +40,7 @@ Fill in the `[brackets]` from the discovery call. Every number in "Ձեր իրա
 Հաջորդ քայլը
 Պատասխանեք «Համաձայն եմ» → ուղարկում ենք պայմանագիրը և հաշիվը → կանխավճարից հետո սկսում ենք [ամսաթիվ]։
 
-Rise · [Անուն Ազգանուն] · [հեռախոս] · riseup-group.com
+RISEUP · [Անուն Ազգանուն] · [հեռախոս] · riseup-group.com
 ```
 
 ### English

@@ -1,4 +1,6 @@
-# HAI-AI: 30-Day $5,000 Master Roadmap
+> **Superseded on 2026-11-22 by `docs/RISEUP_BUSINESS_LAUNCH/`** (brand: RISEUP). Kept for history.
+
+# RISEUP: 30-Day $5,000 Master Roadmap
 
 **Created:** 2026-11-22. **Day 1** = the first working day after the team reads this.
 **KPI:** **cash received by the end of Day 30 ≥ $5,000** (deposits and paid tests count once received; nothing else counts).
@@ -29,14 +31,14 @@
 
 | Asset | Status |
 |---|---|
-| riseup-group.com (this repo: Next.js 16, hy/ru/en, 3D, interactive demos, Telegram lead delivery) | **Ready to sell as portfolio.** Branded "Rise", not HAI-AI → brand decision needed |
+| riseup-group.com (this repo: Next.js 16, hy/ru/en, 3D, interactive demos, Telegram lead delivery) | **Ready to sell as portfolio.** Brand: RISEUP (decided 2026-11-22) |
 | Lead-to-Booking demo video (en/hy, 16:9 + 9:16) | Ready |
 | Developer Sales OS + Solar Alerts demos (30 s, en/hy) | Ready |
 | Marketing reels 01–05, contest video (Remotion) | Ready as AI-video portfolio |
 | Real delivered work: HosDog ordering + dashboard + printer; real-estate WhatsApp-group site; Shtigen hourly automation; AI admin (n8n + ManyChat) | Real. Needs **client permission** to show; the AI admin needs a recorded walkthrough |
 | Sales docs: `docs/riseup-os/REVENUE_SPRINT/*` (offers, contracts, proposals hy/en, warm-lead plans) | Reusable |
 | Research: `docs/riseup-os/PRODUCT_VALIDATION/*` (incl. the 30-day $5K decision) | Basis for this plan |
-| **HAI-AI Partnership PDF** | **[MISSING]**: not in the repo or any accessible location |
+| **RISEUP Partnership PDF** | **[MISSING]**: not in the repo or any accessible location |
 | **hai-ai.systems** | **[MISSING / UNVERIFIED]**: not reachable from this environment; no search results |
 | Command Center docs | Not commercially useful now (paused) |
 
@@ -53,7 +55,7 @@
 | 5. Enough direct selling? | Previous local cold calling produced 0 sales; the problem was targeting and offer, not volume | Direct channel = warm leads + 2 narrow industries only (doc §4 of the catalog) |
 | 6. Right geography order? | Strict sequencing (Armenia → RU → Intl) delays international pipelines, which have longer cycles | **Run all three agency markets from week 1**, weighted 30% Armenia / 25% RU-speaking / 45% international outreach volume. **Russia itself is deprioritised** (payment and compliance risk; Meta banned); focus Georgia, Kazakhstan, relocated firms |
 | 7. Too many things? | Yes, if bloggers get real time | Bloggers capped at **3 hours/week, Person B only**, validation-only; no building without a deposit |
-| 8. Missing before selling tomorrow? | Brand decision (HAI-AI vs Rise), a one-page agency capability sheet, 4 short Loom demos, payment rails (Payoneer/bank SWIFT details), Upwork/Contra profiles | Day 1–2 tasks |
+| 8. Missing before selling tomorrow? | Brand decision (RISEUP vs RISEUP), a one-page agency capability sheet, 4 short Loom demos, payment rails (Payoneer/bank SWIFT details), Upwork/Contra profiles | Day 1–2 tasks |
 | 9. What to stop? | Command Center, new research reports, website rebuilds, new product ideas, unpaid custom demos | Stopped for 30 days |
 | 10. Single highest-priority first action? | **Call the 4 warm leads (HosDog, real estate client, Babasyan, Shtigen) and send the first 20 agency messages with a paid-test offer, on Day 1** | Day 1 |
 
@@ -106,7 +108,7 @@ When delivery load exceeds 5 h/day, Person A's sales block drops to 2 h. Person 
 
 | Day | Main objective | Person A | Person B | Leads | Msgs | FU | Calls | UW | Cash |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | First cash moves + launch outreach | Call HosDog, the real estate client, Babasyan, Shtigen (scripts in `REVENUE_SPRINT/WARM_LEAD_ACTIONS.md`). Record 2 Looms (riseup-group.com tour; Lead-to-Booking). Decide brand (HAI-AI or Rise) | Import `LEADS_DATABASE.csv` into Sheets. Verify the top 20 leads (contact page, owner name). Send 20 first messages (10 Armenia, 10 intl). Create or refresh Upwork + Contra profiles | 20 | 20 | 0 | 4 | 3 | $0 |
+| 1 | First cash moves + launch outreach | Call HosDog, the real estate client, Babasyan, Shtigen (scripts in `REVENUE_SPRINT/WARM_LEAD_ACTIONS.md`). Record 2 Looms (riseup-group.com tour; Lead-to-Booking). (Brand: RISEUP) | Import `LEADS_DATABASE.csv` into Sheets. Verify the top 20 leads (contact page, owner name). Send 20 first messages (10 Armenia, 10 intl). Create or refresh Upwork + Contra profiles | 20 | 20 | 0 | 4 | 3 | $0 |
 | 2 | Assets ready | Write the 1-page agency capability sheet (PDF) + rate card. Record Loom 3 (n8n workflow) and Loom 4 (Developer Sales OS) | 20 msgs (RU market). Follow up warm-lead promises (send videos). 5 UW proposals with A | 20 | 20 | 4 | 2 | 5 | $0 |
 | 3 | First calls; **Gate D3** | Build the white-label "client dashboard" demo (≤ 6 h, illustrative data). Take calls | 20 msgs (intl). 1st follow-ups to Day-1 sends | 20 | 20 | 20 | 2 | 5 | $0–150 |
 | 4 | Convert interest into paid tests | Calls; send paid-test invoices the same day | 20 msgs (Armenia: marketing agencies + CRM partners). Follow-ups | 15 | 20 | 15 | 3 | 5 | $150 |

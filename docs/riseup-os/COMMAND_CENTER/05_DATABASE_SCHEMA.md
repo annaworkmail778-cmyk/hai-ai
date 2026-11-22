@@ -123,7 +123,7 @@ Notes on `audit_logs`:
 
 ## 3. Data ownership rules
 
-- **Business data** (CRM, finance, projects) is owned by Rise and edited by humans. Agents may write only to `lead_candidates`, `sources`, `messages` (draft status), `proposals` (draft), `tasks` (type recommendation) and their own `agent_runs`/`agent_steps`. Every other change goes through an approval or a human UI action.
+- **Business data** (CRM, finance, projects) is owned by RISEUP and edited by humans. Agents may write only to `lead_candidates`, `sources`, `messages` (draft status), `proposals` (draft), `tasks` (type recommendation) and their own `agent_runs`/`agent_steps`. Every other change goes through an approval or a human UI action.
 - **Client-scoped knowledge** is readable only by runs whose `client_scope_company_id` matches, and by humans.
 - **Finance** is readable by `owner` only unless `finance.read` is granted.
 

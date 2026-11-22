@@ -8,7 +8,7 @@
 - **F** = Founder: calls, meetings, demos, proposals, delivery, final decisions.
 - **T** = Team member: research, lists, message preparation, tracker, contest inbox, invoices and follow-ups.
 
-**Honest note:** Rise has no paying client yet (`plan-60-days.md` §0). $4,000 in 14 days is achievable only if at least two existing relationships convert **and** small jobs are paid upfront. The plan is built so the first cash can arrive in days 2–5.
+**Honest note:** RISEUP has no paying client yet (`plan-60-days.md` §0). $4,000 in 14 days is achievable only if at least two existing relationships convert **and** small jobs are paid upfront. The plan is built so the first cash can arrive in days 2–5.
 
 ---
 
