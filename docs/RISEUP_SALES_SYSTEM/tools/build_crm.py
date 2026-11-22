@@ -641,28 +641,31 @@ def build_calculator(wb):
         c = ws.cell(row=4, column=j, value=h)
         c.fill, c.font = H_FILL, H_FONT
         c.alignment = Alignment(wrap_text=True)
-    mix = [("Warm leads / old contacts", 6, .20, 350, .33, 450, .50, 600),
-           ("Agency outreach (msgs + calls)", 345, .005, 400, .01, 500, .018, 700),
-           ("Direct businesses (Armenia)", 150, .008, 250, .015, 300, .025, 350),
-           ("Upwork / Contra proposals", 113, .015, 300, .03, 400, .05, 500),
-           ("Creators (paid validation)", 20, 0, 300, .025, 300, .05, 400)]
+    mix = [("Warm / existing clients", 4, .15, 300, .30, 420, .60, 600),
+           ("Contest participants + personal network", 40, .03, 180, .06, 190, .12, 230),
+           ("Agency outreach (msgs + calls)", 345, .003, 300, .0075, 500, .012, 700),
+           ("Direct businesses (cold, Armenia)", 150, .002, 190, .007, 250, .015, 350),
+           ("Upwork / Contra proposals (net of fees)", 113, .01, 200, .02, 250, .04, 400),
+           ("Creators (paid validation)", 20, 0, 300, 0, 300, .05, 300)]
+    n = len(mix)
     for i, row in enumerate(mix, 5):
         for j, v in enumerate(row, 1):
             c = ws.cell(row=i, column=j, value=v)
             if j > 1:
                 c.fill = IN_FILL
             if j in (3, 5, 7):
-                c.number_format = "0.0%"
+                c.number_format = "0.00%"
             if j in (4, 6, 8):
                 c.number_format = money
-    ws["A11"] = "Result"
-    ws["A11"].font = Font(bold=True)
+    R0 = 5 + n + 1  # result header row
+    ws[f"A{R0}"] = "Result"
+    ws[f"A{R0}"].font = Font(bold=True)
     for j, h in enumerate(["", "", "Cons: deals", "Cons: cash", "Base: deals", "Base: cash", "Aggr: deals", "Aggr: cash"], 1):
         if h:
-            c = ws.cell(row=11, column=j, value=h)
+            c = ws.cell(row=R0, column=j, value=h)
             c.fill, c.font = H_FILL, H_FONT
-    for i in range(5, 10):
-        r = i + 7
+    for k in range(n):
+        i, r = 5 + k, R0 + 1 + k
         ws[f"A{r}"] = f"=A{i}"
         for dcol, ccol, rate, avg in (("C", "D", "C", "D"), ("E", "F", "E", "F"), ("G", "H", "G", "H")):
             ws[f"{dcol}{r}"] = f"=$B{i}*{rate}{i}"
@@ -670,48 +673,52 @@ def build_calculator(wb):
             ws[f"{dcol}{r}"].number_format = "0.0"
             ws[f"{ccol}{r}"].number_format = money
             ws[f"{dcol}{r}"].fill = ws[f"{ccol}{r}"].fill = CALC_FILL
-    ws["A17"] = "TOTAL"
-    ws["A17"].font = Font(bold=True)
+    T = R0 + n + 1
+    ws[f"A{T}"] = "TOTAL"
+    ws[f"A{T}"].font = Font(bold=True)
     for col in "CDEFGH":
-        ws[f"{col}17"] = f"=SUM({col}12:{col}16)"
-        ws[f"{col}17"].number_format = money if col in "DFH" else "0.0"
-        ws[f"{col}17"].font = Font(bold=True)
-    ws["A18"] = "Gap to target (Lists!Y2)"
+        ws[f"{col}{T}"] = f"=SUM({col}{R0 + 1}:{col}{T - 1})"
+        ws[f"{col}{T}"].number_format = money if col in "DFH" else "0.0"
+        ws[f"{col}{T}"].font = Font(bold=True)
+    ws[f"A{T + 1}"] = "Gap to target (Lists!Y2)"
     for col in "DFH":
-        ws[f"{col}18"] = f"={col}17-Lists!$Y$2"
-        ws[f"{col}18"].number_format = money
-    ws.conditional_formatting.add("D18:H18", CellIsRule(operator="lessThan", formula=["0"], fill=RED))
-    ws.conditional_formatting.add("D18:H18", CellIsRule(operator="greaterThanOrEqual", formula=["0"], fill=GREEN))
+        ws[f"{col}{T + 1}"] = f"={col}{T}-Lists!$Y$2"
+        ws[f"{col}{T + 1}"].number_format = money
+    ws.conditional_formatting.add(f"D{T + 1}:H{T + 1}", CellIsRule(operator="lessThan", formula=["0"], fill=RED))
+    ws.conditional_formatting.add(f"D{T + 1}:H{T + 1}", CellIsRule(operator="greaterThanOrEqual", formula=["0"], fill=GREEN))
+    ws[f"A{T + 2}"] = "Revised 2026-11-22 (FINAL_REVENUE_OPTIMIZATION.md): base cut for zero paid history; contest + network added."
+    shift = T + 4 - 21  # move Block 2 below
     # Block 2: funnel check
-    ws["A21"] = "BLOCK 2: what a single funnel needs to reach the target"
-    ws["A21"].font = Font(bold=True)
+    ws[f"A{21 + shift}"] = "BLOCK 2: what a single funnel needs to reach the target"
+    ws[f"A{21 + shift}"].font = Font(bold=True)
     for j, h in enumerate(["Input / output", "Conservative", "Base", "Aggressive"], 1):
-        c = ws.cell(row=22, column=j, value=h)
+        c = ws.cell(row=22 + shift, column=j, value=h)
         c.fill, c.font = H_FILL, H_FONT
     inputs = [("Target cash USD", "=Lists!$Y$2", "=Lists!$Y$2", "=Lists!$Y$2", money),
               ("Average cash per paid deal (USD)", 450, 600, 800, money),
               ("Reply rate (contacted → replied)", 0.06, 0.10, 0.14, "0%"), ("Positive share of replies", 0.4, 0.5, 0.6, "0%"),
               ("Positive → call/demo", 0.6, 0.7, 0.8, "0%"), ("Call/demo → proposal", 0.7, 0.8, 0.85, "0%"),
               ("Proposal → paid", 0.25, 0.35, 0.45, "0%")]
-    for i, (lab, a, b, c, fmt) in enumerate(inputs, 23):
+    for i, (lab, a, b, c, fmt) in enumerate(inputs, 23 + shift):
         ws[f"A{i}"] = lab
         for col, v in zip("BCD", (a, b, c)):
             ws[f"{col}{i}"] = v
             ws[f"{col}{i}"].fill = IN_FILL
             ws[f"{col}{i}"].number_format = fmt
-    outs = [("Paid deals needed", "=ROUNDUP({c}23/{c}24,0)"), ("Proposals needed", "=ROUNDUP({c}30/{c}29,0)"),
-            ("Calls/demos needed", "=ROUNDUP({c}31/{c}28,0)"), ("Positive replies needed", "=ROUNDUP({c}32/{c}27,0)"),
-            ("Replies needed", "=ROUNDUP({c}33/{c}26,0)"), ("Leads to contact", "=ROUNDUP({c}34/{c}25,0)"),
-            ("Contacts per working day (26 days)", "=ROUNDUP({c}35/26,0)")]
-    for i, (lab, f) in enumerate(outs, 30):
+    q = lambda r: r + shift
+    outs = [("Paid deals needed", f"=ROUNDUP({{c}}{q(23)}/{{c}}{q(24)},0)"), ("Proposals needed", f"=ROUNDUP({{c}}{q(30)}/{{c}}{q(29)},0)"),
+            ("Calls/demos needed", f"=ROUNDUP({{c}}{q(31)}/{{c}}{q(28)},0)"), ("Positive replies needed", f"=ROUNDUP({{c}}{q(32)}/{{c}}{q(27)},0)"),
+            ("Replies needed", f"=ROUNDUP({{c}}{q(33)}/{{c}}{q(26)},0)"), ("Leads to contact", f"=ROUNDUP({{c}}{q(34)}/{{c}}{q(25)},0)"),
+            ("Contacts per working day (26 days)", f"=ROUNDUP({{c}}{q(35)}/26,0)")]
+    for i, (lab, f) in enumerate(outs, 30 + shift):
         ws[f"A{i}"] = lab
         ws[f"A{i}"].font = Font(bold=True)
         for col in "BCD":
             ws[f"{col}{i}"] = f.format(c=col)
             ws[f"{col}{i}"].fill = CALC_FILL
-    ws["A38"] = ("Reading: cold outreach alone needs ~960 contacts at Base, more than 2 people can do. "
+    ws[f"A{38 + shift}"] = ("Reading: cold outreach alone needs ~960 contacts at Base, more than 2 people can do. "
                  "The target depends on warm leads, Upwork and agency deals with bigger deposits.")
-    ws["A39"] = "Replace assumptions with real rates from the Dashboard after Day 7 (response rate, proposal → won)."
+    ws[f"A{39 + shift}"] = "Replace assumptions with real rates from the Dashboard after Day 7 (response rate, proposal → won)."
 
 
 def build_readme(wb):

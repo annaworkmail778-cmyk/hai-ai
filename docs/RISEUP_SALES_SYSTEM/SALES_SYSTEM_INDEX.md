@@ -2,7 +2,7 @@
 
 **Goal:** $5,000 **collected and verified** between Mon 23 Nov and Tue 22 Dec 2026.
 
-**Start here:**
+**Start here (after the 2026-11-22 audit):** `FIRST_7_DAYS_SALES_PRIORITY.md` → `FINAL_REVENUE_OPTIMIZATION.md`. Then:
 1. `CRM_SETUP_AND_USAGE.md`: import the CRM.
 2. `DAILY_EXECUTION_PLAN.md`: today's targets.
 3. `SALES_SCRIPTS_HY_RU_EN.md`: what to say.
@@ -40,6 +40,9 @@ There's no separate `RISEUP_SALES_DASHBOARD.xlsx`. The dashboard is a tab in the
 | 16 | DAILY_SALES_REPORT_TEMPLATE.md | Evening report + review questions |
 | 17 | CRM_SETUP_AND_USAGE.md | Google Sheets import, Person A/B routines |
 | 18 | SALES_SYSTEM_INDEX.md | This file |
+| 19 | **FINAL_REVENUE_OPTIMIZATION.md** | Audit findings, lead verification, conversion fixes, offer ranking, capacity model, top 10 opportunities, daily metrics |
+| 20 | **REVISED_5000_REVENUE_SCENARIOS.md** | Revised forecast (≈ $3,080 base), the $5,000 path by channel |
+| 21 | **FIRST_7_DAYS_SALES_PRIORITY.md** | Exact plan for 23–29 Nov |
 
 ## Related (unchanged sources)
 | Source | Contents |

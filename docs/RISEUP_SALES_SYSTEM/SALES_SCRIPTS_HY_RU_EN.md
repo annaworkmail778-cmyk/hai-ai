@@ -1,5 +1,7 @@
 # RISEUP Sales Scripts: Armenian · Russian · English
 
+**v2 (2026-11-22 audit):** §1–4, §6 and §7 were rewritten to get more replies, booked calls and deposits. The reasons are in `FINAL_REVENUE_OPTIMIZATION.md` §3.
+
 **Rules:**
 - Prices come from `docs/RISEUP_BUSINESS_LAUNCH/FINAL_PRICING_AND_PAYMENT_TERMS.md`.
 - Use the **RISEUP** brand only.
@@ -20,48 +22,68 @@ Prices to quote by market:
 
 ---
 
-## 1. Agency first contact (white-label)
+## 1. Agency first contact (white-label) · v2
+**Rules:**
+- ≤ 4 sentences.
+- One specific observation about *them*.
+- One low-friction question.
+- **No link and no price in the first message.** Both go in the reply or in F1.
 
-**HY (email / WhatsApp)**
-> Բարև Ձեզ, [Name]։ Տեսա, որ [Company]-ն անում է [their service]՝ [observation]։ Ես [My name]-ն եմ, RISEUP-ից։ Գործակալություններին օգնում ենք իրականացնել ավելի շատ նախագծեր՝ առանց նոր ծրագրավորող վարձելու. կայքեր, landing էջեր, CRM ինտեգրացիաներ, ավտոմատացումներ և AI օգնականներ՝ Ձեր բրենդով, կուլիսներում։ 1 րոպեանոց օրինակ՝ [demo link]։ Կարող ենք սկսել փոքր վճարովի թեստից (100 000 ֏, 3–5 օր)։ Հարմա՞ր է 15 րոպե զանգ այս շաբաթ։
-
-**RU**
-> Здравствуйте, [Name]! Увидел(а), что [Company] делает [their service]: [observation]. Я [My name], RISEUP. Помогаем агентствам брать больше клиентских проектов без найма разработчиков: сайты, лендинги, CRM-интеграции, автоматизация и AI-ассистенты под вашим брендом, мы остаёмся за кадром. Пример за минуту: [demo link]. Можно начать с платного теста ($250, 3–5 дней). Удобно созвониться на 15 минут на этой неделе?
-
-**EN**
-> Hi [Name], I saw [Company] [observation]. I'm [My name] from RISEUP. We help digital agencies deliver more client projects without hiring more developers: sites, landing pages, CRM integrations, automations and AI assistants, built behind the scenes under your brand. 60-second example: [demo link]. We usually start with a small paid test ($300, 3–5 days). Open to a 15-minute call this week?
-
-## 2. Direct-client first contact
-
-**HY (Instagram / WhatsApp, beauty / clinic / restaurant / real estate)**
-> Բարև Ձեզ։ [Company]-ի էջը տեսա. [observation]։ Մենք RISEUP-ն ենք։ Պատրաստում ենք AI ադմինիստրատոր, որը 24/7 պատասխանում է հաճախորդներին Instagram/WhatsApp-ում, ամրագրում է այց կամ ընդունում պատվեր և հայտը ուղարկում Ձեզ Telegram-ով։ Կարո՞ղ եմ ուղարկել 1 րոպեանոց օրինակ, թե ինչպես կաշխատի հենց Ձեզ մոտ։
+**HY**
+> Բարև Ձեզ, [Name]։ Տեսա [Company]-ի [specific recent project/post]-ը, շատ լավ է ստացվել։ Մենք RISEUP-ն ենք. գործակալությունների համար, նրանց բրենդով և կուլիսներում, պատրաստում ենք կայքեր, CRM ինտեգրացիաներ և AI օգնականներ, որպեսզի նրանք ավելի շատ նախագիծ վերցնեն՝ առանց նոր ծրագրավորող վարձելու։ Կուղարկե՞մ 1 րոպեանոց օրինակ, թե ինչպես դա կաշխատի Ձեր [their client type] հաճախորդների համար։
 
 **RU**
-> Здравствуйте! Посмотрел(а) страницу [Company]: [observation]. Мы RISEUP: делаем AI-администратора, который 24/7 отвечает клиентам в Instagram/WhatsApp, записывает или принимает заказ и присылает заявку вам в Telegram. Можно показать пример на минуту, как это будет работать у вас?
+> Здравствуйте, [Name]! Увидел(а) [specific recent project/post] у [Company], сильная работа. Мы RISEUP: делаем для агентств сайты, CRM-интеграции и AI-ассистентов под их брендом, чтобы они брали больше проектов без найма разработчиков. Прислать минутный пример, как это выглядит для клиентов вроде ваших [client type]?
 
 **EN**
-> Hi! I came across [Company]: [observation]. We're RISEUP. We set up an AI front desk that answers customers 24/7 on Instagram/WhatsApp, books the appointment or takes the order, and sends it to you on Telegram. Can I send a 1-minute example of how it would work for you?
+> Hi [Name], saw [Company]'s [specific recent project/post]. Really clean work. RISEUP builds sites, CRM integrations and AI assistants for agencies, under your brand and behind the scenes, so you can take on more client work without hiring. Worth sending a 60-second example of how this looks for [client type] clients like yours?
 
-## 3. Cold call (≤ 90 seconds)
+**For CRM partners** (Bitrix24/Kommo), replace the middle sentence:
+- «…we take on custom integrations and automations when your implementers are fully booked»
+- «…берём кастомные интеграции и автоматизацию, когда внедренцы загружены»
+- «…կատարում ենք ոչ ստանդարտ ինտեգրացիաներ և ավտոմատացումներ, երբ Ձեր թիմը ծանրաբեռնված է»
 
+**Reply to "yes, send it"** (this is where the link and the pilot go):
+- **EN:** "Here it is: [L2/L5 link]. Most agencies start with a pilot task: one deliverable from your backlog, fixed price ($300 / $250 RU / 100,000 ֏), 3–5 days, and we fix it until it matches the written spec. Is there something on your list right now? I can hold [two time slots] for a 15-minute call."
+- **RU:** «Вот: [link]. Обычно начинаем с пилотной задачи: одна задача из вашего бэклога, фиксированная цена ($250), 3–5 дней, дорабатываем до соответствия ТЗ. Есть что-то подходящее сейчас? Могу предложить [2 слота] на 15 минут.»
+- **HY:** «Ահա՝ [link]։ Սովորաբար սկսում ենք փորձնական առաջադրանքից. Ձեր ցուցակից մեկ խնդիր, ֆիքսված գին (100 000 ֏), 3–5 օր, և լրամշակում ենք մինչև այն համապատասխանի գրավոր առաջադրանքին։ Կա՞ նման խնդիր հիմա։ Կարող եմ առաջարկել [2 ժամ] 15 րոպեանոց զանգի համար։»
+
+## 2. Direct-client first contact · v2
+**Rule:** name *their* visible problem and the outcome. Offer a short video using *their* services.
+
+**HY (Instagram / WhatsApp)**
+> Բարև Ձեզ։ Նկատեցի, որ [Company]-ի էջում [observation: հարցերը մեկնաբանություններում մնում են անպատասխան / ամրագրման հղում չկա]։ Մենք RISEUP-ն ենք. կարգավորում ենք AI ադմինիստրատոր, որը 24/7 պատասխանում է հենց Ձեր գներով ու ծառայություններով և ամրագրում է այցը, որպեսզի ոչ մի հաճախորդ չկորչի։ Ուզո՞ւմ եք 2 րոպեանոց տեսանյութ, թե ինչպես դա կպատասխանի Ձեր հաճախորդներին։
+
+**RU**
+> Здравствуйте! Заметил(а), что у [Company] [observation: вопросы в комментариях остаются без ответа / нет ссылки на запись]. Мы RISEUP: настраиваем AI-администратора, который 24/7 отвечает по вашим ценам и услугам и записывает клиента, чтобы ни одна заявка не терялась. Прислать 2-минутное видео, как он будет отвечать вашим клиентам?
+
+**EN**
+> Hi! I noticed [observation: questions in your comments go unanswered / there's no booking link]. RISEUP sets up an AI front desk that answers 24/7 with your own prices and services and books the visit, so no inquiry gets lost. Want a 2-minute video of how it would answer your customers?
+
+**Contest participants (26–30 Nov), HY:**
+> Բարև Ձեզ, [Name]։ Շնորհակալություն RISEUP-ի մրցույթին մասնակցելու համար։ Ինչպես խոստացել էինք, բոլոր մասնակիցներին գործում է **20% զեղչ մինչև նոյեմբերի 30-ը**։ Օրինակ՝ AI ադմինիստրատոր Pro-ն (Instagram/WhatsApp պատասխաններ + ամրագրում + հիշեցումներ) 90 000 ֏-ի փոխարեն **72 000 ֏** է, պատրաստ է 3–5 օրում։ Ուզո՞ւմ եք՝ ցույց տամ, թե ինչպես այն կաշխատի հենց Ձեր բիզնեսի համար։
+
+## 3. Cold call · v2 (call only after a message or a visit)
 | Step | HY | RU | EN |
 |---|---|---|---|
-| Open | «Բարև Ձեզ, [My name]-ն եմ, RISEUP-ից։ Մեկ րոպե ունե՞ք» | «Здравствуйте, [My name], RISEUP. Удобно минуту?» | "Hi, it's [My name] from RISEUP. Do you have one minute?" |
-| Reason | Agency: «Գործակալությունների համար Ձեր բրենդով կայքեր և ավտոմատացումներ ենք անում»։ Direct: «Ձեր հաճախորդների հարցումներին ավտոմատ պատասխանող AI ադմինիստրատոր ենք պատրաստում» | Agency: «Делаем сайты и автоматизацию для агентств под их брендом». Direct: «Делаем AI-администратора, который отвечает на заявки ваших клиентов» | Agency: "We build sites and automations for agencies under their brand." Direct: "We set up an AI assistant that answers your customer inquiries." |
-| Question | «Ո՞վ է հիմա անում ծրագրավորումը / ո՞վ է պատասխանում Instagram-ի հաղորդագրություններին» | «Кто сейчас делает разработку / кто отвечает на сообщения?» | "Who handles development / who answers your messages today?" |
-| Listen, bridge | «Եթե չեք հասցնում, կարող ենք վերցնել» | «Если не хватает рук, можем подключиться» | "If that's ever a bottleneck, we can take it on." |
-| Ask | «Կարո՞ղ եմ WhatsApp-ով ուղարկել օրինակ և 15 րոպե զանգ նշանակել» | «Пришлю пример в WhatsApp/Telegram и договоримся о 15 минутах?» | "Can I send an example and book 15 minutes?" |
+| Open (reason + observation) | «Բարև Ձեզ, [Name], [My name]-ն եմ RISEUP-ից։ Երեկ գրել էի Instagram-ով [observation]-ի մասին. զանգում եմ մի կարճ հարցով» | «[Name], здравствуйте, [My name] из RISEUP. Вчера писал(а) вам про [observation], звоню с коротким вопросом» | "Hi [Name], it's [My name] from RISEUP. I messaged you yesterday about [observation]; calling with one quick question." |
+| Problem question 1 | «Ո՞վ է հիմա պատասխանում հաղորդագրություններին / անում ինտեգրացիաները» | «Кто сейчас отвечает на сообщения / делает интеграции?» | "Who handles messages / integrations right now?" |
+| Problem question 2 | «Վերջին ամսում եղե՞լ է, որ հաճախորդ կորցնեք կամ նախագիծ հետաձգեք դրա պատճառով» | «В последний месяц было, что из-за этого терялись клиенты или переносились проекты?» | "Has that cost you a customer or delayed a project in the last month?" |
+| Goal: book the slot | «Կցույց տամ 15 րոպեում Ձեր օրինակով. հարմա՞ր է վաղը [time] կամ [time]» | «Покажу за 15 минут на вашем примере: завтра в [time] или [time]?» | "I'll show you on your own example in 15 minutes: tomorrow at [time] or [time]?" |
+| If "send info" | → Scripts §11, then book a follow-up call in 2 days | | |
 
-Log the result immediately: Activities → Type "Call" → Result.
+## 4. No-response follow-up · v2 (each one adds something new)
+| # | Day | Adds | EN (RU/HY: same structure; translate with the §1 wording) |
+|---|---|---|---|
+| F1 | +2 | The example (link) | "Here's the 60-second example I mentioned: [link]. It shows [inquiry → reply → booking] for a [their client type] business." |
+| F2 | +4 | A specific idea for *them* | "One idea for [Company]: [e.g. 'your contact form could push leads straight into your clients' CRM']. We could deliver that as a fixed-price pilot in 3–5 days." |
+| F3 | +7 | A 60-sec personalised screen recording (T1 only, ≤ 10 min to make) | "I recorded 60 seconds on how this would look on your site: [link]." |
+| F4 | +14 | A polite close | "I'll stop here so I don't clutter your inbox. If extra delivery capacity is ever useful, just reply 'yes' and I'll pick it up." |
 
-## 4. No-response follow-up
-
-| # | Day | HY | RU | EN |
-|---|---|---|---|---|
-| F1 | +2 | «Բարև Ձեզ, [Name]։ Կարճ հիշեցում. ուղարկում եմ ևս մեկ օրինակ՝ [demo 2]։» | «[Name], коротко напомню. Вот ещё пример: [demo 2].» | "Hi [Name], quick nudge. One more example: [demo 2]." |
-| F2 | +4 | «Եթե ունեք նախագիծ, որը կարելի է սկսել թեստով, այս շաբաթ ազատ ենք։» | «Если есть задача под тест, на этой неделе есть свободное окно.» | "If there's a project we could test on, we have capacity this week." |
-| F3 | +7 | «Կարո՞ղ եմ հարցնել. սա արդիակա՞ն է Ձեզ համար, թե գրեմ ավելի ուշ։» | «Подскажите, тема актуальна, или написать позже?» | "Is this relevant for you, or should I check back later?" |
-| F4 | +14 | «Չեմ անհանգստացնի։ Եթե պետք լինի, գրեք. աշխատում ենք Ձեր բրենդով և ժամկետներով։» | «Не буду отвлекать. Понадобится подрядчик, пишите.» | "I'll leave it here. If you need extra delivery capacity, just reply." |
+- **RU F1:** «Вот обещанный пример на минуту: [link]. Показывает [заявка → ответ → запись] для бизнеса как у ваших клиентов.»
+- **RU F4:** «Не буду больше отвлекать. Если понадобятся дополнительные руки, ответьте "да", и я подхвачу.»
+- **HY F1:** «Ահա խոստացված 1 րոպեանոց օրինակը՝ [link]։ Այն ցույց է տալիս [հարցում → պատասխան → ամրագրում] Ձեր հաճախորդների նման բիզնեսի համար։»
+- **HY F4:** «Այլևս չեմ անհանգստացնի։ Եթե երբևէ լրացուցիչ ուժեր պետք լինեն, պարզապես պատասխանեք «այո»։»
 
 After F4 → set Stage to **Follow-up Later** with a next date 60 days out.
 
@@ -71,19 +93,19 @@ After F4 → set Stage to **Follow-up Later** with a next date 60 days out.
 **RU:** «Отлично, спасибо! Какая задача сейчас актуальна? Предлагаю 15 минут: [2 варианта времени]. В тот же день пришлю письменное предложение с ценой и сроками.»
 **EN:** "Great, thanks! What project or problem is on your plate right now? How about 15 minutes at [2 time options]? I'll send a written proposal with price and timeline the same day."
 
-## 6. Demo invite
+## 6. Demo invite · v2
+Before the demo, confirm the qualification gate (`FINAL_REVENUE_OPTIMIZATION.md` §2.3) and ask who else decides.
 
-**HY:** «Կցույց տամ 10 րոպեում, թե ինչպես կաշխատի համակարգը Ձեր դեպքում (հաճախորդի հարցում → պատասխան → ամրագրում → հաշվետվություն)։ Հարմա՞ր է [day/time]՝ Zoom/Google Meet կամ WhatsApp տեսազանգով։»
-**RU:** «Покажу за 10 минут, как это будет работать у вас (заявка → ответ → запись → отчёт). Удобно [день/время] в Zoom/Meet?»
-**EN:** "I'll show you in 10 minutes how it would work for you (inquiry → reply → booking → report). Does [day/time] on Zoom/Meet work?"
+- **HY:** «Կցույց տամ 10 րոպեում՝ Ձեր [ծառայություններով / հաճախորդի տեսակով]։ Արդյո՞ք որոշումը կայացնում եք Դուք, թե արժե միացնել նաև [partner/manager]-ին։ Հարմա՞ր է [day/time]»
+- **RU:** «Покажу за 10 минут на примере ваших [услуг/клиентов]. Решение принимаете вы, или стоит подключить ещё кого-то? Удобно [день/время]?»
+- **EN:** "I'll show it in 10 minutes using your [services / client type]. Will you decide on this, or should we include [partner/manager]? Does [day/time] work?"
 
-## 7. Proposal delivery
+## 7. Proposal delivery · v2 (two options + invoice attached)
+- **HY:** «Ինչպես պայմանավորվեցինք, կցում եմ առաջարկը երկու տարբերակով. **A** [smaller scope], [price], [X] օր, և **B** [larger scope], [price], [Y] օր։ Կցում եմ նաև A տարբերակի հաշիվը։ Վճարում՝ [100% / 50% կանխավճար]։ Մեկնարկի օրը՝ [date]. այն պահում եմ 5 աշխատանքային օր, քանի որ միաժամանակ վերցնում ենք սահմանափակ թվով նախագծեր։»
+- **RU:** «Как договорились, отправляю предложение в двух вариантах: **A** [объём], [цена], [X] дней и **B** [объём], [цена], [Y] дней. Прикладываю счёт на вариант A. Оплата: [100% / 50% предоплата]. Дату старта [date] держу 5 рабочих дней: одновременно берём ограниченное число проектов.»
+- **EN:** "As discussed, here are two options: **A** [scope], [price], [X] days, and **B** [scope], [price], [Y] days. The invoice for option A is attached. Payment: [100% / 50% deposit]. I'm holding the [date] start slot for 5 business days, since we take on a limited number of projects at a time."
 
-**HY:** «Ինչպես պայմանավորվեցինք, կցում եմ առաջարկը. ծավալ, ժամկետ [X օր], գին [amount]։ Վճարում՝ [50% կանխավճար, 50% հանձնելիս]։ Սկսում ենք կանխավճարը ստանալուց հետո։ Եթե ամեն ինչ ճիշտ է, կուղարկեմ հաշիվը։ Կա՞ն հարցեր։»
-**RU:** «Как договорились, отправляю предложение: объём, срок [X дней], стоимость [amount]. Оплата: [50% предоплата, 50% при сдаче]. Стартуем после предоплаты. Если всё верно, выставлю счёт. Есть вопросы?»
-**EN:** "As discussed, here's the proposal: scope, timeline [X days], price [amount]. Payment: [50% to start, 50% on delivery]. We start once the deposit arrives. If it looks right, I'll send the invoice. Any questions?"
-
-Follow up after 2 days if there's no answer: «Հասցրի՞ք նայել» / «Успели посмотреть?» / "Did you get a chance to review?"
+Both options use **list prices**: the options differ in scope, not discount. If there's no answer after 2 days: «Հասցրի՞ք նայել» / «Успели посмотреть?» / "Did you get a chance to review?"
 
 ## 8. Price objection
 

@@ -5,6 +5,8 @@
 - If you don't use the CRM, the standalone `RISEUP_DAILY_TRACKER.xlsx` has the same targets with manual input.
 - **Realistic load:** about 6 hours of sales a day for Person B and about 3–4 hours for Person A. A's remaining time goes to delivery. On delivery-heavy days A does calls and closes only.
 
+> **Days 1–7:** follow `FIRST_7_DAYS_SALES_PRIORITY.md`. Same counts, plus contest, network and warm contacts, the three priority offers, and a blockers list.
+
 ## Week themes
 | Week | Days | Goal | Exit criteria |
 |---|---|---|---|

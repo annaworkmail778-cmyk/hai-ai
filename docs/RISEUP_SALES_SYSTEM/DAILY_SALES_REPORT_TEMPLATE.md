@@ -7,7 +7,7 @@ RISEUP — Daily report — Day __ / 30 — Date ____-__-__
 
 CASH (verified in bank)
 - Collected today: $____   Cumulative: $____ / $5,000   Target cumulative today: $____   Gap: $____
-- Invoices sent today: __ ($____)   Payments promised (date): ______________________
+- Payment requests / invoices sent today: __ ($____)   Payments promised (date): ______________________
 
 ACTIVITY            Target  Actual
 - New leads          __      __
@@ -25,6 +25,9 @@ PIPELINE
   1.
   2.
   3.
+
+CAPACITY
+- Delivery hours today: A __ h (max 4.5)   B __ h (max 2)   Active deliveries: __ (max 3)
 
 PERSON A: done / blocked:
 PERSON B: done / blocked:
