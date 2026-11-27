@@ -22,8 +22,8 @@ export type DemoStoreConfig<S> = {
   apiBase: string;
   /** localStorage key prefix and BroadcastChannel prefix, e.g. "bos". */
   prefix: string;
-  /** state = replay(baseDate, orderedEvents). */
-  replay: (baseDate: string, events: Stamped<{ type: string }>[]) => S;
+  /** state = replay(baseDate, orderedEvents, epochAt). `epochAt` = session start (reset) time, for verticals that seed a live service relative to it. */
+  replay: (baseDate: string, events: Stamped<{ type: string }>[], epochAt: number) => S;
   /** Staff member "signed in" by default on a fresh device. */
   defaultActor: string;
   /** Background class of the first-frame splash. */
@@ -248,7 +248,7 @@ export function createDemoStore<S, D extends { type: string }>(cfg: DemoStoreCon
       sl.events = sl.events.filter((e) => !known.has(e.id));
       for (const p of pendingEvents) if (!sl.events.some((x) => x.id === p.id)) sl.events.push(p);
       const extra = sl.events;
-      return cfg.replay(baseDateOf(cache.epochAt), [...cache.events.map((e) => e.ev), ...extra]);
+      return cfg.replay(baseDateOf(cache.epochAt), [...cache.events.map((e) => e.ev), ...extra], cache.epochAt);
     }, [cache, pendingEvents]);
 
     const value: DemoCtx<S, D> = { state, conn, backend, session, epoch: cache.epoch || "pending", mode, pending: pendingEvents.length, dispatch, reset, setMode, setSession, role, setRole, actor, setActor };
