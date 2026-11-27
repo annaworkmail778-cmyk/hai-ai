@@ -1,5 +1,7 @@
 # RISEUP Business OS: Implementation Backlog (Level 1, then Level 2)
 
+> **Phase 1.5 (2026-11-27):** the first demo is now the lean scope in `LEAN_DEMO_SCOPE.md` and `LEAN_DEMO_IMPLEMENTATION_PLAN.md` (≈ 24 h for the hotel stage, ≈ 35 h combined). The Level 1 estimates below are the later, full demo.
+
 **Not approved for implementation yet.** Work starts after the blueprint and the §0 decisions are approved.
 - Estimates are hours for one developer with Claude Code, including tests.
 - Each task's dependencies are listed by ID.

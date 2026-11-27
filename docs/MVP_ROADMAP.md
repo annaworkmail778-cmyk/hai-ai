@@ -1,5 +1,7 @@
 # RISEUP Business OS: MVP Roadmap and Estimates
 
+> **Phase 1.5 (2026-11-27):** the first demo is now the lean scope in `LEAN_DEMO_SCOPE.md` and `LEAN_DEMO_IMPLEMENTATION_PLAN.md` (≈ 24 h for the hotel stage, ≈ 35 h combined). The Level 1 estimates below are the later, full demo.
+
 **Estimates assume one developer using AI coding tools (Claude Code).**
 - They include testing, debugging, content, deployment and dry runs. Ranges reflect uncertainty.
 - **Productive build hours per day:** ~6 (the rest is reviews, calls, context switching).

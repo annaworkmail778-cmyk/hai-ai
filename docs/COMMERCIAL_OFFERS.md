@@ -36,7 +36,7 @@
 | Item | Hypothesis |
 |---|---|
 | Name | **30-day pilot** |
-| Scope | Starter scope of the vertical, with the client's **real** rooms/menu, live for 30 days. For hotels: request form + inbox + Telegram alerts. For restaurants: QR menu + orders to Telegram or the orders board |
+| Scope | **Updated 2026-11-27:** see `HOTEL_SALES_OFFER.md` / `RESTAURANT_SALES_OFFER.md`. The pilot uses working parts only: request page / QR menu → n8n → Telegram + Google Sheet + scripted FAQ assistant. The dashboard is Growth (Level 2) |
 | Fee | **100,000 ֏, 100% upfront** (matches the approved minimum paid test). Monthly fee waived during the pilot |
 | Credit | Pilot fee **credited** against the Growth setup if signed within 14 days of the pilot's end (**needs approval**: it mirrors the approved "paid discovery credited" rule) |
 | Success criteria (agreed in writing on Day 0) | Hotel: number of requests captured, median first-response time, staff usage. Restaurant: share of orders via QR, average ticket time, order errors noted by staff |
