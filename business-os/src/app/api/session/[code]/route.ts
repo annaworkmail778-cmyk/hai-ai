@@ -13,12 +13,16 @@ export const dynamic = "force-dynamic";
 
 const CODES = (process.env.DEMO_SESSION_CODES ?? "a,b").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
 const MAX_BYTES = 8 * 1024;
-const MAX_EVENTS = 400;
+const MAX_EVENTS = 1500;
 const TYPES = new Set([
   "inquiry.create", "reservation.approve", "reservation.decline", "reservation.create", "reservation.checkin", "reservation.checkout",
   "reservation.cancel", "hk.status", "hk.assign", "room.hk", "maint.create", "maint.status", "maint.assign", "staffTask.create",
   "staffTask.status", "chat.start", "chat.message", "chat.handoff", "chat.resolve", "guest.note", "workflow.toggle", "kb.update",
   "clock.set", "notifications.read",
+  "account.register", "account.update", "booking.create", "reservation.pay", "reservation.guestCancel", "loyalty.redeem", "loyalty.config",
+  "campaign.create", "campaign.toggle", "order.create", "order.status", "menu.update", "menu.create", "service.create", "service.assign",
+  "service.status", "employee.create", "employee.toggle", "training.step", "training.submit", "training.review", "training.module",
+  "msg.send", "channel.open",
 ]);
 
 const json = (status: number, body: unknown) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });

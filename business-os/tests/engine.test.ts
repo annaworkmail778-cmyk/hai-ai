@@ -92,3 +92,81 @@ test("ROI formulas", () => {
   assert.equal(r.extraRevenue, 450000);
   assert.equal(r.commissionSaved, 60000);
 });
+
+/* ---------------- Hospitality OS rules ---------------- */
+import { bookingCalc, loyaltyOf, orderCalc } from "../src/lib/rules.ts";
+
+test("loyalty: tiers from lifetime points, points only on completed transactions", () => {
+  const s0 = replay(BASE, []);
+  const james = loyaltyOf(s0, "g-james"), anna = loyaltyOf(s0, "g-anna");
+  assert.ok(james.lifetime > anna.lifetime);
+  assert.equal(james.balance, james.entries.reduce((a, e) => a + e.points, 0));
+  // registering gives only the configured welcome bonus
+  const reg = ev({ type: "account.register", accountId: "acc-t", guest: { firstName: "Test", lastName: "Guest", phone: "+374 00 111 222", email: "t@example.com", lang: "en" }, email: "t@example.com", marketing: false }, "guest");
+  let s = replay(BASE, [reg]);
+  const g = s.accounts.find((a) => a.id === "acc-t")!.guestId;
+  assert.equal(loyaltyOf(s, g).balance, s.loyalty.welcomeBonus);
+  // a booking request earns nothing; approval earns nothing; only check-out earns
+  const sc = scenarioDates(BASE);
+  const bk = ev({ type: "booking.create", source: "website", input: { guest: { firstName: "Test", lastName: "Guest", phone: "+374 00 111 222", email: "t@example.com", lang: "en" }, guestId: g, typeId: "classic", rooms: 1, checkIn: sc.checkIn, checkOut: sc.checkOut, adults: 2, children: 0, extras: [{ id: "transfer", qty: 1 }], requests: "" } }, "guest");
+  s = replay(BASE, [reg, bk]);
+  assert.equal(loyaltyOf(s, g).balance, s.loyalty.welcomeBonus);
+  const res = s.reservations.find((r) => r.id === `r-${bk.id}`)!;
+  assert.equal(res.status, "inquiry");
+  assert.equal(res.payment, "unpaid");
+  // order: points only when completed
+  const oc = ev({ type: "order.create", order: { type: "takeaway", guestId: g, guestName: "Test", items: [{ itemId: "steak", qty: 2, options: [] }], note: "" } }, "guest");
+  s = replay(BASE, [reg, oc]);
+  const o = s.orders.find((x) => x.id === `o-${oc.id}`)!;
+  assert.equal(o.subtotal, 33000);
+  const steps = ["accepted", "preparing", "ready", "completed"].map((st) => ev({ type: "order.status", target: o.id, status: st }, "s-hayk"));
+  s = replay(BASE, [reg, oc, ...steps.slice(0, 3)]);
+  assert.equal(loyaltyOf(s, g).balance, s.loyalty.welcomeBonus);
+  s = replay(BASE, [reg, oc, ...steps]);
+  assert.equal(loyaltyOf(s, g).balance, s.loyalty.welcomeBonus + Math.floor(s.orders.find((x) => x.id === o.id)!.total / 1000) * 10);
+  // invalid transition is ignored (submitted → ready)
+  const bad = replay(BASE, [reg, oc, ev({ type: "order.status", target: o.id, status: "ready" }, "s-hayk")]);
+  assert.equal(bad.orders.find((x) => x.id === o.id)!.status, "submitted");
+});
+
+test("booking price breakdown and voucher lifecycle", () => {
+  const s = replay(BASE, []);
+  const sc = scenarioDates(BASE);
+  const c = bookingCalc(s, { typeId: "deluxe", rooms: 2, checkIn: sc.checkIn, checkOut: sc.checkOut, adults: 2, children: 0, extras: [{ id: "spa", qty: 1 }], guestId: "g-anna" });
+  assert.equal(c.roomTotal, quote("deluxe", sc.checkIn, sc.checkOut).total * 2);
+  assert.equal(c.total, c.roomTotal + c.extrasTotal - c.discount);
+  assert.equal(c.lines.reduce((a, l) => a + l.amount, 0), c.total);
+  assert.ok(c.memberPct > 0, "Anna is a member with a tier discount");
+  // Anna's active restaurant voucher reserved on order, used on acceptance, released on rejection
+  const oc = ev({ type: "order.create", order: { type: "takeaway", guestId: "g-anna", guestName: "Anna", items: [{ itemId: "skewers", qty: 2, options: [] }], note: "", voucherId: "v-anna-1" } }, "guest");
+  let t = replay(BASE, [oc]);
+  assert.equal(t.vouchers.find((v) => v.id === "v-anna-1")!.status, "reserved");
+  assert.ok(t.orders.find((x) => x.id === `o-${oc.id}`)!.discount >= 10000);
+  t = replay(BASE, [oc, ev({ type: "order.status", target: `o-${oc.id}`, status: "rejected" }, "s-hayk")]);
+  assert.equal(t.vouchers.find((v) => v.id === "v-anna-1")!.status, "active");
+  const calc = orderCalc(s, [{ itemId: "cappuccino", qty: 1, options: ["oat"] }]);
+  assert.equal(calc.subtotal, 1800);
+});
+
+test("QR service request routing and onboarding flow", () => {
+  const sr = ev({ type: "service.create", serviceType: "towels", roomId: "204", note: "2 big towels" }, "guest");
+  let s = replay(BASE, [sr]);
+  const req = s.services.find((x) => x.id === `sr-${sr.id}`)!;
+  assert.equal(req.dept, "housekeeping");
+  assert.equal(req.status, "new");
+  s = replay(BASE, [sr, ev({ type: "service.assign", target: req.id, assigneeId: "s-lilit" }, "s-anahit"), ev({ type: "service.status", target: req.id, status: "done" }, "s-lilit")]);
+  assert.equal(s.services.find((x) => x.id === req.id)!.status, "done");
+  // onboarding: new waiter gets welcome + restaurant modules; quiz needs ≥70%
+  const emp = ev({ type: "employee.create", name: "Test Waiter", phone: "+374 00", email: "w@example.com", dept: "restaurant", position: "waiter", supervisorId: "s-tatev" }, "s-narek");
+  s = replay(BASE, [emp]);
+  const mine = s.enrollments.filter((e) => e.employeeId === `s-${emp.id}`);
+  assert.deepEqual(mine.map((e) => e.moduleId).sort(), ["tm-restaurant", "tm-welcome"]);
+  const w = mine.find((e) => e.moduleId === "tm-welcome")!;
+  const steps = ["w1", "w2", "w3"].map((st) => ev({ type: "training.step", enrollmentId: w.id, stepId: st }, `s-${emp.id}`));
+  const failQuiz = ev({ type: "training.step", enrollmentId: w.id, stepId: "w4", score: 50 }, `s-${emp.id}`);
+  s = replay(BASE, [emp, ...steps, failQuiz, ev({ type: "training.submit", enrollmentId: w.id }, `s-${emp.id}`)]);
+  assert.equal(s.enrollments.find((e) => e.id === w.id)!.status, "in_progress");
+  const passQuiz = ev({ type: "training.step", enrollmentId: w.id, stepId: "w4", score: 100 }, `s-${emp.id}`);
+  s = replay(BASE, [emp, ...steps, passQuiz, ev({ type: "training.submit", enrollmentId: w.id }, `s-${emp.id}`), ev({ type: "training.review", enrollmentId: w.id, approved: true, note: "" }, "s-tatev")]);
+  assert.equal(s.enrollments.find((e) => e.id === w.id)!.status, "approved");
+});

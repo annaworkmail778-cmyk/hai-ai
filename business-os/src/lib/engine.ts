@@ -9,7 +9,9 @@ import { addDays, atTime, diffDays } from "./dates.ts";
 import { roomType } from "./hotel-data.ts";
 import { quote, roomIsFree } from "./pricing.ts";
 import { createSeed } from "./seed.ts";
-import type { Guest, GuestInput, HotelState, Lang, OutboxItem, Reservation, StampedEvent } from "./types.ts";
+import { SERVICE_META, TRAINING } from "./hospitality-data.ts";
+import { bookingCalc, earnFor, loyaltyOf, ORDER_FLOW, orderCalc, accountOf, tierRank } from "./rules.ts";
+import type { Guest, GuestInput, HotelState, Lang, OutboxItem, Reservation, StampedEvent, Staff, TrainingModule } from "./types.ts";
 
 type Tpl = Record<Lang, (p: { name: string; room: string; checkIn: string; checkOut: string; code: string; checkInTime: string }) => string>;
 
@@ -134,6 +136,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       if (!roomIsFree(state, ev.roomId, res.checkIn, res.checkOut, res.id)) return state; // never double-book
       res.status = "confirmed";
       res.roomId = ev.roomId;
+      voucherState(state, res.voucherId, "used");
       res.history.push({ at: ev.at, text: `Հաստատվեց, սենյակ ${ev.roomId}`, by: who });
       const g = state.guests.find((x) => x.id === res.guestId)!;
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "approve", text: `Ամրագրումը հաստատվեց՝ ${res.code}, սենյակ ${ev.roomId}`, by: who });
@@ -145,6 +148,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       if (!res || res.status !== "inquiry") return state;
       res.status = "declined";
       res.declineReason = ev.reason;
+      voucherState(state, res.voucherId, "active");
       res.history.push({ at: ev.at, text: `Մերժվեց՝ ${ev.reason}`, by: who });
       const g = state.guests.find((x) => x.id === res.guestId)!;
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "decline", text: `Հարցումը մերժվեց՝ ${res.code}`, by: who });
@@ -156,6 +160,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       if (!res || !["confirmed", "inquiry"].includes(res.status)) return state;
       res.status = "cancelled";
       res.history.push({ at: ev.at, text: "Չեղարկվեց", by: who });
+      voucherState(state, res.voucherId, "active");
       state.hkTasks = state.hkTasks.filter((t) => !(t.reservationId === res.id && t.kind === "arrival_prep" && t.status !== "done"));
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "decline", text: `Ամրագրումը չեղարկվեց՝ ${res.code}`, by: who });
       return state;
@@ -177,6 +182,12 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       res.history.push({ at: ev.at, text: "Հյուրը մեկնեց", by: who });
       state.hk[res.roomId] = "dirty";
       const g = state.guests.find((x) => x.id === res.guestId)!;
+      // Loyalty: points only for a completed stay of a member, if stays are eligible.
+      if (state.loyalty.eligible.stays && accountOf(state, res.guestId)) {
+        const extras = (res.extras ?? []).reduce((a, x) => a + x.price, 0);
+        const pts = earnFor(state, res.total - (res.discount ?? 0) + extras);
+        if (pts > 0) state.ledger.push({ id: `l-${id}`, guestId: res.guestId, at: ev.at, points: pts, reason: `Կեցություն ${res.code}`, ref: res.id });
+      }
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "checkout", text: `Ելք՝ սենյակ ${res.roomId} (${g.firstName} ${g.lastName})`, by: who });
       if (state.workflows.checkout_task) {
         const nextArrival = state.reservations.find((r) => r.roomId === res.roomId && r.checkIn === state.baseDate && r.status === "confirmed");
@@ -216,7 +227,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       return state;
     }
     case "maint.status": {
-      const m = state.maint.find((x) => x.id === ev.id);
+      const m = state.maint.find((x) => x.id === ev.target);
       if (!m) return state;
       m.status = ev.status;
       if (ev.status === "resolved") m.resolvedAt = ev.at;
@@ -225,7 +236,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       return state;
     }
     case "maint.assign": {
-      const m = state.maint.find((x) => x.id === ev.id);
+      const m = state.maint.find((x) => x.id === ev.target);
       if (m) m.assigneeId = ev.assigneeId;
       return state;
     }
@@ -234,7 +245,7 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "task", text: `Նոր առաջադրանք՝ ${ev.title}`, by: who });
       return state;
     case "staffTask.status": {
-      const t = state.staffTasks.find((x) => x.id === ev.id);
+      const t = state.staffTasks.find((x) => x.id === ev.target);
       if (!t) return state;
       t.status = ev.status;
       if (ev.status === "done") state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "task", text: `Ավարտված է՝ ${t.title}`, by: who });
@@ -277,8 +288,8 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       return state;
     }
     case "workflow.toggle":
-      state.workflows[ev.id] = ev.on;
-      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "auto", text: `Ավտոմատացում «${ev.id}»՝ ${ev.on ? "միացված" : "անջատված"}`, by: who });
+      state.workflows[ev.target] = ev.on;
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "auto", text: `Ավտոմատացում «${ev.target}»՝ ${ev.on ? "միացված" : "անջատված"}`, by: who });
       return state;
     case "kb.update":
       state.kb = { ...state.kb, ...ev.patch };
@@ -290,8 +301,10 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
     case "notifications.read":
       state.notifications.forEach((n) => (n.read = true));
       return state;
+    default:
+      applyHospitality(state, ev, who);
+      return state;
   }
-  return state;
 }
 
 function afterApprove(state: HotelState, res: Reservation, g: Guest, id: string, at: number, who: string) {
@@ -330,3 +343,247 @@ export function replay(baseDate: string, events: StampedEvent[]): HotelState {
   s.reservations.sort((a, b) => (b.displayAt ?? b.createdAt) - (a.displayAt ?? a.createdAt));
   return s;
 }
+
+/* ---------------- Hospitality OS expansion ---------------- */
+
+function voucherState(state: HotelState, voucherId: string | undefined, status: "active" | "reserved" | "used", ref?: string) {
+  const v = voucherId ? state.vouchers.find((x) => x.id === voucherId) : undefined;
+  if (!v) return;
+  if (status === "used" && v.status !== "reserved") return;
+  if (status === "active" && v.status !== "reserved") return;
+  v.status = status;
+  if (ref) v.ref = ref;
+}
+
+const initials = (name: string) => name.split(/\s+/).map((p) => p[0] ?? "").join("").slice(0, 2).toUpperCase();
+const ORDER_STATUS_HY: Record<string, string> = { submitted: "Ուղարկված", accepted: "Ընդունված", preparing: "Պատրաստվում է", ready: "Պատրաստ է", out_for_delivery: "Ճանապարհին", completed: "Ավարտված", rejected: "Մերժված", cancelled: "Չեղարկված" };
+
+function enroll(state: HotelState, s: Staff, at: number, modules: TrainingModule[] = state.training) {
+  for (const m of modules) {
+    if (!(m.positions === "all" || m.positions.includes(s.position))) continue;
+    if (state.enrollments.some((e) => e.employeeId === s.id && e.moduleId === m.id)) continue;
+    state.enrollments.push({ id: `en-${s.id}-${m.id}`, employeeId: s.id, moduleId: m.id, done: [], scores: {}, status: "in_progress", assignedAt: at });
+  }
+}
+
+function applyHospitality(state: HotelState, ev: StampedEvent, who: string) {
+  const id = ev.id;
+  switch (ev.type) {
+    case "account.register": {
+      if (state.accounts.some((a) => a.email.toLowerCase() === ev.email.toLowerCase())) return;
+      const g = upsertGuest(state, { ...ev.guest, email: ev.email }, `g-${id}`);
+      if (!g.email) g.email = ev.email;
+      state.accounts.push({ id: ev.accountId, guestId: g.id, email: ev.email, createdAt: ev.at, consent: { marketing: ev.marketing, analytics: true }, favourites: [] });
+      if (state.loyalty.welcomeBonus) state.ledger.push({ id: `l-${id}`, guestId: g.id, at: ev.at, points: state.loyalty.welcomeBonus, reason: "Ողջույնի բոնուս" });
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: `Նոր անդամ՝ ${g.firstName} ${g.lastName} (${state.loyalty.programName})`, by: "Կայք" });
+      return;
+    }
+    case "account.update": {
+      const a = state.accounts.find((x) => x.id === ev.accountId);
+      if (!a) return;
+      if (ev.consent) a.consent = ev.consent;
+      if (ev.favourites) a.favourites = ev.favourites;
+      const g = state.guests.find((x) => x.id === a.guestId);
+      if (g && ev.phone) g.phone = ev.phone;
+      if (g && ev.preferences) g.preferences = ev.preferences;
+      return;
+    }
+    case "booking.create": {
+      const b = ev.input;
+      const g = b.guestId ? state.guests.find((x) => x.id === b.guestId) ?? upsertGuest(state, b.guest, `g-${id}`) : upsertGuest(state, b.guest, `g-${id}`);
+      const calc = bookingCalc(state, { ...b, guestId: g.id });
+      const { at, afterHours } = displayTime(state, ev);
+      const groupId = `grp-${id}`;
+      const voucherOk = calc.voucherAmount > 0 ? b.voucherId : undefined;
+      for (let k = 0; k < Math.max(1, b.rooms); k++) {
+        const res: Reservation = {
+          id: k === 0 ? `r-${id}` : `r-${id}-${k}`, code: `PR-${25000 + state.reservations.length}`, guestId: g.id, typeId: b.typeId, roomId: null,
+          checkIn: b.checkIn, checkOut: b.checkOut, adults: k === 0 ? b.adults : Math.min(2, b.adults), children: k === 0 ? b.children : 0, source: ev.source, status: "inquiry",
+          total: calc.perRoom, createdAt: ev.at, displayAt: at, afterHours, requests: b.requests, groupId: b.rooms > 1 ? groupId : undefined, offerId: b.offerId,
+          extras: k === 0 ? b.extras.filter((x) => x.qty > 0).map((x) => ({ ...x, price: calc.lines.find((l) => l.kind === "extra" && l.label.en === (EXTRA_NAME_EN(x.id)))?.amount ?? 0 })) : undefined,
+          discount: k === 0 ? calc.discount : 0, discountLabel: k === 0 && calc.discount ? calc.lines.filter((l) => l.kind === "discount").map((l) => l.label.hy).join(" · ") : undefined,
+          voucherId: k === 0 ? voucherOk : undefined, payment: "unpaid",
+          history: [{ at, text: b.rooms > 1 ? `Ամրագրման հարցում՝ ${b.rooms} սենյակ (կայք)` : "Ամրագրման հարցում կայքից", by: g.firstName }],
+        };
+        state.reservations.push(res);
+      }
+      if (voucherOk) voucherState(state, voucherOk, "reserved", `r-${id}`);
+      const lead = state.reservations.find((r) => r.id === `r-${id}`)!;
+      state.activity.unshift({ id: `a-${id}`, at, icon: "inquiry", text: `Նոր ամրագրման հարցում՝ ${roomType(b.typeId).name.hy}${b.rooms > 1 ? ` × ${b.rooms}` : ""}, ${fmt(b.checkIn)}–${fmt(b.checkOut)} (${g.firstName})`, by: "Կայք" });
+      if (state.workflows.inquiry_alert) {
+        state.notifications.unshift({ id: `n-${id}`, at, text: `Նոր ամրագրում կայքից՝ ${g.firstName} ${g.lastName}`, href: `/admin/reservations?open=${lead.id}`, read: false, kind: "inquiry" });
+        outbox(state, { at, channel: "email", to: `${g.firstName} ${g.lastName}`, template: "Հարցումը ստացվել է (հյուրին)", text: T_RECEIVED[g.lang](vars(state, lead, g)), state: "simulated", workflowId: "inquiry_alert", reservationId: lead.id }, `ob-${id}`);
+      }
+      return;
+    }
+    case "reservation.pay": {
+      const res = state.reservations.find((r) => r.id === ev.reservationId);
+      if (!res || !["confirmed", "checked_in", "checked_out"].includes(res.status)) return;
+      res.payment = "paid";
+      res.history.push({ at: ev.at, text: `Վճարումը գրանցվեց ձեռքով (${ev.method})`, by: who });
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "approve", text: `Վճարումը գրանցվեց՝ ${res.code} (${ev.method})`, by: who });
+      return;
+    }
+    case "reservation.guestCancel": {
+      const res = state.reservations.find((r) => r.id === ev.reservationId);
+      if (!res || !["inquiry", "confirmed"].includes(res.status)) return;
+      res.status = "cancelled";
+      res.history.push({ at: ev.at, text: "Չեղարկվեց հյուրի կողմից (անձնական էջից)", by: "Հյուր" });
+      voucherState(state, res.voucherId, "active");
+      state.hkTasks = state.hkTasks.filter((t) => !(t.reservationId === res.id && t.status !== "done"));
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "decline", text: `Հյուրը չեղարկեց ամրագրումը՝ ${res.code}`, by: "Հյուր" });
+      return;
+    }
+    case "loyalty.redeem": {
+      const rw = state.rewards.find((x) => x.id === ev.rewardId);
+      if (!rw || !accountOf(state, ev.guestId)) return;
+      const lo = loyaltyOf(state, ev.guestId);
+      if (lo.balance < rw.cost || tierRank(state, lo.tier.id) < tierRank(state, rw.minTier)) return;
+      state.ledger.push({ id: `l-${id}`, guestId: ev.guestId, at: ev.at, points: -rw.cost, reason: `Նվեր՝ ${rw.name.hy}`, ref: `v-${id}` });
+      state.vouchers.push({ id: `v-${id}`, guestId: ev.guestId, rewardId: rw.id, status: "active", createdAt: ev.at });
+      return;
+    }
+    case "loyalty.config":
+      state.loyalty = { ...state.loyalty, ...ev.patch };
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: "Լոյալության ծրագրի կարգավորումները թարմացվեցին", by: who });
+      return;
+    case "campaign.create":
+      state.campaigns.unshift({ id: `cp-${id}`, title: { hy: ev.title, ru: ev.title, en: ev.title }, text: { hy: ev.text, ru: ev.text, en: ev.text }, tierIds: ev.tierIds, discountPct: ev.discountPct, appliesTo: ev.appliesTo, active: true, createdAt: ev.at, uses: 0 });
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: `Նոր արշավ՝ ${ev.title}`, by: who });
+      return;
+    case "campaign.toggle": {
+      const c = state.campaigns.find((x) => x.id === ev.target);
+      if (c) c.active = ev.active;
+      return;
+    }
+    case "order.create": {
+      const o = ev.order;
+      const items = o.items.map((i) => { const m = state.menu.items.find((x) => x.id === i.itemId)!; return { ...i, price: m ? m.price + m.options.filter((op) => i.options.includes(op.id)).reduce((s, op) => s + op.price, 0) : 0 }; }).filter((i) => i.price > 0 && i.qty > 0);
+      if (!items.length) return;
+      const calc = orderCalc(state, items, o.guestId, o.voucherId);
+      const voucherOk = calc.voucher > 0 ? o.voucherId : undefined;
+      const order = { id: `o-${id}`, code: `R-${4000 + state.orders.length}`, type: o.type, roomId: o.roomId, tableId: o.tableId, guestId: o.guestId, guestName: o.guestName || "Հյուր", phone: o.phone, items, subtotal: calc.subtotal, discount: calc.discount, total: calc.total, note: o.note, status: "submitted" as const, createdAt: ev.at, pickupTime: o.pickupTime, voucherId: voucherOk, history: [{ at: ev.at, status: "submitted" as const, by: o.guestName || "Հյուր" }] };
+      state.orders.push(order);
+      if (voucherOk) voucherState(state, voucherOk, "reserved", order.id);
+      state.notifications.unshift({ id: `n-${id}`, at: ev.at, text: `Նոր պատվեր ${order.code}՝ ${o.type === "room_service" ? `սենյակ ${o.roomId}` : o.type === "dine_in" ? `սեղան ${o.tableId?.replace("T", "")}` : "տանելու"}`, href: "/admin/restaurant", read: false, kind: "task" });
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "inquiry", text: `Նոր պատվեր ${order.code} (${calc.total.toLocaleString("en-US").replace(/,/g, " ")} ֏)`, by: o.guestName || "Հյուր" });
+      return;
+    }
+    case "order.status": {
+      const o = state.orders.find((x) => x.id === ev.target);
+      if (!o || !(ORDER_FLOW[o.status] ?? []).includes(ev.status)) return; // only valid transitions
+      if (ev.status === "out_for_delivery" && o.type !== "room_service") return;
+      o.status = ev.status;
+      if (ev.reason) o.reason = ev.reason;
+      o.history.push({ at: ev.at, status: ev.status, by: who });
+      if (ev.status === "accepted") voucherState(state, o.voucherId, "used");
+      if (ev.status === "rejected" || ev.status === "cancelled") voucherState(state, o.voucherId, "active");
+      if (ev.status === "completed" && state.loyalty.eligible.orders && accountOf(state, o.guestId)) {
+        const pts = earnFor(state, o.total);
+        if (pts > 0) state.ledger.push({ id: `l-${id}`, guestId: o.guestId!, at: ev.at, points: pts, reason: `Պատվեր ${o.code}`, ref: o.id });
+      }
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "task", text: `Պատվեր ${o.code}՝ ${ORDER_STATUS_HY[ev.status]}`, by: who });
+      return;
+    }
+    case "menu.update": {
+      const m = state.menu.items.find((x) => x.id === ev.itemId);
+      if (!m) return;
+      if (ev.patch.price !== undefined && ev.patch.price > 0) m.price = Math.round(ev.patch.price);
+      if (ev.patch.available !== undefined) m.available = ev.patch.available;
+      return;
+    }
+    case "menu.create":
+      state.menu.items.push({ id: `mi-${id}`, categoryId: ev.item.categoryId, name: { hy: ev.item.name, ru: ev.item.name, en: ev.item.name }, desc: { hy: ev.item.desc, ru: ev.item.desc, en: ev.item.desc }, price: Math.max(100, Math.round(ev.item.price)), photo: "/img/restaurant.jpg", allergens: ev.item.allergens, tags: ["new"], options: [], available: true, prepMin: 15 });
+      return;
+    case "service.create": {
+      const meta = SERVICE_META[ev.serviceType];
+      const { at } = displayTime(state, ev);
+      const sr = { id: `sr-${id}`, code: `S-${2000 + state.services.length}`, type: ev.serviceType, dept: meta.dept, roomId: ev.roomId, point: ev.point, guestId: ev.guestId, note: ev.note, when: ev.when, priority: meta.priority, status: "new" as const, assigneeId: null, createdAt: ev.at, history: [{ at, text: ev.roomId ? `Հարցումը ստացվեց QR-ով (սենյակ ${ev.roomId})` : "Հարցումը ստացվեց", by: "Հյուր" }] };
+      state.services.unshift(sr);
+      state.notifications.unshift({ id: `n-${id}`, at, text: `${meta.staffLabel}${ev.roomId ? ` · սենյակ ${ev.roomId}` : ""}`, href: "/admin/requests", read: false, kind: "task" });
+      state.activity.unshift({ id: `a-${id}`, at, icon: "task", text: `Նոր հարցում ${sr.code}՝ ${meta.staffLabel}${ev.roomId ? `, սենյակ ${ev.roomId}` : ""} → ${({ housekeeping: "Մաքրություն", maintenance: "Տեխնիկական", reception: "Ընդունարան", spa: "Սպա" } as Record<string, string>)[meta.dept] ?? meta.dept}`, by: "Հյուր" });
+      return;
+    }
+    case "service.assign": {
+      const sr = state.services.find((x) => x.id === ev.target);
+      if (!sr || sr.status === "done" || sr.status === "cancelled") return;
+      sr.assigneeId = ev.assigneeId;
+      if (sr.status === "new" && ev.assigneeId) sr.status = "assigned";
+      sr.history.push({ at: ev.at, text: `Նշանակվեց՝ ${state.staff.find((s) => s.id === ev.assigneeId)?.name ?? "—"}`, by: who });
+      return;
+    }
+    case "service.status": {
+      const sr = state.services.find((x) => x.id === ev.target);
+      if (!sr || sr.status === "done" || sr.status === "cancelled") return;
+      sr.status = ev.status;
+      sr.history.push({ at: ev.at, text: ({ in_progress: "Ընթացքում է", done: "Կատարված է", cancelled: "Չեղարկված է", assigned: "Նշանակված է", new: "Վերաբացված" } as Record<string, string>)[ev.status], by: who });
+      if (ev.status === "done") state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "task", text: `Կատարված է ${sr.code}՝ ${SERVICE_META[sr.type].staffLabel}${sr.roomId ? `, սենյակ ${sr.roomId}` : ""}`, by: who });
+      return;
+    }
+    case "employee.create": {
+      const sid = `s-${id}`;
+      const role = ev.dept === "housekeeping" ? "housekeeping" : ev.dept === "maintenance" ? "maintenance" : ev.dept === "management" ? "manager" : "reception";
+      const s: Staff = { id: sid, name: ev.name.trim(), role, initials: initials(ev.name), phone: ev.phone, shift: "09:00–18:00", dept: ev.dept, position: ev.position, supervisorId: ev.supervisorId, active: true, email: ev.email, startedAt: state.baseDate };
+      state.staff.push(s);
+      enroll(state, s, ev.at);
+      state.channels.push({ id: `dm-${sid}-${ev.supervisorId ?? "s-narek"}`, kind: "direct", name: "", members: [sid, ev.supervisorId ?? "s-narek"] });
+      state.messages.push({ id: `m-${id}`, channelId: `dm-${sid}-${ev.supervisorId ?? "s-narek"}`, authorId: ev.supervisorId ?? "s-narek", text: `Բարի գալուստ թիմ, ${s.name.split(" ")[0]}։ Ձեր ուսուցման ծրագիրը պատրաստ է «Ուսուցում» բաժնում։ Հարցերի դեպքում գրեք ինձ։`, at: ev.at });
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: `Նոր աշխատակից՝ ${s.name}. ստեղծվեց ուսուցման ծրագիր`, by: who });
+      return;
+    }
+    case "employee.toggle": {
+      const s = state.staff.find((x) => x.id === ev.target);
+      if (s) s.active = ev.active;
+      return;
+    }
+    case "training.step": {
+      const e = state.enrollments.find((x) => x.id === ev.enrollmentId);
+      const m = e && state.training.find((x) => x.id === e.moduleId);
+      const step = m?.steps.find((x) => x.id === ev.stepId);
+      if (!e || !step || e.status === "approved" || e.status === "submitted") return;
+      if (step.kind === "quiz") {
+        e.scores[step.id] = ev.score ?? 0;
+        if ((ev.score ?? 0) < 70) return; // a quiz counts as done only at ≥ 70%
+      }
+      if (!e.done.includes(step.id)) e.done.push(step.id);
+      return;
+    }
+    case "training.submit": {
+      const e = state.enrollments.find((x) => x.id === ev.enrollmentId);
+      const m = e && state.training.find((x) => x.id === e.moduleId);
+      if (!e || !m || !m.steps.every((st) => e.done.includes(st.id))) return;
+      e.status = "submitted";
+      const s = state.staff.find((x) => x.id === e.employeeId);
+      state.notifications.unshift({ id: `n-${id}`, at: ev.at, text: `${s?.name} ավարտեց «${m.title}» մոդուլը. սպասում է ստուգման`, href: "/admin/team", read: false, kind: "task" });
+      return;
+    }
+    case "training.review": {
+      const e = state.enrollments.find((x) => x.id === ev.enrollmentId);
+      if (!e || e.status !== "submitted") return;
+      e.status = ev.approved ? "approved" : "changes_requested";
+      e.reviewNote = ev.note;
+      if (!ev.approved) e.done = e.done.filter((d) => !state.training.find((m) => m.id === e.moduleId)?.steps.find((st) => st.id === d && st.kind === "quiz"));
+      const s = state.staff.find((x) => x.id === e.employeeId);
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: `${s?.name}՝ ուսուցման մոդուլը ${ev.approved ? "հաստատվեց" : "վերադարձվեց լրամշակման"}`, by: who });
+      if (e.status === "changes_requested") e.status = "in_progress";
+      return;
+    }
+    case "training.module": {
+      const m: TrainingModule = { id: `tm-${id}`, title: ev.title, dept: ev.dept, positions: ev.positions, minutes: 10, custom: true, steps: [{ id: `${id}-l`, kind: "lesson", title: ev.title, body: ev.lesson }, ...(ev.checklist.length ? [{ id: `${id}-c`, kind: "checklist" as const, title: "Ստուգաթերթ", items: ev.checklist }] : [])] };
+      state.training.push(m);
+      for (const s of state.staff.filter((x) => x.active)) enroll(state, s, ev.at, [m]);
+      return;
+    }
+    case "msg.send": {
+      if (!ev.text.trim() || !state.channels.some((c) => c.id === ev.channelId)) return;
+      state.messages.push({ id: `m-${id}`, channelId: ev.channelId, authorId: ev.by, text: ev.text.trim().slice(0, 1200), at: ev.at, urgent: ev.urgent, handover: ev.handover });
+      return;
+    }
+    case "channel.open":
+      if (!state.channels.some((c) => c.id === ev.channel.id)) state.channels.push(ev.channel);
+      return;
+  }
+}
+
+const EXTRA_NAME_EN = (id: string) => ({ transfer: "Airport transfer", spa: "Spa ritual for two", late: "Late check-out until 16:00", romance: "Romantic set-up", ski: "Ski pack" } as Record<string, string>)[id];
+export { TRAINING };

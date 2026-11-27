@@ -42,7 +42,7 @@ export default function Staff() {
               const overdue = t.status !== "done" && t.due < today;
               return (
                 <li key={t.id} className="flex items-start gap-3 py-3">
-                  <button onClick={() => dispatch({ type: "staffTask.status", id: t.id, status: t.status === "done" ? "todo" : "done" })} className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border", t.status === "done" ? "border-ok bg-ok text-white" : "border-line-2 hover:border-ink")} aria-label="Կատարված">{t.status === "done" && <Icon name="check" size={13} />}</button>
+                  <button onClick={() => dispatch({ type: "staffTask.status", target: t.id, status: t.status === "done" ? "todo" : "done" })} className={cn("mt-0.5 grid size-5 shrink-0 place-items-center rounded-md border", t.status === "done" ? "border-ok bg-ok text-white" : "border-line-2 hover:border-ink")} aria-label="Կատարված">{t.status === "done" && <Icon name="check" size={13} />}</button>
                   <div className="min-w-0 flex-1">
                     <div className={cn("text-[14px]", t.status === "done" && "text-muted line-through")}>{t.title}</div>
                     {t.detail && <div className="text-[12.5px] text-muted">{t.detail}</div>}
@@ -53,7 +53,7 @@ export default function Staff() {
                       {s && <span>· {s.name}</span>}
                     </div>
                   </div>
-                  {t.status === "todo" && <Button size="sm" variant="ghost" onClick={() => dispatch({ type: "staffTask.status", id: t.id, status: "in_progress" })}>Սկսել</Button>}
+                  {t.status === "todo" && <Button size="sm" variant="ghost" onClick={() => dispatch({ type: "staffTask.status", target: t.id, status: "in_progress" })}>Սկսել</Button>}
                   {t.status === "in_progress" && <Badge tone="info">Ընթացքում</Badge>}
                 </li>
               );

@@ -139,13 +139,17 @@ export const ROOMS: Room[] = [
 ];
 
 export const STAFF: Staff[] = [
-  { id: "s-narek", name: "Նարեկ Հովհաննիսյան", role: "manager", initials: "ՆՀ", phone: "+374 00 000 101", shift: "09:00–18:00" },
-  { id: "s-gohar", name: "Գոհար Սարգսյան", role: "reception", initials: "ԳՍ", phone: "+374 00 000 102", shift: "08:00–16:00" },
-  { id: "s-davit", name: "Դավիթ Պետրոսյան", role: "reception", initials: "ԴՊ", phone: "+374 00 000 103", shift: "14:00–22:00" },
-  { id: "s-anahit", name: "Անահիտ Գրիգորյան", role: "housekeeping", initials: "ԱԳ", phone: "+374 00 000 104", shift: "08:00–16:00" },
-  { id: "s-lilit", name: "Լիլիթ Ավետիսյան", role: "housekeeping", initials: "ԼԱ", phone: "+374 00 000 105", shift: "08:00–16:00" },
-  { id: "s-mariam", name: "Մարիամ Հակոբյան", role: "housekeeping", initials: "ՄՀ", phone: "+374 00 000 106", shift: "10:00–18:00" },
-  { id: "s-armen", name: "Արմեն Ղազարյան", role: "maintenance", initials: "ԱՂ", phone: "+374 00 000 107", shift: "09:00–18:00" },
+  { id: "s-narek", name: "Նարեկ Հովհաննիսյան", role: "manager", initials: "ՆՀ", phone: "+374 00 000 101", shift: "09:00–18:00", dept: "management", position: "general_manager", supervisorId: null, active: true, email: "narek@pineridge.demo", startedAt: "2023-04-01" },
+  { id: "s-gohar", name: "Գոհար Սարգսյան", role: "reception", initials: "ԳՍ", phone: "+374 00 000 102", shift: "08:00–16:00", dept: "reception", position: "reception_manager", supervisorId: "s-narek", active: true, email: "gohar@pineridge.demo", startedAt: "2023-05-15" },
+  { id: "s-davit", name: "Դավիթ Պետրոսյան", role: "reception", initials: "ԴՊ", phone: "+374 00 000 103", shift: "14:00–22:00", dept: "reception", position: "receptionist", supervisorId: "s-gohar", active: true, email: "davit@pineridge.demo", startedAt: "2024-02-01" },
+  { id: "s-anahit", name: "Անահիտ Գրիգորյան", role: "housekeeping", initials: "ԱԳ", phone: "+374 00 000 104", shift: "08:00–16:00", dept: "housekeeping", position: "housekeeping_manager", supervisorId: "s-narek", active: true, email: "anahit@pineridge.demo", startedAt: "2023-05-01" },
+  { id: "s-lilit", name: "Լիլիթ Ավետիսյան", role: "housekeeping", initials: "ԼԱ", phone: "+374 00 000 105", shift: "08:00–16:00", dept: "housekeeping", position: "housekeeper", supervisorId: "s-anahit", active: true, email: "lilit@pineridge.demo", startedAt: "2024-06-10" },
+  { id: "s-mariam", name: "Մարիամ Հակոբյան", role: "housekeeping", initials: "ՄՀ", phone: "+374 00 000 106", shift: "10:00–18:00", dept: "housekeeping", position: "housekeeper", supervisorId: "s-anahit", active: true, email: "mariam@pineridge.demo", startedAt: "2025-03-01" },
+  { id: "s-armen", name: "Արմեն Ղազարյան", role: "maintenance", initials: "ԱՂ", phone: "+374 00 000 107", shift: "09:00–18:00", dept: "maintenance", position: "technician", supervisorId: "s-narek", active: true, email: "armen@pineridge.demo", startedAt: "2023-06-01" },
+  { id: "s-tatev", name: "Տաթև Մկրտչյան", role: "manager", initials: "ՏՄ", phone: "+374 00 000 108", shift: "11:00–20:00", dept: "restaurant", position: "restaurant_manager", supervisorId: "s-narek", active: true, email: "tatev@pineridge.demo", startedAt: "2023-09-01" },
+  { id: "s-hayk", name: "Հայկ Սիմոնյան", role: "manager", initials: "ՀՍ", phone: "+374 00 000 109", shift: "10:00–19:00", dept: "kitchen", position: "chef", supervisorId: "s-tatev", active: true, email: "hayk@pineridge.demo", startedAt: "2023-09-01" },
+  { id: "s-ani", name: "Անի Վարդանյան", role: "reception", initials: "ԱՎ", phone: "+374 00 000 110", shift: "12:00–21:00", dept: "restaurant", position: "waiter", supervisorId: "s-tatev", active: true, email: "ani@pineridge.demo", startedAt: "2025-01-20" },
+  { id: "s-sona", name: "Սոնա Մանուկյան", role: "reception", initials: "ՍՄ", phone: "+374 00 000 111", shift: "10:00–21:00", dept: "spa", position: "spa_therapist", supervisorId: "s-narek", active: true, email: "sona@pineridge.demo", startedAt: "2024-11-01" },
 ];
 
 export const DEFAULT_KB: KnowledgeBase = {

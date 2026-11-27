@@ -47,12 +47,12 @@ export default function Maintenance() {
         {!list.length && <div className="p-8 text-center text-sm text-muted">Հայտեր չկան</div>}
       </Card>
       <Drawer open={!!cur} onClose={() => setOpen(null)} title={cur?.title ?? ""} sub={cur ? `${cur.roomId ? `Սենյակ ${cur.roomId} · ` : ""}${cur.area}` : ""}
-        footer={cur && <div className="flex flex-wrap justify-end gap-2">{cur.status === "open" && <Button variant="primary" onClick={() => dispatch({ type: "maint.status", id: cur.id, status: "in_progress" })}>Սկսել աշխատանքը</Button>}{cur.status !== "resolved" ? <Button variant="ok" icon="check" onClick={() => dispatch({ type: "maint.status", id: cur.id, status: "resolved" })}>Նշել լուծված</Button> : <Button onClick={() => dispatch({ type: "maint.status", id: cur.id, status: "open" })}>Վերաբացել</Button>}</div>}>
+        footer={cur && <div className="flex flex-wrap justify-end gap-2">{cur.status === "open" && <Button variant="primary" onClick={() => dispatch({ type: "maint.status", target: cur.id, status: "in_progress" })}>Սկսել աշխատանքը</Button>}{cur.status !== "resolved" ? <Button variant="ok" icon="check" onClick={() => dispatch({ type: "maint.status", target: cur.id, status: "resolved" })}>Նշել լուծված</Button> : <Button onClick={() => dispatch({ type: "maint.status", target: cur.id, status: "open" })}>Վերաբացել</Button>}</div>}>
         {cur && (
           <div className="space-y-4 text-[13px]">
             <div className="flex flex-wrap gap-2"><Badge tone={PRI_TONE[cur.priority]}>{PRIORITY_LABEL[cur.priority]}</Badge><Badge tone={ST[cur.status][1]} dot>{ST[cur.status][0]}</Badge>{cur.outOfOrder && <Badge tone="bad">Սենյակը վաճառքից հանված է</Badge>}</div>
             <p className="rounded-xl bg-paper p-3">{cur.description || "—"}</p>
-            <Field label="Պատասխանատու"><Select value={cur.assigneeId ?? ""} onChange={(e) => dispatch({ type: "maint.assign", id: cur.id, assigneeId: e.target.value || null })}><option value="">Չնշանակված</option>{state.staff.filter((s) => s.role === "maintenance" || s.role === "manager").map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</Select></Field>
+            <Field label="Պատասխանատու"><Select value={cur.assigneeId ?? ""} onChange={(e) => dispatch({ type: "maint.assign", target: cur.id, assigneeId: e.target.value || null })}><option value="">Չնշանակված</option>{state.staff.filter((s) => s.role === "maintenance" || s.role === "manager").map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</Select></Field>
             <div><div className="mb-2 font-semibold">Պատմություն</div><ol className="space-y-2 border-l border-line pl-4">{[...cur.log].reverse().map((l, i) => <li key={i} className="relative"><span className="absolute -left-[21px] top-1.5 size-2 rounded-full bg-ink-2" />{l.text}<span className="block text-[12px] text-faint">{stamp(l.at, state.baseDate)} · {l.by}</span></li>)}</ol></div>
           </div>
         )}

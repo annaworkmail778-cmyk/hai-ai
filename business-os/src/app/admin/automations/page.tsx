@@ -45,7 +45,7 @@ export default function Automations() {
             <div className="flex items-start gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-violet-soft text-violet"><Icon name={w.icon} size={19} /></span>
               <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-3"><div className="text-[14px] font-semibold">{i + 1}. {w.trigger}</div><Toggle on={state.workflows[w.id]} disabled={w.core} label={w.trigger} onChange={(v) => dispatch({ type: "workflow.toggle", id: w.id, on: v })} /></div>
+                <div className="flex items-start justify-between gap-3"><div className="text-[14px] font-semibold">{i + 1}. {w.trigger}</div><Toggle on={state.workflows[w.id]} disabled={w.core} label={w.trigger} onChange={(v) => dispatch({ type: "workflow.toggle", target: w.id, on: v })} /></div>
                 <div className="mt-1 flex items-start gap-1.5 text-[13px] text-ink-2"><Icon name="arrowRight" size={15} className="mt-0.5 shrink-0 text-faint" />{w.action}</div>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-muted"><Badge>{w.channels}</Badge><Badge tone="ok">{runs(w.id)} անգամ</Badge>{w.core && <Badge tone="dark">Հիմնական</Badge>}</div>
                 <div className="mt-2 text-[12px] text-faint">Առանց համակարգի՝ {w.manualBefore}</div>

@@ -74,6 +74,16 @@ export type Reservation = {
   conversationId?: string;
   history: { at: number; text: string; by: string }[];
   declineReason?: string;
+  /** Booking-journey additions (direct bookings). */
+  groupId?: string;
+  extras?: { id: string; qty: number; price: number }[];
+  discount?: number;
+  discountLabel?: string;
+  voucherId?: string;
+  offerId?: string;
+  /** "paid" is only ever set by staff recording a payment; the demo never charges cards. */
+  payment?: "unpaid" | "paid";
+  review?: { score: number; text: string };
 };
 
 export type TaskStatus = "todo" | "in_progress" | "done";
@@ -110,7 +120,14 @@ export type MaintRequest = {
 };
 
 export type StaffRole = "manager" | "reception" | "housekeeping" | "maintenance";
-export type Staff = { id: string; name: string; role: StaffRole; initials: string; phone: string; shift: string };
+export type Dept = "management" | "reception" | "housekeeping" | "maintenance" | "restaurant" | "kitchen" | "spa" | "administration";
+export type Position =
+  | "owner" | "general_manager" | "reception_manager" | "receptionist" | "housekeeping_manager" | "housekeeper"
+  | "restaurant_manager" | "waiter" | "chef" | "technician" | "spa_therapist";
+export type Staff = {
+  id: string; name: string; role: StaffRole; initials: string; phone: string; shift: string;
+  dept: Dept; position: Position; supervisorId: string | null; active: boolean; email: string; startedAt: string;
+};
 
 export type StaffTask = {
   id: string;
@@ -225,7 +242,7 @@ export type HotelState = {
   kb: KnowledgeBase;
   /** Lost inquiries in the history (declined/expired), for conversion analytics. */
   seq: number;
-};
+} & HospitalityState;
 
 /* ---------- events (the only way state changes) ---------- */
 
@@ -243,18 +260,113 @@ export type DemoEvent =
   | { type: "hk.assign"; taskId: string; assigneeId: string | null }
   | { type: "room.hk"; roomId: string; status: HkStatus }
   | { type: "maint.create"; roomId: string | null; area: string; title: string; description: string; priority: Priority; outOfOrder: boolean }
-  | { type: "maint.status"; id: string; status: MaintRequest["status"] }
-  | { type: "maint.assign"; id: string; assigneeId: string | null }
+  | { type: "maint.status"; target: string; status: MaintRequest["status"] }
+  | { type: "maint.assign"; target: string; assigneeId: string | null }
   | { type: "staffTask.create"; title: string; detail?: string; assigneeId: string | null; priority: Priority; due: string }
-  | { type: "staffTask.status"; id: string; status: TaskStatus }
+  | { type: "staffTask.status"; target: string; status: TaskStatus }
   | { type: "chat.start"; conversationId: string; lang: Lang }
   | { type: "chat.message"; conversationId: string; msg: ChatMsg }
   | { type: "chat.handoff"; conversationId: string; question: string }
   | { type: "chat.resolve"; conversationId: string }
   | { type: "guest.note"; guestId: string; text: string }
-  | { type: "workflow.toggle"; id: WorkflowId; on: boolean }
+  | { type: "workflow.toggle"; target: WorkflowId; on: boolean }
   | { type: "kb.update"; patch: Partial<KnowledgeBase> }
   | { type: "clock.set"; mode: DemoClock["mode"] }
-  | { type: "notifications.read" };
+  | { type: "notifications.read" }
+  | HospitalityEvent;
 
 export type StampedEvent = DemoEvent & { id: string; at: number; by: string };
+
+/* ---------- Hospitality OS expansion ---------- */
+
+export type Account = { id: string; guestId: string; email: string; createdAt: number; consent: { marketing: boolean; analytics: boolean }; favourites: string[]; birthday?: string };
+
+export type Tier = { id: string; name: I18n; minPoints: number; discountPct: number; color: string; benefits: I18n[] };
+export type LoyaltyConfig = { programName: string; earnPer1000: number; welcomeBonus: number; eligible: { stays: boolean; orders: boolean }; tiers: Tier[] };
+export type LedgerEntry = { id: string; guestId: string; at: number; points: number; reason: string; ref?: string };
+export type Reward = { id: string; name: I18n; cost: number; kind: "pct" | "amount"; value: number; appliesTo: "stay" | "order"; minTier?: string };
+export type Voucher = { id: string; guestId: string; rewardId: string; status: "active" | "reserved" | "used"; createdAt: number; ref?: string };
+export type Campaign = { id: string; title: I18n; text: I18n; tierIds: string[]; discountPct: number; appliesTo: "stay" | "order"; active: boolean; createdAt: number; uses: number };
+
+export type MenuCategory = { id: string; name: I18n };
+export type MenuOption = { id: string; name: I18n; price: number };
+export type MenuItem = { id: string; categoryId: string; name: I18n; desc: I18n; price: number; photo: string; allergens: string[]; tags: string[]; options: MenuOption[]; available: boolean; prepMin: number };
+export type Table = { id: string; label: string; seats: number; zone: string };
+export type OrderType = "room_service" | "dine_in" | "takeaway";
+export type OrderStatus = "submitted" | "accepted" | "preparing" | "ready" | "out_for_delivery" | "completed" | "rejected" | "cancelled";
+export type OrderItem = { itemId: string; qty: number; price: number; options: string[]; note?: string };
+export type Order = {
+  id: string; code: string; type: OrderType; roomId?: string; tableId?: string; guestId?: string; guestName: string; phone?: string;
+  items: OrderItem[]; subtotal: number; discount: number; total: number; note: string; status: OrderStatus; createdAt: number;
+  pickupTime?: string; voucherId?: string; history: { at: number; status: OrderStatus; by: string }[]; reason?: string;
+};
+
+export type ServiceType = "towels" | "cleaning" | "toiletries" | "maintenance" | "laundry" | "wakeup" | "luggage" | "spa" | "reception" | "checkout" | "issue" | "other";
+export type ServiceStatus = "new" | "assigned" | "in_progress" | "done" | "cancelled";
+export type ServiceRequest = {
+  id: string; code: string; type: ServiceType; dept: Dept; roomId?: string; point?: string; guestId?: string; note: string; when?: string;
+  priority: Priority; status: ServiceStatus; assigneeId: string | null; createdAt: number; history: { at: number; text: string; by: string }[];
+};
+
+export type TrainingStep = { id: string; kind: "lesson" | "checklist" | "quiz"; title: string; body?: string; items?: string[]; questions?: { q: string; options: string[]; answer: number }[] };
+export type TrainingModule = { id: string; title: string; dept: Dept | "all"; positions: Position[] | "all"; minutes: number; steps: TrainingStep[]; custom?: boolean };
+export type Enrollment = {
+  id: string; employeeId: string; moduleId: string; done: string[]; scores: Record<string, number>;
+  status: "in_progress" | "submitted" | "approved" | "changes_requested"; reviewNote?: string; assignedAt: number;
+};
+export type Sop = { id: string; dept: Dept | "all"; title: string; tags: string[]; body: string[] };
+
+export type Channel = { id: string; kind: "direct" | "department" | "notice" | "task"; name: string; members?: string[]; dept?: Dept; ref?: { kind: "service" | "order" | "reservation" | "task"; id: string } };
+export type Msg = { id: string; channelId: string; authorId: string; text: string; at: number; urgent?: boolean; handover?: boolean };
+
+export type Property = { id: string; type: "hotel" | "restaurant" | "hotel_restaurant"; brand: string; modules: string[] };
+
+export type HospitalityState = {
+  property: Property;
+  accounts: Account[];
+  loyalty: LoyaltyConfig;
+  ledger: LedgerEntry[];
+  rewards: Reward[];
+  vouchers: Voucher[];
+  campaigns: Campaign[];
+  menu: { categories: MenuCategory[]; items: MenuItem[] };
+  tables: Table[];
+  orders: Order[];
+  services: ServiceRequest[];
+  training: TrainingModule[];
+  enrollments: Enrollment[];
+  sops: Sop[];
+  channels: Channel[];
+  messages: Msg[];
+};
+
+export type BookingInput = {
+  guest: GuestInput; guestId?: string; typeId: RoomTypeId; rooms: number; checkIn: string; checkOut: string; adults: number; children: number;
+  extras: { id: string; qty: number }[]; voucherId?: string; offerId?: string; requests: string;
+};
+
+export type HospitalityEvent =
+  | { type: "account.register"; accountId: string; guest: GuestInput; email: string; marketing: boolean }
+  | { type: "account.update"; accountId: string; consent?: Account["consent"]; favourites?: string[]; phone?: string; preferences?: string[] }
+  | { type: "booking.create"; input: BookingInput; source: Source }
+  | { type: "reservation.pay"; reservationId: string; method: string }
+  | { type: "reservation.guestCancel"; reservationId: string }
+  | { type: "loyalty.redeem"; guestId: string; rewardId: string }
+  | { type: "loyalty.config"; patch: Partial<LoyaltyConfig> }
+  | { type: "campaign.create"; title: string; text: string; tierIds: string[]; discountPct: number; appliesTo: "stay" | "order" }
+  | { type: "campaign.toggle"; target: string; active: boolean }
+  | { type: "order.create"; order: { type: OrderType; roomId?: string; tableId?: string; guestId?: string; guestName: string; phone?: string; items: { itemId: string; qty: number; options: string[]; note?: string }[]; note: string; pickupTime?: string; voucherId?: string } }
+  | { type: "order.status"; target: string; status: OrderStatus; reason?: string }
+  | { type: "menu.update"; itemId: string; patch: { price?: number; available?: boolean } }
+  | { type: "menu.create"; item: { categoryId: string; name: string; desc: string; price: number; allergens: string[] } }
+  | { type: "service.create"; serviceType: ServiceType; roomId?: string; point?: string; guestId?: string; note: string; when?: string }
+  | { type: "service.assign"; target: string; assigneeId: string | null }
+  | { type: "service.status"; target: string; status: ServiceStatus }
+  | { type: "employee.create"; name: string; phone: string; email: string; dept: Dept; position: Position; supervisorId: string | null }
+  | { type: "employee.toggle"; target: string; active: boolean }
+  | { type: "training.step"; enrollmentId: string; stepId: string; score?: number }
+  | { type: "training.submit"; enrollmentId: string }
+  | { type: "training.review"; enrollmentId: string; approved: boolean; note: string }
+  | { type: "training.module"; title: string; dept: Dept | "all"; positions: Position[] | "all"; lesson: string; checklist: string[] }
+  | { type: "msg.send"; channelId: string; text: string; urgent?: boolean; handover?: boolean }
+  | { type: "channel.open"; channel: Channel };

@@ -6,12 +6,13 @@
 import { addDays, atTime, nextFriday, weekday } from "./dates.ts";
 import { DEFAULT_KB, ROOMS, ROOM_TYPES, STAFF } from "./hotel-data.ts";
 import { quote, seasonOf } from "./pricing.ts";
+import { hospitalitySeed } from "./seed-hospitality.ts";
 import type {
   ActivityItem, ChatMsg, Conversation, Guest, HkStatus, HkTask, HotelState, Lang, MaintRequest,
   OutboxItem, Reservation, RoomTypeId, Source, StaffTask, WorkflowId,
 } from "./types.ts";
 
-function rng(seedStr: string) {
+export function rng(seedStr: string) {
   let h = 2166136261;
   for (let i = 0; i < seedStr.length; i++) h = Math.imul(h ^ seedStr.charCodeAt(i), 16777619);
   let a = h >>> 0;
@@ -311,7 +312,11 @@ export function createSeed(baseDate: string): HotelState {
     inquiry_alert: true, approve_calendar: true, approve_prep_task: true, pre_arrival: true, checkout_task: true, review_request: true, unanswered_followup: true,
   };
 
+  const staff = STAFF.map((x) => ({ ...x }));
+  const hosp = hospitalitySeed(baseDate, r, guests, reservations, staff);
+
   return {
+    ...hosp,
     baseDate,
     clock: { mode: "live" },
     roomTypes: ROOM_TYPES,
@@ -321,7 +326,7 @@ export function createSeed(baseDate: string): HotelState {
     reservations,
     hkTasks,
     maint,
-    staff: STAFF,
+    staff,
     staffTasks,
     conversations,
     outbox,
