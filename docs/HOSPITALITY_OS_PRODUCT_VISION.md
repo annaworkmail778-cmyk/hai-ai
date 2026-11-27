@@ -39,7 +39,7 @@ The four environments:
 
    See `HOSPITALITY_OS_FEATURE_MAP.md`.
 3. **Approved information only.** The guest and staff assistants answer from configured data or hand over to a human.
-4. **Tenant isolation by design.** Every entity belongs to a property (`tenantId`). The demo has one fictional tenant, "Pine Ridge Hotel & Spa".
+4. **Tenant isolation by design.** In production every entity carries a `property_id` (tenant), enforced by Row Level Security. The demo state is scoped to one fictional property, "Pine Ridge Hotel & Spa" (`state.property`), whose type can be switched in `/admin/settings`.
 5. **Premium for guests, simple for staff.** The guest site is immersive. Operations are fast, readable and boring in the best sense.
 6. **Mobile first** for guests and staff.
 

@@ -15,14 +15,23 @@ This is a standalone Next.js app, separate from the riseup-group.com website in 
 | `/hotel/hy`, `/hotel/ru`, `/hotel/en` | Guest website: home, rooms, room details, offers, facilities, location, booking request, AI assistant |
 | `/admin` | Management dashboard (Armenian): overview, reservations, calendar, rooms, guest CRM, housekeeping, maintenance, staff & tasks, AI assistant management, automations, analytics, value (ROI) calculator |
 | `/s/{a\|b}/hotel` | QR entry: joins presenter session A or B and opens the guest site in the phone's language |
+| `/hotel/{lang}/booking` | Booking journey: dates, room and quantity, extras, voucher, details, price breakdown, policy. Sends a request (pending), never a payment |
+| `/hotel/{lang}/account` | Guest account (demo sign-in): stays, orders, requests, Pine Ridge Circle points, rewards, vouchers, profile and consent |
+| `/hotel/{lang}/dining`, `/hotel/{lang}/order/{id}` | Restaurant ordering (room service / table / takeaway) and live order status |
+| `/hotel/{lang}/stay` | In-stay services after QR scan and stay verification (towels, cleaning, maintenance, wake-up…) |
+| `/q/room/{n}`, `/q/table/{T}`, `/q/point/{spa\|lobby\|pool}` | Printable QR entry points |
+| `/kds` | Kitchen Display System (full screen, touch) |
+| `/staff` | Staff workspace, mobile-first: today, messages, learning (onboarding, SOPs, SOP assistant), team (managers) |
+| `/admin/requests`, `/admin/restaurant`, `/admin/loyalty`, `/admin/team`, `/admin/settings` | Guest requests, restaurant & menu, loyalty programme, team/RBAC/onboarding, property configuration |
 
 ## Run locally
 ```bash
 cd business-os
 npm install
 npm run build && npm start      # http://localhost:3100
-npm test                        # engine, analytics, assistant and ROI unit tests
+npm test                        # engine, loyalty, booking, QR routing, onboarding, SOP assistant, metric-consistency tests
 npm run typecheck
+npm run lint                    # uses ESLint from the repo root (run `npm install` there once)
 ```
 
 On a laptop, `npm start` is enough for a full demo. A phone on the same Wi‑Fi can open `http://<laptop-ip>:3100/s/a/hotel`, and its actions sync to the laptop.
@@ -114,7 +123,12 @@ Printed cards therefore keep working when the demo moves to a permanent subdomai
 - The Netlify Blobs backend is implemented to the official API, but in this environment only the in-memory backend was exercised end to end. Check the tooltip on the first deploy.
 - There are no user accounts. The presenter PIN only protects Reset, and the dashboard is open to anyone with the URL (demo data only, `noindex`).
 - Sync uses short polling, not websockets. That is fine for a demo; a pilot would use Supabase Realtime (see `../docs/TECHNICAL_ARCHITECTURE.md`).
-- The admin UI is in Armenian only. Guest pages are in hy/ru/en.
+- The admin and staff UI is in Armenian only. Guest pages are in hy/ru/en.
+- Guest and staff "sign-in" is a per-device demo identity, not authentication. Permissions are enforced in the UI only.
+- No payment, PMS, POS, channel-manager or messaging integration is connected. Payments are recorded manually by staff.
+- The SOP assistant uses deterministic keyword retrieval, not an LLM. It answers only from the approved SOPs or routes the question to the supervisor.
+- Lint: 0 errors, plus React Compiler advisory warnings (storage reads in effects, render-time clock in older screens) that are tracked in `../docs/HOSPITALITY_OS_IMPLEMENTATION_ROADMAP.md`.
+- Full status of every feature (working / simulated / needs integration): `../docs/HOSPITALITY_OS_FEATURE_MAP.md`.
 
 ## Photo credits
 Photos are from [Unsplash](https://unsplash.com) under the Unsplash License (free commercial use). They are stored in `public/img/`.
