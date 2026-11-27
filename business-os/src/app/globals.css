@@ -1,4 +1,10 @@
 @import "tailwindcss";
+:root {
+  --font-inter: "Inter";
+  --font-arm: "Noto Sans Armenian";
+  --font-serif-latin: "Cormorant Garamond";
+  --font-serif-arm: "Noto Serif Armenian";
+}
 
 @theme {
   --color-*: initial;
