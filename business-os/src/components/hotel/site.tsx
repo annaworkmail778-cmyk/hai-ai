@@ -47,7 +47,8 @@ export function SiteHeader({ lang, overlay }: { lang: Lang; overlay?: boolean })
     return () => window.removeEventListener("scroll", f);
   }, []);
   const light = overlay && !scrolled && !open;
-  const links: [string, string][] = [[`/hotel/${lang}/rooms`, d.nav.rooms], [`/hotel/${lang}/dining`, g(lang, "dining")], [`/hotel/${lang}#spa`, g(lang, "spaTitle").split(" ")[0]], [`/hotel/${lang}#offers`, d.nav.offers], [`/hotel/${lang}#location`, d.nav.location]];
+  const { state } = useDemo();
+  const links: [string, string][] = [[`/hotel/${lang}/rooms`, d.nav.rooms], ...(state.property.type !== "hotel" ? [[`/hotel/${lang}/dining`, g(lang, "dining")] as [string, string]] : []), [`/hotel/${lang}#spa`, g(lang, "spaTitle").split(" ")[0]], [`/hotel/${lang}#offers`, d.nav.offers], [`/hotel/${lang}#location`, d.nav.location]];
   return (
     <header className={cn("fixed inset-x-0 top-0 z-40 transition-colors duration-300", light ? "bg-transparent" : "border-b border-pine/10 bg-cream/95 backdrop-blur")}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[72px] sm:px-6">

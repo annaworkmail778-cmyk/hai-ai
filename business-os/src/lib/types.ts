@@ -369,4 +369,5 @@ export type HospitalityEvent =
   | { type: "training.review"; enrollmentId: string; approved: boolean; note: string }
   | { type: "training.module"; title: string; dept: Dept | "all"; positions: Position[] | "all"; lesson: string; checklist: string[] }
   | { type: "msg.send"; channelId: string; text: string; urgent?: boolean; handover?: boolean }
-  | { type: "channel.open"; channel: Channel };
+  | { type: "channel.open"; channel: Channel }
+  | { type: "property.update"; patch: { type?: Property["type"]; brand?: string } };

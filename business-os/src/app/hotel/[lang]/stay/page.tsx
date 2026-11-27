@@ -10,6 +10,7 @@ import { Suspense, use, useState } from "react";
 import { DemoAuthBadge, inpG, labG } from "@/components/hotel/auth";
 import { Icon, type IconName } from "@/components/icons";
 import { cn } from "@/components/ui";
+import { useNow } from "@/lib/client/use-now";
 import { useDemo } from "@/lib/client/demo-store";
 import { useGuestSession } from "@/lib/client/guest-session";
 import { time } from "@/lib/format";
@@ -27,6 +28,7 @@ function Stay({ lang }: { lang: Lang }) {
   const point = sp.get("point");
   const { state, dispatch } = useDemo();
   const { stay, stayRes, verifyStay, leaveStay } = useGuestSession();
+  const now = useNow(60000);
   const [last, setLast] = useState("");
   const [err, setErr] = useState(false);
   const [hint, setHint] = useState(false);
@@ -69,7 +71,7 @@ function Stay({ lang }: { lang: Lang }) {
   }
 
   const list = roomId ? ROOM_SERVICES : POINT_SERVICES[point ?? ""] ?? POINT_SERVICES.lobby;
-  const mine = state.services.filter((s) => (roomId ? s.roomId === roomId && s.createdAt >= (stayRes?.createdAt ?? 0) : s.point === point && s.createdAt > Date.now() - 6 * 3600e3)).slice(0, 8);
+  const mine = state.services.filter((s) => (roomId ? s.roomId === roomId && s.createdAt >= (stayRes?.createdAt ?? 0) : s.point === point && s.createdAt > now - 6 * 3600e3)).slice(0, 8);
   const guestName = stayRes ? state.guests.find((x) => x.id === stayRes.guestId)?.firstName : null;
   const send = () => {
     if (!pick) return;

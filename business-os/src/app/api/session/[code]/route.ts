@@ -15,6 +15,7 @@ const CODES = (process.env.DEMO_SESSION_CODES ?? "a,b").split(",").map((s) => s.
 const MAX_BYTES = 8 * 1024;
 const MAX_EVENTS = 1500;
 const TYPES = new Set([
+  "property.update",
   "inquiry.create", "reservation.approve", "reservation.decline", "reservation.create", "reservation.checkin", "reservation.checkout",
   "reservation.cancel", "hk.status", "hk.assign", "room.hk", "maint.create", "maint.status", "maint.assign", "staffTask.create",
   "staffTask.status", "chat.start", "chat.message", "chat.handoff", "chat.resolve", "guest.note", "workflow.toggle", "kb.update",

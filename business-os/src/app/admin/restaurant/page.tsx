@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { PageTitle } from "@/components/admin/shell";
 import { Bars } from "@/components/charts";
 import { Badge, Button, Card, CardHead, cn, DemoDataBadge, Drawer, Field, Input, Kpi, Modal, Select, Tabs, Textarea, Toggle } from "@/components/ui";
+import { useNow } from "@/lib/client/use-now";
 import { useDemo } from "@/lib/client/demo-store";
 import { amd, stamp } from "@/lib/format";
 import { ALLERGEN_LABEL } from "@/lib/hospitality-data";
@@ -25,7 +26,7 @@ export default function Restaurant() {
   const [cur, setCur] = useState<string | null>(null);
   const [create, setCreate] = useState(false);
   const [f, setF] = useState({ categoryId: "mains", name: "", desc: "", price: "", allergens: "" });
-  const now = Date.now();
+  const now = useNow(60000);
   const active = state.orders.filter((o) => !["completed", "rejected", "cancelled"].includes(o.status));
   const o = state.orders.find((x) => x.id === cur);
   const s = useMemo(() => {

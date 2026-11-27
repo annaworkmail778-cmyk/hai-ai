@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { PageTitle } from "@/components/admin/shell";
 import { BarLine, Donut, HBar } from "@/components/charts";
 import { Icon } from "@/components/icons";
-import { Badge, Card, CardHead, DemoDataBadge, Kpi, Segmented } from "@/components/ui";
+import { HospitalityAnalytics, type Area } from "@/components/admin/hosp-analytics";
+import { Badge, Card, CardHead, DemoDataBadge, Kpi, Segmented, Tabs } from "@/components/ui";
 import { computeKpis, DIRECT_SOURCES, periods } from "@/lib/analytics";
 import { useDemo } from "@/lib/client/demo-store";
 import { addDays } from "@/lib/dates";
@@ -15,6 +16,7 @@ type P = "last30" | "last90" | "next30";
 export default function Analytics() {
   const { state } = useDemo();
   const [p, setP] = useState<P>("last30");
+  const [area, setArea] = useState<Area | "rooms">("rooms");
   const per = periods(state.baseDate)[p];
   const k = useMemo(() => computeKpis(state, per), [state, per]);
   const prev = useMemo(() => (p === "next30" ? null : computeKpis(state, { from: addDays(per.from, -(p === "last30" ? 30 : 90)), to: per.from, label: "" })), [state, per, p]);
@@ -31,6 +33,8 @@ export default function Analytics() {
   return (
     <>
       <PageTitle title="Վերլուծություն" sub={<span className="flex flex-wrap items-center gap-2">Գործառնական և ֆինանսական պատկերը մեկ էջում <DemoDataBadge /></span>} right={<Segmented value={p} onChange={setP} items={[{ id: "last30", label: "30 օր" }, { id: "last90", label: "90 օր" }, { id: "next30", label: "Հաջորդ 30 օր" }]} />} />
+      <Tabs className="mb-4 w-fit" value={area} onChange={setArea} items={[{ id: "rooms", label: "Սենյակներ և եկամուտ" }, { id: "guests", label: "Հյուրեր և կարծիքներ" }, { id: "restaurant", label: "Ռեստորան" }, { id: "staff", label: "Անձնակազմ" }, { id: "loyalty", label: "Հավատարմություն" }]} />
+      {area !== "rooms" ? <HospitalityAnalytics area={area} per={per} /> : <>
       {p === "next30" && <div className="mb-4 rounded-xl bg-info-soft px-4 py-2.5 text-[13px] text-info">Ապագա ժամանակահատված. ցուցադրված են արդեն հաստատված («on the books») ամրագրումները։</div>}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
         <Kpi label="Ընդհանուր եկամուտ (սենյակներ)" value={amdShort(k.revenue)} sub={trend(k.revenue, prev?.revenue)} icon="chart" />
@@ -91,6 +95,7 @@ export default function Analytics() {
           <li>Բոլոր թվերը ցուցադրական են և հաշվարկվում են գեներացված տվյալներից</li>
         </ul>
       </details>
+      </>}
     </>
   );
 }

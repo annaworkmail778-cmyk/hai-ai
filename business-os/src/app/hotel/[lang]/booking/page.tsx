@@ -38,10 +38,10 @@ function Journey({ lang }: { lang: Lang }) {
   const offer = OFFERS.find((o) => o.id === sp.get("offer"));
   const [f, setF] = useState({ first: "", last: "", phone: "", email: "", requests: offer ? offer.title[lang] : "" });
   const [sent, setSent] = useState<string | null>(null);
-  useEffect(() => { if (guest) setF((x) => ({ ...x, first: guest.firstName, last: guest.lastName, phone: guest.phone, email: guest.email })); }, [guest]);
+  useEffect(() => { if (guest) setF((x) => ({ ...x, first: guest.firstName, last: guest.lastName, phone: guest.phone, email: guest.email })); }, [guest?.id]); // eslint-disable-line react-hooks/exhaustive-deps -- refill only when the signed-in guest changes, not on every sync
   const nights = checkIn < checkOut ? quote("classic", checkIn, checkOut).nights : 0;
   const myVouchers = account ? state.vouchers.filter((v) => v.guestId === account.guestId && v.status === "active" && state.rewards.find((r) => r.id === v.rewardId)?.appliesTo === "stay") : [];
-  const calc = useMemo(() => typeId && nights ? bookingCalc(state, { typeId, rooms, checkIn, checkOut, adults, children, extras: Object.entries(extras).map(([id, qty]) => ({ id, qty })), voucherId: voucherId || undefined, guestId: account?.guestId }) : null, [state, typeId, rooms, checkIn, checkOut, adults, children, extras, voucherId, account]);
+  const calc = useMemo(() => typeId && nights ? bookingCalc(state, { typeId, rooms, checkIn, checkOut, adults, children, extras: Object.entries(extras).map(([id, qty]) => ({ id, qty })), voucherId: voucherId || undefined, guestId: account?.guestId }) : null, [state, typeId, rooms, checkIn, checkOut, adults, children, extras, voucherId, account, nights]);
   const free = typeId && nights ? freeRooms(state, typeId, checkIn, checkOut).length : 0;
   const detailsOk = f.first.trim() && f.phone.replace(/\D/g, "").length >= 6;
 

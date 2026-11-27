@@ -8,18 +8,18 @@ import { POSITION_LABEL } from "@/lib/hospitality-data";
 import { Icon, type IconName } from "../icons";
 import { Avatar, Badge, cn, DemoDataBadge } from "../ui";
 
-const NAV: { href: string; label: string; icon: IconName; group?: string }[] = [
+const NAV: { href: string; label: string; icon: IconName; group?: string; mod?: "rooms" | "restaurant" }[] = [
   { href: "/admin", label: "Ընդհանուր պատկեր", icon: "home" },
-  { href: "/admin/reservations", label: "Ամրագրումներ", icon: "list", group: "Ամրագրումներ" },
-  { href: "/admin/calendar", label: "Օրացույց", icon: "calendar" },
-  { href: "/admin/rooms", label: "Սենյակներ", icon: "bed" },
+  { mod: "rooms", href: "/admin/reservations", label: "Ամրագրումներ", icon: "list", group: "Ամրագրումներ" },
+  { mod: "rooms", href: "/admin/calendar", label: "Օրացույց", icon: "calendar" },
+  { mod: "rooms", href: "/admin/rooms", label: "Սենյակներ", icon: "bed" },
   { href: "/admin/guests", label: "Հյուրեր (CRM)", icon: "users" },
   { href: "/admin/requests", label: "Հյուրերի հարցումներ (QR)", icon: "qr", group: "Աշխատանք" },
-  { href: "/admin/housekeeping", label: "Մաքրություն", icon: "broom" },
+  { mod: "rooms", href: "/admin/housekeeping", label: "Մաքրություն", icon: "broom" },
   { href: "/admin/maintenance", label: "Տեխնիկական սպասարկում", icon: "wrench" },
   { href: "/admin/staff", label: "Առաջադրանքներ", icon: "tasks" },
-  { href: "/admin/restaurant", label: "Ռեստորան և մենյու", icon: "coffee", group: "Ռեստորան" },
-  { href: "/kds", label: "Խոհանոցի էկրան (KDS)", icon: "flame" },
+  { mod: "restaurant", href: "/admin/restaurant", label: "Ռեստորան և մենյու", icon: "coffee", group: "Ռեստորան" },
+  { mod: "restaurant", href: "/kds", label: "Խոհանոցի էկրան (KDS)", icon: "flame" },
   { href: "/admin/loyalty", label: "Հավատարմություն", icon: "star", group: "Հյուրեր և աճ" },
   { href: "/admin/team", label: "Թիմ, դերեր, ուսուցում", icon: "users", group: "Թիմ" },
   { href: "/staff", label: "Աշխատակցի հավելված", icon: "smartphone" },
@@ -121,7 +121,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const night = state.clock.mode === "night";
   const nav = (
     <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 pb-4">
-      {NAV.map((n) => {
+      {NAV.filter((n) => !n.mod || state.property.modules.includes(n.mod)).map((n) => {
         const active = n.href === "/admin" ? path === "/admin" : path.startsWith(n.href);
         return (
           <div key={n.href}>

@@ -48,7 +48,6 @@ const PALETTE = ["#121212", "#ff5b14", "#2f62d0", "#17845b", "#6a52c7", "#b7790f
 
 export function Donut({ data, center, sub }: { data: { label: string; value: number }[]; center: string; sub?: string }) {
   const total = data.reduce((a, d) => a + d.value, 0) || 1;
-  let acc = 0;
   const R = 52, C = 2 * Math.PI * R;
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row">
@@ -56,9 +55,8 @@ export function Donut({ data, center, sub }: { data: { label: string; value: num
         <circle cx="70" cy="70" r={R} fill="none" stroke="var(--color-line)" strokeWidth="16" />
         {data.map((d, i) => {
           const len = (d.value / total) * C;
-          const el = <circle key={d.label} cx="70" cy="70" r={R} fill="none" stroke={PALETTE[i % PALETTE.length]} strokeWidth="16" strokeDasharray={`${len} ${C - len}`} strokeDashoffset={-acc} />;
-          acc += len;
-          return el;
+          const offset = data.slice(0, i).reduce((a, x) => a + (x.value / total) * C, 0);
+          return <circle key={d.label} cx="70" cy="70" r={R} fill="none" stroke={PALETTE[i % PALETTE.length]} strokeWidth="16" strokeDasharray={`${len} ${C - len}`} strokeDashoffset={-offset} />;
         })}
         <g className="rotate-90" style={{ transformOrigin: "70px 70px" }}>
           <text x="70" y="68" textAnchor="middle" fontSize="20" fontWeight="600" fill="var(--color-ink)">{center}</text>

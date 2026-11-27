@@ -392,6 +392,7 @@ function applyHospitality(state: HotelState, ev: StampedEvent, who: string) {
       const b = ev.input;
       const g = b.guestId ? state.guests.find((x) => x.id === b.guestId) ?? upsertGuest(state, b.guest, `g-${id}`) : upsertGuest(state, b.guest, `g-${id}`);
       const calc = bookingCalc(state, { ...b, guestId: g.id });
+      if (calc.campaignId) { const c = state.campaigns.find((x) => x.id === calc.campaignId); if (c) c.uses++; }
       const { at, afterHours } = displayTime(state, ev);
       const groupId = `grp-${id}`;
       const voucherOk = calc.voucherAmount > 0 ? b.voucherId : undefined;
@@ -461,6 +462,7 @@ function applyHospitality(state: HotelState, ev: StampedEvent, who: string) {
       const items = o.items.map((i) => { const m = state.menu.items.find((x) => x.id === i.itemId)!; return { ...i, price: m ? m.price + m.options.filter((op) => i.options.includes(op.id)).reduce((s, op) => s + op.price, 0) : 0 }; }).filter((i) => i.price > 0 && i.qty > 0);
       if (!items.length) return;
       const calc = orderCalc(state, items, o.guestId, o.voucherId);
+      if (calc.campaignId && calc.pct) { const c = state.campaigns.find((x) => x.id === calc.campaignId); if (c) c.uses++; }
       const voucherOk = calc.voucher > 0 ? o.voucherId : undefined;
       const order = { id: `o-${id}`, code: `R-${4000 + state.orders.length}`, type: o.type, roomId: o.roomId, tableId: o.tableId, guestId: o.guestId, guestName: o.guestName || "Հյուր", phone: o.phone, items, subtotal: calc.subtotal, discount: calc.discount, total: calc.total, note: o.note, status: "submitted" as const, createdAt: ev.at, pickupTime: o.pickupTime, voucherId: voucherOk, history: [{ at: ev.at, status: "submitted" as const, by: o.guestName || "Հյուր" }] };
       state.orders.push(order);
@@ -582,6 +584,17 @@ function applyHospitality(state: HotelState, ev: StampedEvent, who: string) {
     case "channel.open":
       if (!state.channels.some((c) => c.id === ev.channel.id)) state.channels.push(ev.channel);
       return;
+    case "property.update": {
+      const t = ev.patch.type;
+      if (t && ["hotel", "restaurant", "hotel_restaurant"].includes(t)) {
+        state.property.type = t;
+        const base = ["services", "loyalty", "staff", "training", "analytics"];
+        state.property.modules = [...(t !== "restaurant" ? ["rooms", "reservations"] : []), ...(t !== "hotel" ? ["restaurant"] : []), ...base];
+      }
+      if (ev.patch.brand?.trim()) state.property.brand = ev.patch.brand.trim().slice(0, 80);
+      state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: "Օբյեկտի կարգավորումները թարմացվեցին", by: who });
+      return;
+    }
   }
 }
 

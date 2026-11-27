@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { EXTRAS } from "@/lib/hospitality-data";
 import { useEffect, useState } from "react";
 import { useDemo } from "@/lib/client/demo-store";
 import { addDays, diffDays, eachNight } from "@/lib/dates";
@@ -103,8 +104,21 @@ export function ReservationDrawer({ id, onClose }: { id: string | null; onClose:
         <div className="mb-2 text-[13px] font-semibold">Գնի հաշվարկ (գնացուցակից)</div>
         <div className="space-y-1 text-[13px]">
           {eachNight(res.checkIn, res.checkOut).map((n) => <div key={n} className="flex justify-between text-muted"><span>{dShort(n)}</span><span className="tnum">{amd(nightlyRate(res.typeId, n))}</span></div>)}
-          <div className="flex justify-between border-t border-line pt-1.5 text-[14px] font-semibold"><span>Ընդհանուր</span><span className="tnum">{amd(res.total)}</span></div>
+          {(res.extras?.length || res.discount) ? <>
+            <div className="flex justify-between border-t border-line pt-1.5"><span>Սենյակ</span><span className="tnum">{amd(res.total)}</span></div>
+            {res.extras?.map((x) => <div key={x.id} className="flex justify-between"><span>+ {EXTRAS.find((e) => e.id === x.id)?.name.hy ?? x.id}{x.qty > 1 ? ` × ${x.qty}` : ""}</span><span className="tnum">{amd(x.price)}</span></div>)}
+            {!!res.discount && <div className="flex justify-between text-ok"><span>− {res.discountLabel ?? "Զեղչ"}</span><span className="tnum">−{amd(res.discount)}</span></div>}
+            <div className="flex justify-between border-t border-line pt-1.5 text-[14px] font-semibold"><span>Ընդհանուր վճարման ենթակա</span><span className="tnum">{amd(res.total + (res.extras ?? []).reduce((a, x) => a + x.price, 0) - (res.discount ?? 0))}</span></div>
+          </> : <div className="flex justify-between border-t border-line pt-1.5 text-[14px] font-semibold"><span>Ընդհանուր</span><span className="tnum">{amd(res.total)}</span></div>}
+          {res.groupId && <div className="pt-1 text-[12px] text-muted">Խմբային ամրագրում՝ {state.reservations.filter((r) => r.groupId === res.groupId).map((r) => r.code).join(", ")} (զեղչերը և լրացուցիչները՝ առաջին սենյակի վրա)</div>}
         </div>
+        {["confirmed", "checked_in", "checked_out"].includes(res.status) && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-line pt-3 text-[13px]">
+            <span className="mr-auto">Վճարում՝ {res.payment === "paid" ? <Badge tone="ok">Վճարված</Badge> : <Badge tone="warn">Չվճարված</Badge>}</span>
+            {res.payment !== "paid" && ["Կանխիկ", "Քարտ (տերմինալ)", "Բանկային փոխանցում"].map((m) => <Button key={m} size="sm" onClick={() => dispatch({ type: "reservation.pay", reservationId: res.id, method: m })}>{m}</Button>)}
+          </div>
+        )}
+        {["confirmed", "checked_in", "checked_out"].includes(res.status) && res.payment !== "paid" && <p className="mt-2 text-[11.5px] text-muted">Վճարումը գրանցվում է ձեռքով։ Առցանց վճարման ինտեգրացիա չկա (ցուցադրական)։</p>}
       </section>
 
       {res.requests && <section className="mt-4 rounded-xl bg-paper p-4 text-[13px]"><div className="mb-1 font-semibold">Հյուրի խնդրանքը</div>{res.requests}</section>}

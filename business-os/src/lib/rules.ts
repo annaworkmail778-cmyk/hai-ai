@@ -32,7 +32,7 @@ export type Line = { label: I18n; amount: number; kind: "room" | "extra" | "disc
 
 export type BookingCalc = {
   nights: number; roomTotal: number; extrasTotal: number; discount: number; total: number; lines: Line[];
-  perRoom: number; memberPct: number; campaignPct: number; voucherAmount: number;
+  perRoom: number; memberPct: number; campaignPct: number; voucherAmount: number; campaignId?: string;
 };
 
 const L = (hy: string, ru: string, en: string): I18n => ({ hy, ru, en });
@@ -51,13 +51,14 @@ export function bookingCalc(state: HotelState, b: { typeId: RoomTypeId; rooms: n
     extrasTotal += amt;
     lines.push({ label: x.name, amount: amt, kind: "extra" });
   }
-  let memberPct = 0, campaignPct = 0, voucherAmount = 0;
+  let memberPct = 0, campaignPct = 0, voucherAmount = 0, campaignId: string | undefined;
   const acc = accountOf(state, b.guestId);
   if (acc) {
     const lo = loyaltyOf(state, acc.guestId);
     memberPct = lo.tier.discountPct;
     const camp = state.campaigns.filter((c) => c.active && c.appliesTo === "stay" && c.tierIds.includes(lo.tier.id)).sort((x, y) => y.discountPct - x.discountPct)[0];
     campaignPct = camp?.discountPct ?? 0;
+    campaignId = camp?.id;
     if (memberPct) lines.push({ label: L(`Անդամի զեղչ (${lo.tier.name.hy}) −${memberPct}%`, `Скидка участника (${lo.tier.name.ru}) −${memberPct}%`, `Member discount (${lo.tier.name.en}) −${memberPct}%`), amount: -Math.round((roomTotal * memberPct) / 100), kind: "discount" });
     if (camp) lines.push({ label: { hy: `${camp.title.hy} −${campaignPct}%`, ru: `${camp.title.ru} −${campaignPct}%`, en: `${camp.title.en} −${campaignPct}%` }, amount: -Math.round((roomTotal * campaignPct) / 100), kind: "discount" });
     const v = b.voucherId ? state.vouchers.find((x) => x.id === b.voucherId && x.guestId === acc.guestId && x.status === "active") : undefined;
@@ -70,7 +71,7 @@ export function bookingCalc(state: HotelState, b: { typeId: RoomTypeId; rooms: n
   const rawDiscount = Math.round((roomTotal * (memberPct + campaignPct)) / 100) + voucherAmount;
   const discount = Math.min(rawDiscount, Math.round(roomTotal * 0.5)); // never more than half the room price
   if (discount < rawDiscount) lines.push({ label: L("Զեղչերի սահմանափակում (առավելագույնը 50%)", "Ограничение скидок (максимум 50%)", "Discount cap (max 50%)"), amount: rawDiscount - discount, kind: "discount" });
-  return { nights: q.nights, roomTotal, extrasTotal, discount, total: roomTotal + extrasTotal - discount, lines, perRoom: q.total, memberPct, campaignPct, voucherAmount };
+  return { nights: q.nights, roomTotal, extrasTotal, discount, total: roomTotal + extrasTotal - discount, lines, perRoom: q.total, memberPct, campaignPct, voucherAmount, campaignId };
 }
 
 export function itemPrice(item: MenuItem, options: string[]) {
@@ -79,18 +80,18 @@ export function itemPrice(item: MenuItem, options: string[]) {
 
 export function orderCalc(state: HotelState, items: { itemId: string; qty: number; options: string[] }[], guestId?: string, voucherId?: string) {
   const subtotal = items.reduce((s, i) => { const m = state.menu.items.find((x) => x.id === i.itemId); return s + (m ? itemPrice(m, i.options) * i.qty : 0); }, 0);
-  let pct = 0, voucher = 0, label: I18n | null = null;
+  let pct = 0, voucher = 0, label: I18n | null = null, campaignId: string | undefined;
   const acc = accountOf(state, guestId);
   if (acc) {
     const lo = loyaltyOf(state, acc.guestId);
     const camp = state.campaigns.filter((c) => c.active && c.appliesTo === "order" && c.tierIds.includes(lo.tier.id)).sort((x, y) => y.discountPct - x.discountPct)[0];
-    if (camp) { pct = camp.discountPct; label = camp.title; }
+    if (camp) { pct = camp.discountPct; label = camp.title; campaignId = camp.id; }
     const v = voucherId ? state.vouchers.find((x) => x.id === voucherId && x.guestId === acc.guestId && x.status === "active") : undefined;
     const rw = v ? state.rewards.find((x) => x.id === v.rewardId && x.appliesTo === "order") : undefined;
     if (rw) voucher = rw.kind === "pct" ? Math.round((subtotal * rw.value) / 100) : rw.value;
   }
   const discount = Math.min(subtotal, Math.round((subtotal * pct) / 100) + voucher);
-  return { subtotal, pct, voucher, discount, total: subtotal - discount, campaignLabel: label };
+  return { subtotal, pct, voucher, discount, total: subtotal - discount, campaignLabel: label, campaignId };
 }
 
 export const ORDER_FLOW: Record<string, string[]> = {

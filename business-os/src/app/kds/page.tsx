@@ -19,7 +19,7 @@ const REASONS = ["Բաղադրիչը վերջացել է", "Խոհանոցը փ�
 
 export default function Kds() {
   const { state, dispatch, setRole, conn } = useDemo();
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   const [reject, setReject] = useState<string | null>(null);
   useEffect(() => { setRole("staff"); const t = setInterval(() => setNow(Date.now()), 15000); return () => clearInterval(t); }, [setRole]);
   const live = state.orders.filter((o) => COLS.some((c) => c.statuses.includes(o.status))).sort((a, b) => a.createdAt - b.createdAt);

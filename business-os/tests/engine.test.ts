@@ -182,3 +182,21 @@ test("employee assistant answers only from SOPs and routes unknowns to the super
   assert.equal(none.kind, "none");
   if (none.kind === "none") assert.equal(none.supervisor?.id, "s-anahit");
 });
+
+test("management metrics are internally consistent", async () => {
+  const { loyaltyStats, restaurantStats, staffStats, guestStats } = await import("../src/lib/hospitality-analytics.ts");
+  const s = replay(BASE, []);
+  const now = Date.parse(`${s.baseDate}T12:00:00+04:00`);
+  const lo = loyaltyStats(s, now);
+  assert.equal(lo.tiers.reduce((a, t) => a + t.count, 0), lo.members, "tier distribution covers every member");
+  assert.equal(lo.outstanding, lo.issuedAll - lo.redeemedAll, "outstanding points = issued − redeemed");
+  const r = restaurantStats(s, now - 30 * 86400e3, now + 86400e3);
+  assert.ok(r.orders > 0);
+  assert.equal(Math.round(r.avgCheck * r.orders), r.revenue);
+  assert.equal(r.byType.room_service + r.byType.dine_in + r.byType.takeaway, r.revenue);
+  const st = staffStats(s, now - 30 * 86400e3, now + 86400e3);
+  assert.ok(st.onboardingProgress > 0 && st.onboardingProgress <= 1);
+  const g = guestStats(s, { from: "2000-01-01", to: s.baseDate, label: "" });
+  assert.ok(g.satisfaction >= 1 && g.satisfaction <= 5);
+  assert.ok(g.returningRate >= 0 && g.returningRate <= 1);
+});
