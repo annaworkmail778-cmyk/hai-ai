@@ -1,6 +1,6 @@
 # RISEUP Business OS: Lean Sales Demo Scope (Phase 1.5)
 
-**Status:** proposal for approval (2026-11-27). No code until it's approved.
+**Status:** direction approved 2026-11-27 with adjustments. Final task sequence and schedule: `LEAN_DEMO_IMPLEMENTATION_PLAN.md` v2 (hotel stage ≈ 26.5 h incl. the approved QR redirect and visual pass; restaurant ≈ 11.5 h after the interview gate). The demo shows **no RISEUP package prices**; those stay hypotheses in the offer documents. Admin routes are protected by a presenter PIN. No code until the plan is signed off.
 - **Supersedes** the Level 1 scope and estimates in `MVP_ROADMAP.md` and `IMPLEMENTATION_BACKLOG.md` for the first demo. The architecture direction in `TECHNICAL_ARCHITECTURE.md` stays.
 - **Goal:** win the first paying hotel and restaurant customers in Tsaghkadzor. The demo exists to start paid pilots, not to be the product.
 
@@ -117,7 +117,7 @@
 | Restaurant assistant, tables floor plan, food cost, CRM/loyalty, ROI calculator, analytics beyond basic metrics | After validation (Level 1 complete) |
 | Hotel analytics beyond 4 KPIs, guest CRM, maintenance, automation settings | After validation |
 | Animated guided overlay, auto-play, Playwright suite (manual checklist + 1 smoke test instead) | Later |
-| Admin in Russian/English (admin is Armenian in the lean demo; customer pages are hy/ru/en) | +1 h if owners need it (**decision**) |
+| Admin in Russian/English (admin is Armenian in the lean demo; customer pages are hy/ru/en) | Later (approved: Armenian only for now) |
 | Real database, logins, Telegram/email sending, LLM, iCal, printers, payments | Level 2 pilot |
 
 ## 9. Quality bar (definition of done for the lean demo)
