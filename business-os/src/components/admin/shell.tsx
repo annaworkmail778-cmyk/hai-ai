@@ -5,6 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useDemo } from "@/lib/client/demo-store";
 import { dHy, time } from "@/lib/format";
 import { Icon, type IconName } from "../icons";
+import { ConnPillView } from "../shared/conn-pill";
 import { Avatar, Badge, cn, DemoDataBadge } from "../ui";
 
 const NAV: { href: string; label: string; icon: IconName; group?: string }[] = [
@@ -24,17 +25,7 @@ const NAV: { href: string; label: string; icon: IconName; group?: string }[] = [
 
 export function ConnPill() {
   const { conn, mode, backend, pending } = useDemo();
-  const map = {
-    live: { tone: "ok" as const, text: "Համաժամեցված", icon: "wifi" as IconName },
-    connecting: { tone: "neutral" as const, text: "Միանում է…", icon: "wifi" as IconName },
-    reconnecting: { tone: "warn" as const, text: pending ? `Վերամիացում… (${pending} սպասում է)` : "Վերամիացում…", icon: "wifiOff" as IconName },
-    local: { tone: "info" as const, text: "Տեղային ռեժիմ", icon: "laptop" as IconName },
-  }[conn];
-  return (
-    <span title={mode === "live" ? `Սինք․ ${backend || "…"}` : "Միայն այս սարքում (առանց ինտերնետի)"} className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium", { ok: "bg-ok-soft text-ok", neutral: "bg-black/5 text-muted", warn: "bg-warn-soft text-warn", info: "bg-info-soft text-info" }[map.tone])}>
-      <Icon name={map.icon} size={14} />{map.text}
-    </span>
-  );
+  return <ConnPillView conn={conn} mode={mode} backend={backend} pending={pending} />;
 }
 
 function Bell() {

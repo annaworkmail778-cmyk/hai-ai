@@ -4,9 +4,14 @@ import "server-only";
  *  - On Netlify: Netlify Blobs (strong consistency), one blob per event → no write races.
  *  - Elsewhere (local dev, `next start` on a laptop): in-memory, shared by all devices on that server.
  * A session = { epoch, epochAt, events[] }. Reset starts a new epoch.
+ *
+ * Shared by all verticals. Each vertical has its own namespace, so hotel and restaurant sessions
+ * never mix. The hotel uses the default (empty) namespace, which keeps its original storage names.
  */
 import { getStore } from "@netlify/blobs";
-import type { StampedEvent } from "../types.ts";
+
+/** Minimal shape every stored event has (verticals define the rest). */
+export type StampedEvent = { id: string; at: number; by: string; type: string };
 
 export type SessionMeta = { epoch: string; epochAt: number };
 export type StoredEvent = { key: string; ev: StampedEvent };
@@ -25,17 +30,18 @@ const eventKey = (ev: StampedEvent) => `${String(Date.now()).padStart(14, "0")}-
 type Mem = Map<string, { meta: SessionMeta; events: StoredEvent[] }>;
 const g = globalThis as unknown as { __bosMem?: Mem };
 
-function memoryStore(): SessionStore {
+function memoryStore(namespace: string): SessionStore {
   const mem: Mem = (g.__bosMem ??= new Map());
+  const k = (code: string) => (namespace ? `${namespace}:${code}` : code);
   const get = (code: string) => {
-    let s = mem.get(code);
-    if (!s) { s = { meta: newMeta(), events: [] }; mem.set(code, s); }
+    let s = mem.get(k(code));
+    if (!s) { s = { meta: newMeta(), events: [] }; mem.set(k(code), s); }
     return s;
   };
   return {
     backend: "memory",
     async meta(code) { return get(code).meta; },
-    async reset(code) { const s = { meta: newMeta(), events: [] }; mem.set(code, s); return s.meta; },
+    async reset(code) { const s = { meta: newMeta(), events: [] }; mem.set(k(code), s); return s.meta; },
     async list(code, epoch, after) {
       const s = get(code);
       if (s.meta.epoch !== epoch) return { events: [], count: 0 };
@@ -53,9 +59,9 @@ function memoryStore(): SessionStore {
   };
 }
 
-function blobStore(): SessionStore {
+function blobStore(namespace: string): SessionStore {
   const context = (process.env.CONTEXT ?? "production").replace(/[^a-z0-9-]/gi, "");
-  const store = getStore({ name: `hotel-demo-${context}`, consistency: "strong" });
+  const store = getStore({ name: `${namespace || "hotel"}-demo-${context}`, consistency: "strong" });
   const metaKey = (code: string) => `${code}/meta`;
   return {
     backend: "netlify-blobs",
@@ -90,10 +96,13 @@ function blobStore(): SessionStore {
 
 export class EpochMismatch extends Error {}
 
-let cached: SessionStore | null = null;
-export function sessionStore(): SessionStore {
-  if (cached) return cached;
+const cached = new Map<string, SessionStore>();
+/** `namespace` = vertical ("" for the hotel, "restaurant", …). */
+export function sessionStore(namespace = ""): SessionStore {
+  const hit = cached.get(namespace);
+  if (hit) return hit;
   const onNetlify = Boolean(process.env.NETLIFY_BLOBS_CONTEXT || (globalThis as { netlifyBlobsContext?: unknown }).netlifyBlobsContext || process.env.NETLIFY);
-  cached = onNetlify ? blobStore() : memoryStore();
-  return cached;
+  const store = onNetlify ? blobStore(namespace) : memoryStore(namespace);
+  cached.set(namespace, store);
+  return store;
 }

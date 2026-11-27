@@ -6,6 +6,7 @@
  * External messages are NEVER sent: they are written to the outbox as "simulated"/"scheduled".
  */
 import { addDays, atTime, diffDays } from "./dates.ts";
+import { replayEvents } from "./kernel/replay.ts";
 import { roomType } from "./hotel-data.ts";
 import { quote, roomIsFree } from "./pricing.ts";
 import { createSeed } from "./seed.ts";
@@ -333,13 +334,8 @@ export const hkLabel: Record<string, string> = { clean: "Մաքուր", dirty: "
 
 /** Replays events on a fresh seed. Events must be ordered (server order). */
 export function replay(baseDate: string, events: StampedEvent[]): HotelState {
-  const s = createSeed(baseDate);
-  const seen = new Set<string>();
-  for (const e of events) {
-    if (seen.has(e.id)) continue; // at-least-once delivery → apply each event once
-    seen.add(e.id);
-    apply(s, e);
-  }
+  // at-least-once delivery → the kernel applies each event once
+  const s = replayEvents(createSeed(baseDate), events, apply);
   s.reservations.sort((a, b) => (b.displayAt ?? b.createdAt) - (a.displayAt ?? a.createdAt));
   return s;
 }

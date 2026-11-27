@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter, Noto_Sans_Armenian, Noto_Serif_Armenian } from "next/font/google";
-import { DemoProvider } from "@/lib/client/demo-store";
+import { VerticalProvider } from "@/components/shared/vertical-provider";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter", display: "swap" });
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="hy" className={`${inter.variable} ${arm.variable} ${serif.variable} ${serifArm.variable}`}>
       <body>
-        <DemoProvider>{children}</DemoProvider>
+        <VerticalProvider>{children}</VerticalProvider>
       </body>
     </html>
   );
