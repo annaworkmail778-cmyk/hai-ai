@@ -9,7 +9,7 @@ const TYPES = new Set([
   "ticket.start", "ticket.ready", "ticket.bump", "ticket.recall", "ticket.rush",
   "table.open", "table.close", "table.clean", "table.request", "request.ack", "request.done",
   "menu.availability", "menu.price", "ingredient.price", "recipe.qty", "stock.waste", "stock.adjust",
-  "po.create", "po.send", "po.receive", "settings.update", "automation.toggle", "notices.read",
+  "po.create", "po.send", "po.receive", "settings.update", "brand.theme", "automation.toggle", "notices.read",
 ]);
 
 const route = createSessionRoute({ namespace: "restaurant", types: TYPES, maxEvents: 1500, maxBytes: 8 * 1024 });

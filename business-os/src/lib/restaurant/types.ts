@@ -207,6 +207,7 @@ export type RestaurantEvent =
   | { type: "po.send"; poId: string }
   | { type: "po.receive"; poId: string; lines: { ingredientId: string; qty: number; cost: number }[] }
   | { type: "settings.update"; patch: Partial<Omit<Settings, "savings">> & { savings?: Partial<SavingsAssumptions> } }
+  | { type: "brand.theme"; theme: ThemePreset }
   | { type: "automation.toggle"; target: AutomationId; on: boolean }
   | { type: "notices.read" };
 

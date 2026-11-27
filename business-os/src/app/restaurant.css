@@ -1,0 +1,91 @@
+/* Restaurant OS guest themes. Scoped to .rt so the Hotel OS tokens are untouched. Two presets prove configurability. */
+/* In the components layer so Tailwind utilities (e.g. pl-11) can override these defaults. */
+@layer components {
+.rt {
+  --rt-bg: #12100e;
+  --rt-bg-2: #1b1815;
+  --rt-card: #201c18;
+  --rt-line: rgb(255 240 220 / 0.1);
+  --rt-text: #f3ece2;
+  --rt-muted: rgb(243 236 226 / 0.62);
+  --rt-faint: rgb(243 236 226 / 0.4);
+  --rt-accent: #e2793b;
+  --rt-accent-ink: #1a0f08;
+  --rt-gold: #c9a46a;
+  --rt-radius: 18px;
+  --rt-hero-overlay: linear-gradient(180deg, rgb(18 16 14 / 0.25) 0%, rgb(18 16 14 / 0.55) 55%, #12100e 100%);
+  background: var(--rt-bg);
+  color: var(--rt-text);
+  min-height: 100dvh;
+}
+.rt[data-theme="family"] {
+  --rt-bg: #fbf6ef;
+  --rt-bg-2: #f3eadd;
+  --rt-card: #ffffff;
+  --rt-line: rgb(60 40 20 / 0.12);
+  --rt-text: #2b1d12;
+  --rt-muted: rgb(43 29 18 / 0.66);
+  --rt-faint: rgb(43 29 18 / 0.42);
+  --rt-accent: #c4512a;
+  --rt-accent-ink: #ffffff;
+  --rt-gold: #b07a2a;
+  --rt-radius: 26px;
+  --rt-hero-overlay: linear-gradient(180deg, rgb(251 246 239 / 0) 0%, rgb(251 246 239 / 0.35) 55%, #fbf6ef 100%);
+}
+.rt .rt-serif { font-family: var(--font-serif); letter-spacing: -0.01em; }
+.rt[data-theme="family"] .rt-serif { font-family: var(--font-sans); font-weight: 700; letter-spacing: -0.03em; }
+.rt .rt-card { background: var(--rt-card); border: 1px solid var(--rt-line); border-radius: var(--rt-radius); }
+.rt .rt-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 3rem; padding: 0 1.4rem; border-radius: 999px; font-weight: 600; font-size: 15px; transition: transform 0.15s ease, filter 0.15s ease, background 0.15s ease; }
+.rt .rt-btn:active { transform: scale(0.97); }
+.rt .rt-btn-accent { background: var(--rt-accent); color: var(--rt-accent-ink); }
+.rt .rt-btn-accent:hover { filter: brightness(1.06); }
+.rt .rt-btn-ghost { border: 1px solid var(--rt-line); color: var(--rt-text); background: color-mix(in srgb, var(--rt-card) 60%, transparent); backdrop-filter: blur(8px); }
+.rt .rt-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.rt .rt-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 12px; border: 1px solid var(--rt-line); color: var(--rt-muted); }
+.rt .rt-input { width: 100%; height: 3rem; border-radius: 14px; border: 1px solid var(--rt-line); background: var(--rt-bg-2); color: var(--rt-text); padding: 0 1rem; font-size: 16px; }
+.rt .rt-input:focus { outline: 2px solid var(--rt-accent); outline-offset: 1px; }
+.rt :focus-visible { outline-color: var(--rt-accent); }
+
+/* hero: slow cinematic zoom */
+@keyframes rt-kenburns { from { transform: scale(1.08); } to { transform: scale(1); } }
+.rt .rt-hero-img { animation: rt-kenburns 14s ease-out both; }
+@keyframes rt-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.rt .rt-rise { animation: rt-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.rt .rt-rise-2 { animation-delay: 0.15s; }
+.rt .rt-rise-3 { animation-delay: 0.3s; }
+
+/* reveal on scroll: progressive enhancement (scroll-driven where supported, observer class otherwise) */
+.rt .rt-reveal { opacity: 0; transform: translateY(28px) scale(0.985); transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.rt .rt-reveal.is-in { opacity: 1; transform: none; }
+.rt .rt-clip { clip-path: inset(12% 6% 12% 6% round var(--rt-radius)); transition: clip-path 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.rt .rt-clip.is-in { clip-path: inset(0 0 0 0 round var(--rt-radius)); }
+@supports (animation-timeline: view()) {
+  .rt .rt-parallax { animation: rt-par linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+  @keyframes rt-par { from { transform: translateY(-6%) scale(1.12); } to { transform: translateY(6%) scale(1.12); } }
+}
+
+/* sheets */
+@keyframes rt-sheet { from { transform: translateY(100%); } to { transform: none; } }
+.rt .rt-sheet { animation: rt-sheet 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes rt-fade { from { opacity: 0; } to { opacity: 1; } }
+.rt .rt-fade { animation: rt-fade 0.25s ease both; }
+@keyframes rt-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rt-accent) 55%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
+.rt .rt-pulse { animation: rt-pulse 1.8s ease-out infinite; }
+.rt .rt-noscroll { scrollbar-width: none; }
+.rt .rt-noscroll::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rt .rt-reveal, .rt .rt-clip { opacity: 1; transform: none; clip-path: none; transition: none; }
+  .rt .rt-hero-img, .rt .rt-parallax, .rt .rt-rise, .rt .rt-sheet, .rt .rt-pulse { animation: none !important; }
+}
+
+}
+
+/* Kitchen display: high contrast, large type */
+.kds { background: #0b0b0c; color: #f5f5f4; min-height: 100dvh; }
+.kds .kds-card { background: #17171a; border: 2px solid #2a2a2e; border-radius: 14px; }
+.kds .kds-amber { border-color: #e0a419; }
+.kds .kds-red { border-color: #ef4444; box-shadow: 0 0 0 1px #ef4444 inset; }
+.kds .kds-new { animation: kds-new 1.4s ease-out 2; }
+@keyframes kds-new { 0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.5); } 100% { box-shadow: 0 0 0 16px rgb(255 255 255 / 0); } }
+@media (prefers-reduced-motion: reduce) { .kds .kds-new { animation: none; } }

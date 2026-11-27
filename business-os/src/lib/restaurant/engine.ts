@@ -396,6 +396,9 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
       };
       return s;
     }
+    case "brand.theme":
+      if (ev.theme === "fine_dining" || ev.theme === "family") s.brand.theme = ev.theme;
+      return s;
     case "automation.toggle":
       if (ev.target in s.automations) s.automations[ev.target] = ev.on;
       return s;
