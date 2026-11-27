@@ -9,6 +9,8 @@ import { amd } from "@/lib/format";
 import { HOTEL } from "@/lib/hotel-data";
 import { fromRate } from "@/lib/pricing";
 import { LANGS, t } from "@/lib/site-i18n";
+import { g } from "@/lib/guest-i18n";
+import { useGuestSession } from "@/lib/client/guest-session";
 import type { Lang, RoomType } from "@/lib/types";
 import { Icon } from "../icons";
 import { cn } from "../ui";
@@ -45,7 +47,7 @@ export function SiteHeader({ lang, overlay }: { lang: Lang; overlay?: boolean })
     return () => window.removeEventListener("scroll", f);
   }, []);
   const light = overlay && !scrolled && !open;
-  const links: [string, string][] = [[`/hotel/${lang}/rooms`, d.nav.rooms], [`/hotel/${lang}#offers`, d.nav.offers], [`/hotel/${lang}#facilities`, d.nav.facilities], [`/hotel/${lang}#location`, d.nav.location]];
+  const links: [string, string][] = [[`/hotel/${lang}/rooms`, d.nav.rooms], [`/hotel/${lang}/dining`, g(lang, "dining")], [`/hotel/${lang}#spa`, g(lang, "spaTitle").split(" ")[0]], [`/hotel/${lang}#offers`, d.nav.offers], [`/hotel/${lang}#location`, d.nav.location]];
   return (
     <header className={cn("fixed inset-x-0 top-0 z-40 transition-colors duration-300", light ? "bg-transparent" : "border-b border-pine/10 bg-cream/95 backdrop-blur")}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[72px] sm:px-6">
@@ -55,7 +57,8 @@ export function SiteHeader({ lang, overlay }: { lang: Lang; overlay?: boolean })
         </nav>
         <div className="flex items-center gap-2">
           <div className="hidden sm:block"><LangSwitch lang={lang} light={light} /></div>
-          <Link href={`/hotel/${lang}/book`} className={cn("hidden h-10 items-center rounded-full px-5 text-[14px] font-semibold transition sm:inline-flex", light ? "bg-white text-pine hover:bg-cream" : "bg-pine text-cream hover:bg-pine-2")}>{d.nav.request}</Link>
+          <AccountLink lang={lang} light={light} />
+          <Link href={`/hotel/${lang}/booking`} className={cn("hidden h-10 items-center rounded-full px-5 text-[14px] font-semibold transition sm:inline-flex", light ? "bg-white text-pine hover:bg-cream" : "bg-pine text-cream hover:bg-pine-2")}>{d.nav.request}</Link>
           <button onClick={() => setOpen(!open)} className={cn("grid size-10 place-items-center rounded-full md:hidden", light ? "text-white" : "text-pine")} aria-label="Menu"><Icon name={open ? "x" : "menu"} size={22} /></button>
         </div>
       </div>
@@ -64,7 +67,7 @@ export function SiteHeader({ lang, overlay }: { lang: Lang; overlay?: boolean })
           {links.map(([href, label]) => <Link key={href} href={href} onClick={() => setOpen(false)} className="block border-b border-pine/10 py-3.5 font-serif text-xl text-pine">{label}</Link>)}
           <div className="mt-4 flex items-center justify-between">
             <LangSwitch lang={lang} />
-            <Link href={`/hotel/${lang}/book`} onClick={() => setOpen(false)} className="inline-flex h-11 items-center rounded-full bg-pine px-6 font-semibold text-cream">{d.nav.request}</Link>
+            <Link href={`/hotel/${lang}/booking`} onClick={() => setOpen(false)} className="inline-flex h-11 items-center rounded-full bg-pine px-6 font-semibold text-cream">{d.nav.request}</Link>
           </div>
         </div>
       )}
@@ -100,7 +103,7 @@ export function BookingBar({ lang, compact }: { lang: Lang; compact?: boolean })
     const f = nextFriday(state.baseDate, 6);
     setIn(f); setOut(addDays(f, 2));
   }, [state.baseDate]);
-  const go = () => router.push(`/hotel/${lang}/book?in=${checkIn}&out=${checkOut}&a=${adults}&c=${children}`);
+  const go = () => router.push(`/hotel/${lang}/booking?in=${checkIn}&out=${checkOut}&a=${adults}&c=${children}`);
   const cell = "flex min-w-0 flex-col gap-1 px-4 py-2.5";
   const lbl = "text-[11px] font-semibold uppercase tracking-[0.12em] text-pine/55";
   const inp = "w-full min-w-0 bg-transparent text-[15px] font-medium text-pine outline-none";
@@ -152,5 +155,15 @@ export function SectionTitle({ eyebrow, title, text, light }: { eyebrow?: string
       <h2 className={cn("font-serif text-[34px] font-semibold leading-[1.08] sm:text-[44px]", light ? "text-cream" : "text-pine")}>{title}</h2>
       {text && <p className={cn("mt-4 text-[16px] leading-relaxed", light ? "text-cream/70" : "text-pine/70")}>{text}</p>}
     </div>
+  );
+}
+
+function AccountLink({ lang, light }: { lang: Lang; light?: boolean }) {
+  const { guest } = useGuestSession();
+  return (
+    <Link href={`/hotel/${lang}/account`} aria-label={g(lang, "account")} className={cn("flex h-10 items-center gap-2 rounded-full px-2.5 text-[13px] font-semibold transition", light ? "text-white hover:bg-white/10" : "text-pine hover:bg-pine/5")}>
+      <span className={cn("grid size-7 place-items-center rounded-full text-[11px]", light ? "bg-white/15" : "bg-pine/10")}>{guest ? `${guest.firstName[0]}${guest.lastName[0] ?? ""}` : <Icon name="user" size={15} />}</span>
+      <span className="hidden lg:inline">{guest ? guest.firstName : g(lang, "signIn")}</span>
+    </Link>
   );
 }

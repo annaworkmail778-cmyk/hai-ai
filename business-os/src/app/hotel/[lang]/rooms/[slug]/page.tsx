@@ -80,7 +80,7 @@ export default function RoomDetail({ params }: { params: Promise<{ lang: Lang; s
             <div className={cn("mt-4 flex items-center gap-2 rounded-xl px-3 py-2.5 text-[13px] font-medium", !fits ? "bg-red-50 text-red-800" : free ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber-800")}>
               <Icon name={!fits ? "alert" : free ? "check" : "info"} size={16} />{!fits ? d.tooMany : free ? d.availableNow : d.notAvailable}
             </div>
-            <button disabled={!valid || !fits} onClick={() => router.push(`/hotel/${lang}/book?in=${checkIn}&out=${checkOut}&a=${adults}&c=${children}&room=${room.id}`)} className="mt-4 h-12 w-full rounded-xl bg-pine text-[15px] font-semibold text-cream transition hover:bg-pine-2 disabled:opacity-40">{d.requestThisRoom}</button>
+            <button disabled={!valid || !fits} onClick={() => router.push(`/hotel/${lang}/booking?in=${checkIn}&out=${checkOut}&a=${adults}&c=${children}&room=${room.id}`)} className="mt-4 h-12 w-full rounded-xl bg-pine text-[15px] font-semibold text-cream transition hover:bg-pine-2 disabled:opacity-40">{d.requestThisRoom}</button>
           </aside>
         </div>
       </div>

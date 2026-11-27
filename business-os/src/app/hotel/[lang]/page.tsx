@@ -54,7 +54,7 @@ export default function HotelHome({ params }: { params: Promise<{ lang: Lang }> 
                 <p className="mt-2 text-[14px] leading-relaxed text-pine/70">{o.text[lang]}</p>
                 <div className="mt-4 flex items-end justify-between border-t border-pine/10 pt-4">
                   <div><span className="text-[12px] text-pine/60">{d.from} </span><span className="tnum text-lg font-semibold">{amd(o.priceFrom)}</span><span className="block text-[12px] text-pine/60">{o.unit[lang]}</span></div>
-                  <Link href={`/hotel/${lang}/book?offer=${o.id}`} className="inline-flex h-10 items-center rounded-full bg-pine px-4 text-[13px] font-semibold text-cream">{d.nav.request}</Link>
+                  <Link href={`/hotel/${lang}/booking?offer=${o.id}`} className="inline-flex h-10 items-center rounded-full bg-pine px-4 text-[13px] font-semibold text-cream">{d.nav.request}</Link>
                 </div>
               </div>
             </article>
