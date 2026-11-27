@@ -1,0 +1,11 @@
+# Netlify site for the RISEUP Hotel OS demo.
+# In the Netlify UI set "Base directory" = business-os (this file is then picked up).
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

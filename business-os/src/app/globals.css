@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* RISEUP admin system */
+  --color-ink: #121212;
+  --color-ink-2: #2a2a2a;
+  --color-paper: #f6f5f1;
+  --color-surface: #ffffff;
+  --color-line: #e8e5de;
+  --color-line-2: #d9d5cc;
+  --color-muted: #6b6963;
+  --color-faint: #9a978f;
+  --color-signal: #ff5b14;
+  --color-signal-soft: #fff0e8;
+
+  /* status */
+  --color-ok: #17845b;
+  --color-ok-soft: #e7f5ee;
+  --color-warn: #b7790f;
+  --color-warn-soft: #fdf3dc;
+  --color-bad: #c2412f;
+  --color-bad-soft: #fbe9e6;
+  --color-info: #2f62d0;
+  --color-info-soft: #e9effc;
+  --color-violet: #6a52c7;
+  --color-violet-soft: #efecfb;
+
+  /* Pine Ridge hotel identity */
+  --color-pine: #1c3a32;
+  --color-pine-2: #2d5447;
+  --color-pine-soft: #e6eee9;
+  --color-cream: #f4efe5;
+  --color-cream-2: #ebe3d4;
+  --color-brass: #a7814c;
+  --color-night: #0f1b17;
+
+  --font-sans: var(--font-inter), var(--font-arm), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif-latin), var(--font-serif-arm), Georgia, serif;
+
+  --radius-card: 14px;
+  --shadow-card: 0 1px 2px rgb(16 16 16 / 0.04), 0 1px 1px rgb(16 16 16 / 0.03);
+  --shadow-pop: 0 12px 32px rgb(16 16 16 / 0.14), 0 2px 6px rgb(16 16 16 / 0.06);
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-sans); color: var(--color-ink); background: var(--color-paper); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--color-signal); outline-offset: 2px; border-radius: 6px; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+.tnum { font-variant-numeric: tabular-nums; }
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* striped "request, not confirmed" pattern */
+.inquiry-stripes {
+  background-image: repeating-linear-gradient(135deg, rgb(183 121 15 / 0.18) 0 6px, rgb(183 121 15 / 0.06) 6px 12px);
+}
+.ooo-stripes {
+  background-image: repeating-linear-gradient(135deg, rgb(107 105 99 / 0.2) 0 5px, rgb(107 105 99 / 0.07) 5px 10px);
+}
+
+@keyframes rise-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rise-in { animation: rise-in 0.35s ease-out both; }
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgb(255 91 20 / 0.45); } 100% { box-shadow: 0 0 0 10px rgb(255 91 20 / 0); } }
+.pulse-ring { animation: pulse-ring 1.6s ease-out infinite; }
+@keyframes typing { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+.typing span { animation: typing 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes flash { 0% { background: var(--color-signal-soft); } 100% { background: transparent; } }
+.flash { animation: flash 2.4s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

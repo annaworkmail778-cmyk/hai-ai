@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     ".old-site-backup/**",
     // Remotion reels project (own package.json and tooling).
     "reels/**",
+    // Hotel OS demo app (own package.json and tooling).
+    "business-os/**",
     // Alternate build output (NEXT_DIST_DIR, see next.config.ts).
     ".next-*/**",
   ]),
