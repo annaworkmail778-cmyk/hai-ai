@@ -19,7 +19,7 @@ export default function OrderStatusPage({ params }: { params: Promise<{ lang: La
   // only the device that placed the order can see it
   const visible = o && key && o.deviceKey === key;
   if (!key) return null;
-  if (!visible) return <GuestShell lang={lang}><main className="mx-auto max-w-lg px-5 py-24 text-center"><p className="text-[var(--rt-muted)]">{t("invalidTable", lang)}</p><Link href={`/restaurant/${lang}/menu`} className="rt-btn rt-btn-accent mt-6">{t("menu", lang)}</Link></main></GuestShell>;
+  if (!visible) return <GuestShell lang={lang}><main className="mx-auto max-w-lg px-5 py-24 text-center"><p className="text-[var(--rt-muted)]">{t("orderNotFound", lang)}</p><Link href={`/restaurant/${lang}/menu`} className="rt-btn rt-btn-accent mt-6">{t("menu", lang)}</Link></main></GuestShell>;
 
   const steps: OrderStatus[] = o.type === "takeaway" ? ["submitted", "accepted", "preparing", "ready", "picked_up"] : ["submitted", "accepted", "preparing", "ready", "served"];
   const failed = o.status === "rejected" || o.status === "cancelled";

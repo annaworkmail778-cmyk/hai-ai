@@ -15,7 +15,8 @@ export default function QrEntry({ params }: { params: Promise<{ session: string;
       localStorage.setItem("rst:mode", JSON.stringify("live"));
       localStorage.setItem("rst:table", JSON.stringify({ token: tk, at: Date.now() }));
     } catch { /* private mode: the menu still works without a remembered table */ }
-    const nav = (navigator.language || "hy").slice(0, 2);
+    const hint = new URL(window.location.href).searchParams.get("l");
+    const nav = (hint || navigator.language || "hy").slice(0, 2);
     const lang = nav === "ru" ? "ru" : nav === "en" ? "en" : "hy";
     window.location.replace(`/restaurant/${lang}/menu?s=${s}`);
   }, [session, token]);

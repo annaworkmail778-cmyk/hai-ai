@@ -61,6 +61,7 @@ const T = {
   chef: { hy: "Շեֆն առաջարկում է", ru: "Шеф рекомендует", en: "Chef recommends" },
   newTag: { hy: "Նոր", ru: "Новинка", en: "New" },
   qrWelcome: { hy: "Բարի գալուստ։ Պատվիրեք անմիջապես սեղանից", ru: "Добро пожаловать! Заказывайте прямо со стола", en: "Welcome! Order right from your table" },
+  orderNotFound: { hy: "Պատվերը չի գտնվել այս սարքում", ru: "Заказ не найден на этом устройстве", en: "Order not found on this device" },
   invalidTable: { hy: "QR կոդը չի ճանաչվել", ru: "QR-код не распознан", en: "QR code not recognised" },
   trackHint: { hy: "Կարգավիճակը թարմանում է ավտոմատ", ru: "Статус обновляется автоматически", en: "Status updates automatically" },
   cancelOrder: { hy: "Չեղարկել պատվերը", ru: "Отменить заказ", en: "Cancel order" },
