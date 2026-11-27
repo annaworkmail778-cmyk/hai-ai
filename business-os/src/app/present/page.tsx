@@ -14,6 +14,7 @@ import type { Lang } from "@/lib/types";
 type Step = { title: string; say: string; phone?: string; admin?: string; action?: { label: string; run: () => void }; icon: IconName };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+type ScenarioId = "night" | "checkout" | "question" | "booking" | "dining" | "qr" | "vip" | "onboarding" | "comms";
 
 /** Renders a page at a fixed "device" size and scales it to fit its box. */
 function Device({ src, w, h, kind, label, reloadKey }: { src: string; w: number; h: number; kind: "phone" | "laptop"; label: string; reloadKey: number }) {
@@ -39,8 +40,8 @@ function Device({ src, w, h, kind, label, reloadKey }: { src: string; w: number;
 }
 
 export default function Present() {
-  const { state, dispatch, session, setSession, mode, setMode, reset, epoch, setRole } = useDemo();
-  const [scenario, setScenario] = useState<"night" | "checkout" | "question">("night");
+  const { state, dispatch, session, setSession, mode, setMode, reset, epoch, setRole, setActor } = useDemo();
+  const [scenario, setScenario] = useState<ScenarioId>("night");
   const [step, setStep] = useState(0);
   const [lang, setLang] = useState<Lang>("ru");
   const [phoneSrc, setPhone] = useState(`/hotel/ru`);
@@ -62,6 +63,34 @@ export default function Present() {
   const convKey = `bos:conv:${session}:${epoch}`;
 
   const sc = scenarioDates(state.baseDate);
+
+  /* ---- helpers for the Hospitality OS journeys (they write the same device-local demo identity the guest/staff UIs use) ---- */
+  const [ids, setIds] = useState<Record<string, string>>({});
+  const remember = (k: string, v: string) => setIds((x) => ({ ...x, [k]: v }));
+  const lsSet = (k: string, v: unknown) => { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); window.dispatchEvent(new Event("bos-guest")); } catch { /* ignore */ } };
+  const signGuest = (accId: string | null) => lsSet(`bos:guest:${session}`, accId);
+  const staffAs = (id: string) => { setActor(id); try { localStorage.setItem("bos:staff:in", "1"); } catch { /* ignore */ } };
+  const show = (phone?: string, admin?: string) => { if (phone) setPhone(phone); if (admin) setAdmin(admin); setReload((x) => x + 1); };
+  const inHouse = state.reservations.find((r) => r.status === "checked_in" && r.roomId && /^\d/.test(r.roomId));
+  const inHouseName = inHouse ? state.guests.find((g) => g.id === inHouse.guestId)?.lastName : "";
+  const newOrder = state.orders.find((o) => o.id === ids.order);
+  const newSr = state.services.find((x) => x.id === ids.sr);
+  const newEmp = state.staff.find((x) => x.id === ids.emp);
+  const newEnr = newEmp ? state.enrollments.filter((e) => e.employeeId === newEmp.id) : [];
+  const vipRes = state.reservations.find((r) => r.id === ids.vipRes);
+  const bookRes = state.reservations.find((r) => r.id === ids.bookRes);
+  const elena: Record<Lang, [string, string]> = { ru: ["Елена", "Арутюнян"], hy: ["Էլենա", "Հարությունյան"], en: ["Elena", "Harutyunyan"] };
+  const autoRegisterAndBook = () => {
+    const accId = `acc-${uid()}`;
+    const email = `elena.${uid().slice(0, 4)}@example.com`;
+    const guest = { firstName: elena[lang][0], lastName: elena[lang][1], phone: `+374 00 ${Math.floor(100000 + Math.random() * 899999)}`, email, lang };
+    dispatch({ type: "account.register", accountId: accId, email, marketing: true, guest });
+    const ev = dispatch({ type: "booking.create", source: "website", input: { guest, typeId: "deluxe", rooms: 1, checkIn: sc.checkIn, checkOut: sc.checkOut, adults: 2, children: 0, extras: [{ id: "spa", qty: 1 }, { id: "transfer", qty: 1 }], requests: "" } });
+    signGuest(accId); remember("bookRes", `r-${ev.id}`);
+    show(`/hotel/${lang}/account`, "/admin/reservations?status=inquiry");
+  };
+  const approve = (r?: typeof bookRes) => { if (!r || r.status !== "inquiry") return; const room = freeRooms(state, r.typeId, r.checkIn, r.checkOut, r.id)[0]; if (room) dispatch({ type: "reservation.approve", reservationId: r.id, roomId: room }); };
+  const advanceOrder = (to: "accepted" | "preparing" | "ready" | "completed") => { if (newOrder) dispatch({ type: "order.status", target: newOrder.id, status: to }); };
   const question: Record<Lang, string> = {
     ru: "Добрый вечер! Есть семейный номер на следующие выходные на 4 человек? Сколько стоит?",
     hy: "Բարի երեկո։ Ունե՞ք ընտանեկան սենյակ հաջորդ հանգստյան օրերին 4 հոգու համար։ Ինչ արժե։",
@@ -136,6 +165,63 @@ export default function Present() {
         { icon: "send", title: "Աշխատակիցը պատասխանում է", say: "Աշխատակիցը պատասխանում է վահանակից, և պատասխանը հայտնվում է հյուրի զրույցում։ Այնուհետև պատասխանը կարելի է ավելացնել գիտելիքների բազայում։", admin: "/admin/assistant?open=" + (state.conversations.find((c) => c.status === "handoff")?.id ?? "") },
       ],
     },
+    booking: {
+      title: "Նոր հյուր․ հաշիվ և ուղիղ ամրագրում", time: "≈ 3 րոպե",
+      steps: [
+        { icon: "globe", title: "Հյուրը բացում է կայքը", say: "Պրեմիում կայք՝ սենյակներ, սպա, ռեստորան, անդամակցություն։ Հյուրը սեղմում է «Ստուգել հասանելիությունը»։", phone: `/hotel/${lang}`, admin: "/admin" },
+        { icon: "calendar", title: "Ամրագրման քայլերը", say: "Ամսաթվեր → սենյակ (իրական հասանելիությամբ) → լրացուցիչ ծառայություններ → տվյալներ → գնի մանրամասն հաշվարկ և չեղարկման պայմաններ։", phone: `/hotel/${lang}/booking?in=${sc.checkIn}&out=${sc.checkOut}&a=2&c=0` },
+        { icon: "user", title: "Գրանցում և հարցում", say: "Հյուրը գրանցվում է Pine Ridge Circle-ում (+500 միավոր) և ուղարկում ամրագրման հարցումը սպա և տրանսֆեր ծառայություններով։ Կարգավիճակը՝ «Սպասում է հաստատման», վճարում չի կատարվում։", action: { label: "Ավտոմատ. գրանցել և ուղարկել", run: autoRegisterAndBook } },
+        { icon: "check", title: "Ընդունարանը հաստատում է", say: "Վահանակում հայտը իր լրացուցիչ ծառայություններով և հաշվարկով։ Սենյակը ընտրվում է, մաքրության առաջադրանքը ստեղծվում է ավտոմատ։", admin: bookRes ? `/admin/reservations?open=${bookRes.id}` : "/admin/reservations?status=inquiry", action: { label: bookRes?.status === "confirmed" ? "Հաստատված է ✓" : "Ավտոմատ. հաստատել", run: () => approve(bookRes) } },
+        { icon: "star", title: "Հյուրի անձնական էջը", say: "Հյուրը տեսնում է հաստատված ամրագրումը, միավորները և մակարդակը։ Միավորներ կեցության համար տրվում են միայն մեկնելուց հետո (ավարտված գործարք)։", phone: `/hotel/${lang}/account` },
+      ],
+    },
+    dining: {
+      title: "Ռեստորանի պատվեր → խոհանոց (KDS)", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "qr", title: "Հյուրը սկանավորում է սեղանի QR-ը", say: "Մենյուն լուսանկարներով, ալերգեններով և տարբերակներով։ Սեղանը արդեն ընտրված է QR-ից։", phone: `/hotel/${lang}/dining?table=T3`, admin: "/kds" },
+        { icon: "send", title: "Պատվերն ուղարկվում է", say: "Ստեյք և գինի, մեկնաբանություն խոհանոցին։ Պատվերը ակնթարթորեն հայտնվում է խոհանոցի էկրանին։", action: { label: newOrder ? `Պատվեր ${newOrder.code} ✓` : "Ավտոմատ. պատվիրել սեղան 3-ից", run: () => { const ev = dispatch({ type: "order.create", order: { type: "dine_in", tableId: "T3", guestName: elena[lang][0], items: [{ itemId: "steak", qty: 1, options: [] }, { itemId: "wine", qty: 2, options: [] }], note: "Medium rare, please" } }); remember("order", `o-${ev.id}`); show(`/hotel/${lang}/order/o-${ev.id}`, "/kds"); } } },
+        { icon: "flame", title: "Խոհանոցը ընդունում և պատրաստում է", say: "Խոհարարը սեղմում է «Ընդունել», «Սկսել»։ Հյուրը տեսնում է կարգավիճակը իրական ժամանակում։", action: { label: "Ավտոմատ. ընդունել և սկսել", run: () => { advanceOrder("accepted"); setTimeout(() => advanceOrder("preparing"), 400); } } },
+        { icon: "check", title: "Պատրաստ է և մատուցված", say: "«Պատրաստ է» → մատուցողը նշում է «Մատուցված է»։ Վաճառքը հաշվվում է ռեստորանի վերլուծության մեջ։", action: { label: "Ավտոմատ. պատրաստ → մատուցված", run: () => { advanceOrder("ready"); setTimeout(() => advanceOrder("completed"), 600); } } },
+        { icon: "chart", title: "Ռեստորանի ցուցանիշներ", say: "Եկամուտ, միջին չեկ, ամենավաճառվող ուտեստներ՝ բանաձևերով։", admin: "/admin/restaurant" },
+      ],
+    },
+    qr: {
+      title: "Սենյակի QR․ թարմ սրբիչներ", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "qr", title: "Հյուրը սկանավորում է սենյակի QR-ը", say: `QR-ը պարունակում է միայն սենյակի համարը՝ ոչ մի անձնական տվյալ։ Հյուրը հաստատում է կեցությունը ազգանունով${inHouseName ? ` (ցուցադրական՝ «${inHouseName}»)` : ""}։`, phone: inHouse ? `/hotel/${lang}/stay?room=${inHouse.roomId}` : `/hotel/${lang}/stay`, admin: "/admin/requests" },
+        { icon: "check", title: "Կեցությունը հաստատված է", say: "Հյուրը տեսնում է ծառայությունները՝ սրբիչներ, մաքրում, տեխնիկական խնդիր, արթնացում, ուտելիք սենյակ։", action: inHouse ? { label: "Ավտոմատ. հաստատել կեցությունը", run: () => { lsSet(`bos:stay:${session}`, { roomId: inHouse.roomId, reservationId: inHouse.id }); show(`/hotel/${lang}/stay?room=${inHouse.roomId}`); } } : undefined },
+        { icon: "bath", title: "Խնդրանք՝ թարմ սրբիչներ", say: "Խնդրանքը ավտոմատ ուղղվում է մաքրության բաժին։", action: inHouse ? { label: newSr ? `${newSr.code} ✓` : "Ավտոմատ. խնդրել սրբիչներ", run: () => { const ev = dispatch({ type: "service.create", serviceType: "towels", roomId: inHouse.roomId!, guestId: inHouse.guestId, note: "2 large towels" }); remember("sr", `sr-${ev.id}`); show(undefined, "/admin/requests"); } } : undefined },
+        { icon: "smartphone", title: "Հավաքարարը ստանում է առաջադրանքը", say: "Լիլիթի հեռախոսում (աշխատակցի հավելված) հարցումը «Իմ գործերը» ցուցակում է։ Նա սեղմում է «Սկսել», ապա «Կատարված է»։", phone: "/staff", action: { label: "Ավտոմատ. Լիլիթը վերցնում և կատարում է", run: () => { staffAs("s-lilit"); if (newSr) { dispatch({ type: "service.assign", target: newSr.id, assigneeId: "s-lilit" }); dispatch({ type: "service.status", target: newSr.id, status: "in_progress" }); setTimeout(() => dispatch({ type: "service.status", target: newSr.id, status: "done" }), 900); } show("/staff"); } } },
+        { icon: "check", title: "Հյուրը տեսնում է «Կատարված է»", say: "Կարգավիճակը թարմացվեց հյուրի էջում, իսկ մենեջերը տեսնում է կատարման ժամանակը։", phone: inHouse ? `/hotel/${lang}/stay?room=${inHouse.roomId}` : undefined, admin: "/admin/requests" },
+      ],
+    },
+    vip: {
+      title: "Վերադարձող VIP հյուր և անձնական առավելություն", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "star", title: "James-ը մուտք է գործում", say: "Պլատինե մակարդակ, 9 կեցություն, միավորներ և անձնական առաջարկներ։", phone: "/hotel/en/account", admin: "/admin/loyalty", action: { label: "Ավտոմատ. մուտք որպես James", run: () => { signGuest("acc-james"); show("/hotel/en/account"); } } },
+        { icon: "sparkles", title: "Փոխանակում է միավորները պարգևի", say: "«20% զեղչ կեցության համար (Ոսկի+)»՝ 5 000 միավոր։ Ստեղծվում է վաուչեր։", action: { label: "Ավտոմատ. ստանալ պարգևը", run: () => dispatch({ type: "loyalty.redeem", guestId: "g-james", rewardId: "rw-vip" }) } },
+        { icon: "calendar", title: "Ամրագրում վաուչերով", say: "Ամրագրման հաշվարկում երևում են անդամի զեղչը, արշավը և վաուչերը (առավելագույնը 50%)։", action: { label: vipRes ? `${vipRes.code} ✓` : "Ավտոմատ. ամրագրել շալե", run: () => { const v = state.vouchers.find((x) => x.guestId === "g-james" && x.status === "active" && x.rewardId === "rw-vip"); const g = state.guests.find((x) => x.id === "g-james")!; const ev = dispatch({ type: "booking.create", source: "website", input: { guest: { firstName: g.firstName, lastName: g.lastName, phone: g.phone, email: g.email, lang: "en" }, guestId: g.id, typeId: "chalet", rooms: 1, checkIn: sc.checkIn, checkOut: sc.checkOut, adults: 2, children: 0, extras: [{ id: "romance", qty: 1 }], voucherId: v?.id, requests: "High floor, extra pillow" } }); remember("vipRes", `r-${ev.id}`); show("/hotel/en/account", `/admin/reservations?open=r-${ev.id}`); } } },
+        { icon: "users", title: "Ընդունարանը տեսնում է VIP-ը", say: "Զեղչը, վաուչերը և նախասիրությունները (բարձր հարկ, լրացուցիչ բարձ) տեսանելի են։ Հաստատելուց հետո վաուչերը դառնում է «օգտագործված»։", admin: vipRes ? `/admin/reservations?open=${vipRes.id}` : "/admin/reservations", action: { label: vipRes?.status === "confirmed" ? "Հաստատված է ✓" : "Ավտոմատ. հաստատել", run: () => approve(vipRes) } },
+      ],
+    },
+    onboarding: {
+      title: "Նոր աշխատակցի onboarding", time: "≈ 3 րոպե",
+      steps: [
+        { icon: "users", title: "Մենեջերը ավելացնում է աշխատակից", say: "Նոր մատուցող՝ Նարե։ Համակարգը նշանակում է «Բարի գալուստ» և ռեստորանի մոդուլները, ստեղծում զրույց ղեկավարի հետ։", admin: "/admin/team", action: { label: newEmp ? `${newEmp.name} ✓` : "Ավտոմատ. ավելացնել Նարեին", run: () => { const ev = dispatch({ type: "employee.create", name: "Նարե Հովհաննիսյան", phone: "+374 00 222 333", email: "nare@example.com", dept: "restaurant", position: "waiter", supervisorId: "s-tatev" }); remember("emp", `s-${ev.id}`); show(undefined, "/admin/team"); } } },
+        { icon: "smartphone", title: "Նարեն բացում է հավելվածը", say: "Հեռախոսում՝ ուսուցման ծրագիրը․ դասեր, ստուգաթերթեր, թեստ (≥70%)։", phone: "/staff/learn", action: newEmp ? { label: "Մուտք որպես Նարե", run: () => { staffAs(newEmp.id); show("/staff/learn"); } } : undefined },
+        { icon: "check", title: "Անցնում է քայլերը և ուղարկում", say: "Բոլոր քայլերը կատարված են, թեստը՝ 100%։ Մոդուլները ուղարկվում են ղեկավարի ստուգման։", action: newEnr.length ? { label: "Ավտոմատ. ավարտել և ուղարկել", run: () => { for (const e of newEnr) { const m = state.training.find((x) => x.id === e.moduleId); for (const st of m?.steps ?? []) dispatch({ type: "training.step", enrollmentId: e.id, stepId: st.id, score: st.kind === "quiz" ? 100 : undefined }); dispatch({ type: "training.submit", enrollmentId: e.id }); } show("/staff/learn"); } } : undefined },
+        { icon: "star", title: "Ղեկավարը հաստատում է", say: "Թաթևը (ռեստորանի մենեջեր) տեսնում է արդյունքները և հաստատում։ Ուղղումներ պահանջելու դեպքում մոդուլը վերադառնում է աշխատակցին։", phone: "/staff/team", action: { label: "Ավտոմատ. հաստատել որպես Թաթև", run: () => { staffAs("s-tatev"); for (const e of newEnr.filter((x) => x.status === "submitted")) dispatch({ type: "training.review", enrollmentId: e.id, approved: true, note: "Բարի գալուստ թիմ, Նարե։" }); show("/staff/team", "/admin/team"); } } },
+      ],
+    },
+    comms: {
+      title: "Ներքին հաղորդակցություն և հերթափոխ", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "message", title: "Ղեկավարը գրում է շտապ հաղորդագրություն", say: "Անահիտը (մաքրության ղեկավար) բաժնի ալիքում նշում է շտապ առաջադրանք։", phone: "/staff/messages?c=ch-housekeeping", action: { label: "Ավտոմատ. շտապ հաղորդագրություն", run: () => { staffAs("s-anahit"); dispatch({ type: "msg.send", channelId: "ch-housekeeping", text: "VIP ժամանում ժամը 14:00-ին, շալե C1։ Խնդրում եմ ստուգել մինչև 13:30։", urgent: true }); show("/staff/messages?c=ch-housekeeping"); } } },
+        { icon: "bell", title: "Հավաքարարը տեսնում է չկարդացածը", say: "Լիլիթի հեռախոսում՝ կարմիր նշան և չկարդացածների քանակ։", phone: "/staff/messages", action: { label: "Մուտք որպես Լիլիթ", run: () => { staffAs("s-lilit"); show("/staff/messages"); } } },
+        { icon: "refresh", title: "Հերթափոխի փոխանցում", say: "Երեկոյան հերթափոխին փոխանցվում է նշում, որը հաջորդ հերթափոխը տեսնում է «Այսօր» էջում։", action: { label: "Ավտոմատ. փոխանցման նշում", run: () => { staffAs("s-lilit"); dispatch({ type: "msg.send", channelId: "ch-housekeeping", text: "C1-ը ստուգված է։ 204-ում պետք է փոխել լոգասենյակի լամպը (տեխնիկականին տեղեկացված է)։", handover: true }); show("/staff"); } } },
+        { icon: "users", title: "Մենեջերը տեսնում է ամբողջ պատկերը", say: "Վահանակում՝ անձնակազմի արձագանքի ժամանակը, ժամկետանց առաջադրանքները և onboarding-ի առաջընթացը։", admin: "/admin/analytics" },
+      ],
+    },
   };
   const cur = SCENARIOS[scenario];
   const go = (i: number) => {
@@ -147,7 +233,7 @@ export default function Present() {
   const doReset = async () => {
     const r = await reset(pin || undefined);
     if (r === "pin") { setPinNeeded(true); return; }
-    setConfirmReset(false); setPinNeeded(false); setStep(0); setScenario("night");
+    setConfirmReset(false); setPinNeeded(false); setStep(0); setScenario("night"); setIds({}); signGuest(null); lsSet(`bos:stay:${session}`, null);
     try { Object.keys(sessionStorage).filter((k) => k.startsWith("bos:conv:")).forEach((k) => sessionStorage.removeItem(k)); } catch { /* ignore */ }
     setPhone(`/hotel/${lang}`); setAdmin("/admin"); setReload((x) => x + 1);
   };

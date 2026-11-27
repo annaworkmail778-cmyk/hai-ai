@@ -65,10 +65,10 @@ function Journey({ lang }: { lang: Lang }) {
 
   const next = () => setStep((s) => Math.min(4, s + 1));
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div>
-        <ol className="scrollbar-none mb-6 flex gap-2 overflow-x-auto">
-          {STEPS.map((k, i) => <li key={k}><button disabled={i > step} onClick={() => setStep(i)} className={cn("flex shrink-0 items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-semibold transition", i === step ? "bg-pine text-cream" : i < step ? "bg-pine/10 text-pine" : "text-pine/40")}><span className={cn("grid size-5 place-items-center rounded-full text-[11px]", i < step ? "bg-brass text-white" : "bg-white/20")}>{i < step ? "✓" : i + 1}</span>{g(lang, k)}</button></li>)}
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="min-w-0">
+        <ol className="scrollbar-none -mx-4 mb-6 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          {STEPS.map((k, i) => <li key={k} className="shrink-0"><button disabled={i > step} onClick={() => setStep(i)} className={cn("flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 text-[13px] font-semibold transition", i === step ? "bg-pine text-cream" : i < step ? "bg-pine/10 text-pine" : "text-pine/40")}><span className={cn("grid size-5 place-items-center rounded-full text-[11px]", i < step ? "bg-brass text-white" : "bg-white/20")}>{i < step ? "✓" : i + 1}</span>{g(lang, k)}</button></li>)}
         </ol>
         <div key={step} className="rise-in">
           {step === 0 && (

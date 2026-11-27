@@ -89,7 +89,7 @@ export default function HotelHome({ params }: { params: Promise<{ lang: Lang }> 
       </section>
 
       <section id="dining" className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-24 sm:px-6 md:grid-cols-[1.1fr_1fr]">
-        <Reveal><div className="reveal-img relative aspect-[5/4] overflow-hidden rounded-3xl"><Image src="/img/restaurant.jpg" alt="" fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover" /></div></Reveal>
+        <Reveal><div className="reveal-img relative aspect-[5/4] overflow-hidden rounded-3xl"><Image src="/img/dining.jpg" alt="" fill sizes="(min-width: 768px) 55vw, 100vw" className="object-cover" /></div></Reveal>
         <Reveal delay={120}>
           <SectionTitle eyebrow={g(lang, "dining")} title={g(lang, "diningSection")} text={g(lang, "diningSectionText")} />
           <div className="mt-6 flex gap-3">

@@ -23,7 +23,7 @@ export default function StaffToday() {
   const items: Item[] = [];
 
   if (can("housekeeping")) for (const t of state.hkTasks.filter((x) => x.status !== "done" && x.due <= today && (x.assigneeId === actor || (manager && !x.assigneeId)))) {
-    items.push({ key: t.id, icon: "broom", title: `${HK_KIND[t.kind]} · սենյակ ${t.roomId}`, sub: `${t.dueTime ? `մինչև ${t.dueTime} · ` : ""}${t.assigneeId ? "" : "չնշանակված · "}${t.note ?? ""}`, priority: t.priority, overdue: t.due < today, status: t.status,
+    items.push({ key: t.id, icon: "broom", title: `${HK_KIND[t.kind]} · սենյակ ${t.roomId}`, sub: [t.dueTime && `մինչև ${t.dueTime}`, !t.assigneeId && "չնշանակված", t.note].filter(Boolean).join(" · "), priority: t.priority, overdue: t.due < today, status: t.status,
       actions: [...(!t.assigneeId ? [{ label: "Վերցնել", run: () => dispatch({ type: "hk.assign", taskId: t.id, assigneeId: actor }) }] : []), t.status === "todo" ? { label: "Սկսել", run: () => dispatch({ type: "hk.status", taskId: t.id, status: "in_progress" }) } : { label: "Ավարտել", primary: true, run: () => dispatch({ type: "hk.status", taskId: t.id, status: "done" }) }] });
   }
   if (can("requests") || me.dept === "housekeeping") for (const s of state.services.filter((x) => (x.status === "new" || x.status === "assigned" || x.status === "in_progress") && (x.assigneeId === actor || (!x.assigneeId && (x.dept === me.dept || manager))))) {
@@ -35,7 +35,7 @@ export default function StaffToday() {
       actions: [...(!m.assigneeId ? [{ label: "Վերցնել", run: () => dispatch({ type: "maint.assign", target: m.id, assigneeId: actor }) }] : []), m.status === "open" ? { label: "Սկսել", run: () => dispatch({ type: "maint.status", target: m.id, status: "in_progress" }) } : { label: "Լուծված է", primary: true, run: () => dispatch({ type: "maint.status", target: m.id, status: "resolved" }) }] });
   }
   for (const t of state.staffTasks.filter((x) => x.status !== "done" && x.assigneeId === actor)) {
-    items.push({ key: t.id, icon: "tasks", title: t.title, sub: `${t.detail ?? ""}${t.due < today ? " · ժամկետանց" : ""}`, priority: t.priority, overdue: t.due < today, status: t.status,
+    items.push({ key: t.id, icon: "tasks", title: t.title, sub: [t.detail, t.due < today && "ժամկետանց"].filter(Boolean).join(" · "), priority: t.priority, overdue: t.due < today, status: t.status,
       actions: [t.status === "todo" ? { label: "Սկսել", run: () => dispatch({ type: "staffTask.status", target: t.id, status: "in_progress" }) } : { label: "Ավարտել", primary: true, run: () => dispatch({ type: "staffTask.status", target: t.id, status: "done" }) }] });
   }
   items.sort((a, b) => Number(!!b.overdue) - Number(!!a.overdue) || RANK[a.priority] - RANK[b.priority]);

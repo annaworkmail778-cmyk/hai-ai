@@ -91,7 +91,7 @@ function Stay({ lang }: { lang: Lang }) {
       {roomId && (
         <div className="mt-5 grid grid-cols-2 gap-3">
           <Link href={`/hotel/${lang}/dining`} className="flex items-center gap-3 rounded-2xl bg-pine p-4 text-cream"><Icon name="coffee" size={22} /><span className="text-[14.5px] font-semibold">{g(lang, "orderFood")}</span></Link>
-          <Link href={`/hotel/${lang}?assistant=1`} className="flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-pine/10"><Icon name="sparkles" size={22} className="text-brass" /><span className="text-[14.5px] font-semibold">{g(lang, "askAssistant")}</span></Link>
+          <Link href={`/hotel/${lang}?chat=1`} className="flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-pine/10"><Icon name="sparkles" size={22} className="text-brass" /><span className="text-[14.5px] font-semibold">{g(lang, "askAssistant")}</span></Link>
         </div>
       )}
       <h2 className="mt-8 text-[13px] font-semibold uppercase tracking-[0.14em] text-pine/55">{g(lang, "services")}</h2>
