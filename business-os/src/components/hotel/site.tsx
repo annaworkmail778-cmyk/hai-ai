@@ -103,19 +103,19 @@ export function BookingBar({ lang, compact }: { lang: Lang; compact?: boolean })
   const go = () => router.push(`/hotel/${lang}/book?in=${checkIn}&out=${checkOut}&a=${adults}&c=${children}`);
   const cell = "flex min-w-0 flex-col gap-1 px-4 py-2.5";
   const lbl = "text-[11px] font-semibold uppercase tracking-[0.12em] text-pine/55";
-  const inp = "w-full bg-transparent text-[15px] font-medium text-pine outline-none";
+  const inp = "w-full min-w-0 bg-transparent text-[15px] font-medium text-pine outline-none";
   return (
-    <div className={cn("grid overflow-hidden rounded-2xl bg-white shadow-[0_20px_50px_rgb(15_27_23/0.18)] sm:grid-cols-[1fr_1fr_1fr_auto]", compact && "shadow-none ring-1 ring-pine/10")}>
-      <label className={cn(cell, "border-b border-pine/10 sm:border-b-0 sm:border-r")}><span className={lbl}>{d.checkIn}</span><input type="date" className={inp} value={checkIn} min={state.baseDate} onChange={(e) => { setIn(e.target.value); if (e.target.value >= checkOut) setOut(addDays(e.target.value, 1)); }} /></label>
+    <div className={cn("grid grid-cols-2 overflow-hidden rounded-2xl bg-white shadow-[0_20px_50px_rgb(15_27_23/0.18)] sm:grid-cols-[1fr_1fr_1fr_auto]", compact && "shadow-none ring-1 ring-pine/10")}>
+      <label className={cn(cell, "border-b border-r border-pine/10 sm:border-b-0")}><span className={lbl}>{d.checkIn}</span><input type="date" className={inp} value={checkIn} min={state.baseDate} onChange={(e) => { setIn(e.target.value); if (e.target.value >= checkOut) setOut(addDays(e.target.value, 1)); }} /></label>
       <label className={cn(cell, "border-b border-pine/10 sm:border-b-0 sm:border-r")}><span className={lbl}>{d.checkOut}</span><input type="date" className={inp} value={checkOut} min={checkIn ? addDays(checkIn, 1) : undefined} onChange={(e) => setOut(e.target.value)} /></label>
-      <div className={cn(cell, "border-b border-pine/10 sm:border-b-0 sm:border-r")}>
+      <div className={cn(cell, "col-span-2 border-b border-pine/10 sm:col-span-1 sm:border-b-0 sm:border-r")}>
         <span className={lbl}>{d.guests}</span>
         <div className="flex items-center gap-3 text-[15px] font-medium text-pine">
           <select aria-label={d.adults} className="bg-transparent outline-none" value={adults} onChange={(e) => setAdults(+e.target.value)}>{[1, 2, 3, 4].map((n) => <option key={n} value={n}>{n} {d.adults.toLowerCase()}</option>)}</select>
           <select aria-label={d.children} className="bg-transparent outline-none" value={children} onChange={(e) => setChildren(+e.target.value)}>{[0, 1, 2].map((n) => <option key={n} value={n}>{n} {d.children.toLowerCase()}</option>)}</select>
         </div>
       </div>
-      <button onClick={go} className="m-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-pine px-6 text-[15px] font-semibold text-cream transition hover:bg-pine-2">{d.checkAvailability}<Icon name="arrowRight" size={17} /></button>
+      <button onClick={go} className="col-span-2 m-2 inline-flex h-12 sm:col-span-1 items-center justify-center gap-2 rounded-xl bg-pine px-6 text-[15px] font-semibold text-cream transition hover:bg-pine-2">{d.checkAvailability}<Icon name="arrowRight" size={17} /></button>
     </div>
   );
 }

@@ -68,6 +68,8 @@ export function DemoProvider({ children, role: initialRole = "staff" }: { childr
   const [role, setRole] = useState<Role>(initialRole);
   const [actor, setActorState] = useState("s-gohar");
   const ready = useRef(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const cacheRef = useRef(cache);
   cacheRef.current = cache;
   const pendingRef = useRef(pendingEvents);
@@ -233,6 +235,9 @@ export function DemoProvider({ children, role: initialRole = "staff" }: { childr
   }, [cache, pendingEvents]);
 
   const value: Ctx = { state, conn, backend, session, epoch: cache.epoch || "pending", mode, pending: pendingEvents.length, dispatch, reset, setMode, setSession, role, setRole, actor, setActor };
+  // Demo state depends on the current date and local storage, so it is rendered on the client only
+  // (avoids server/client mismatches). A neutral splash shows for the first frame.
+  if (!mounted) return <div className="grid min-h-dvh place-items-center bg-paper"><span className="size-6 animate-spin rounded-full border-2 border-line-2 border-t-ink" aria-label="Loading" /></div>;
   return <DemoCtx.Provider value={value}>{children}</DemoCtx.Provider>;
 }
 

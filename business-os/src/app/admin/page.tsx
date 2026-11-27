@@ -30,7 +30,7 @@ export default function Overview() {
   const arrivals = state.reservations.filter((r) => r.checkIn === today && (r.status === "confirmed" || r.status === "checked_in"));
   const departures = state.reservations.filter((r) => r.checkOut === today && (r.status === "checked_in" || r.status === "checked_out") && r.roomId);
   const inquiries = state.reservations.filter((r) => r.status === "inquiry").sort((a, b) => a.createdAt - b.createdAt);
-  const confirmedUpcoming = state.reservations.filter((r) => r.status === "confirmed" && r.checkIn >= today).length;
+  const confirmedUpcoming = state.reservations.filter((r) => r.status === "confirmed" && r.checkIn >= today && r.checkIn < addDays(today, 30)).length;
   const hkOpen = state.hkTasks.filter((t) => t.due === today && t.status !== "done");
   const stOpen = state.staffTasks.filter((t) => t.status !== "done" && t.due <= addDays(today, 1));
   const handoffs = state.conversations.filter((c) => c.status === "handoff");
@@ -52,7 +52,7 @@ export default function Overview() {
         <Kpi label="Ժամանումներ" value={arrivals.length} sub={`${arrivals.filter((a) => a.status === "checked_in").length} արդեն ժամանել են`} icon="logIn" tone="ok" />
         <Kpi label="Մեկնումներ" value={departures.length} sub={`${departures.filter((d) => d.status === "checked_out").length} արդեն մեկնել են`} icon="logOut" />
         <Kpi label="Սպասող հարցումներ" value={inquiries.length} sub={inquiries[0] ? `ամենահինը՝ ${ago(inquiries[0].createdAt)}` : "բոլորը մշակված են"} icon="bell" tone={inquiries.length ? "signal" : "ok"} />
-        <Kpi label="Հաստատված առաջիկայում" value={confirmedUpcoming} sub="ապագա ամրագրումներ" icon="check" tone="info" />
+        <Kpi label="Հաստատված առաջիկայում" value={confirmedUpcoming} sub="հաջորդ 30 օրում" icon="check" tone="info" />
         <Kpi label="Ազատ սենյակներ այսօր" value={avail} sub={`${rooms.filter((r) => r.status === "dirty" || r.status === "cleaning").length} մաքրման փուլում`} icon="door" />
         <Kpi label="Բաց առաջադրանքներ" value={hkOpen.length + stOpen.length} sub={`${hkOpen.length} մաքրություն · ${stOpen.length} այլ`} icon="tasks" tone="warn" />
       </div>

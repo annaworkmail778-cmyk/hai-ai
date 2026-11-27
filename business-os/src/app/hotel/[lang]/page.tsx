@@ -4,7 +4,6 @@ import Link from "next/link";
 import { use } from "react";
 import { BookingBar, RoomCard, SectionTitle } from "@/components/hotel/site";
 import { Icon } from "@/components/icons";
-import { useDemo } from "@/lib/client/demo-store";
 import { amd } from "@/lib/format";
 import { ATTRACTIONS, FACILITIES, HOTEL, OFFERS, ROOM_TYPES } from "@/lib/hotel-data";
 import { t } from "@/lib/site-i18n";
@@ -13,7 +12,6 @@ import type { Lang } from "@/lib/types";
 export default function HotelHome({ params }: { params: Promise<{ lang: Lang }> }) {
   const { lang } = use(params);
   const d = t(lang);
-  const { state } = useDemo();
   return (
     <>
       <section className="relative isolate flex min-h-[92svh] items-end overflow-hidden pb-10 pt-28 sm:pb-16">
@@ -21,9 +19,9 @@ export default function HotelHome({ params }: { params: Promise<{ lang: Lang }> 
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-night/55 via-night/25 to-night/75" />
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <div className="mb-3 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.28em] text-cream/85"><Icon name="pin" size={14} />{HOTEL.town[lang]} · {"★".repeat(HOTEL.stars)}</div>
-          <h1 className="max-w-3xl font-serif text-[44px] font-semibold leading-[1.02] text-white sm:text-[68px]">{d.heroTitle}</h1>
-          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-cream/85">{d.heroText}</p>
-          <div className="mt-8 max-w-4xl"><BookingBar lang={lang} /></div>
+          <h1 className="max-w-3xl font-serif text-[38px] font-semibold leading-[1.04] text-white sm:text-[68px]">{d.heroTitle}</h1>
+          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-cream/85 sm:mt-5 sm:text-[17px]">{d.heroText}</p>
+          <div className="mt-6 max-w-4xl sm:mt-8"><BookingBar lang={lang} /></div>
         </div>
       </section>
 
@@ -99,7 +97,6 @@ export default function HotelHome({ params }: { params: Promise<{ lang: Lang }> 
           </div>
         </a>
       </section>
-      <div className="sr-only">{state.baseDate}</div>
     </>
   );
 }

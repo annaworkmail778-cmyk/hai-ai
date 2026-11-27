@@ -73,7 +73,7 @@ export function Kpi({ label, value, sub, icon, tone, onClick }: { label: string;
   return (
     <Comp onClick={onClick} className={cn("group flex min-w-0 flex-col rounded-[var(--radius-card)] border border-line bg-surface p-4 text-left shadow-[var(--shadow-card)]", onClick && "transition hover:border-line-2 hover:shadow-md")}>
       <div className="flex items-center justify-between gap-2 text-[12.5px] font-medium text-muted">
-        <span className="truncate">{label}</span>
+        <span className="line-clamp-2 leading-snug">{label}</span>
         {icon && <span className={cn("grid size-7 place-items-center rounded-lg", tone ? TONE[tone] : "bg-black/[0.04] text-muted")}><Icon name={icon} size={15} /></span>}
       </div>
       <div className="tnum mt-2 text-[26px] font-semibold leading-none tracking-tight">{value}</div>

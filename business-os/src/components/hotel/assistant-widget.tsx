@@ -65,9 +65,9 @@ export function AssistantWidget({ lang, autoOpen }: { lang: Lang; autoOpen?: boo
   return (
     <>
       {!open && (
-        <button onClick={openPanel} className="fixed bottom-5 right-4 z-40 flex items-center gap-2.5 rounded-full bg-pine py-2.5 pl-2.5 pr-5 text-cream shadow-[0_14px_34px_rgb(15_27_23/0.35)] transition hover:bg-pine-2 sm:right-6">
-          <span className="pulse-ring grid size-9 place-items-center rounded-full bg-cream text-pine"><Icon name="message" size={18} /></span>
-          <span className="text-left leading-tight"><span className="block text-[14px] font-semibold">{d.open}</span><span className="block text-[11.5px] text-cream/70">{night ? d.night : d.status}</span></span>
+        <button onClick={openPanel} aria-label={d.open} className="fixed bottom-4 right-4 z-40 flex items-center gap-2.5 rounded-full bg-pine p-2 text-cream sm:bottom-5 sm:py-2.5 sm:pl-2.5 sm:pr-5 shadow-[0_14px_34px_rgb(15_27_23/0.35)] transition hover:bg-pine-2 sm:right-6">
+          <span className="pulse-ring grid size-11 place-items-center rounded-full bg-cream text-pine sm:size-9"><Icon name="message" size={20} /></span>
+          <span className="hidden text-left leading-tight sm:block"><span className="block text-[14px] font-semibold">{d.open}</span><span className="block text-[11.5px] text-cream/70">{night ? d.night : d.status}</span></span>
         </button>
       )}
       {open && (
