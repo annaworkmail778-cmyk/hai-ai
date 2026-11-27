@@ -170,3 +170,15 @@ test("QR service request routing and onboarding flow", () => {
   s = replay(BASE, [emp, ...steps, passQuiz, ev({ type: "training.submit", enrollmentId: w.id }, `s-${emp.id}`), ev({ type: "training.review", enrollmentId: w.id, approved: true, note: "" }, "s-tatev")]);
   assert.equal(s.enrollments.find((e) => e.id === w.id)!.status, "approved");
 });
+
+test("employee assistant answers only from SOPs and routes unknowns to the supervisor", async () => {
+  const { askSop } = await import("../src/lib/sop-assistant.ts");
+  const s = replay(BASE, []);
+  const lilit = s.staff.find((x) => x.id === "s-lilit")!;
+  const a = askSop(s, lilit, "Ինչպես պատրաստել VIP սենյակ");
+  assert.equal(a.kind, "answer");
+  if (a.kind === "answer") assert.equal(a.sop.id, "sop-vip");
+  const none = askSop(s, lilit, "bitcoin price tomorrow");
+  assert.equal(none.kind, "none");
+  if (none.kind === "none") assert.equal(none.supervisor?.id, "s-anahit");
+});

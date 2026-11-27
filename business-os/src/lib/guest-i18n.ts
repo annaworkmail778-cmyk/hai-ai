@@ -62,6 +62,9 @@ const D = {
   diningSection: ["Ընթրիք բուխարու մոտ", "Ужин у камина", "Dinner by the fire"], diningSectionText: ["Խորոված, տեղական գինիներ և սեզոնային մենյու։ Պատվիրեք սենյակ կամ ամրագրեք սեղան։", "Хоровац, местные вина и сезонное меню. Закажите в номер или к столику.", "Khorovats, local wines and a seasonal menu. Order to your room or your table."],
   viewMenu: ["Դիտել մենյուն և պատվիրել", "Меню и заказ", "View menu & order"], membershipTitle: ["Pine Ridge Circle", "Pine Ridge Circle", "Pine Ridge Circle"],
   faqTitle: ["Հաճախ տրվող հարցեր", "Частые вопросы", "Frequently asked questions"],
+  membershipText: ["Միացեք անվճար՝ վաստակեք միավորներ ավարտված կեցությունների և պատվերների համար, բարձրացրեք մակարդակը և օգտագործեք անձնական առաջարկներ։", "Вступайте бесплатно: баллы за завершённые проживания и заказы, повышение уровня и персональные предложения.", "Join for free: earn points on completed stays and orders, move up tiers and unlock personal offers."],
+  hello: ["Բարև", "Здравствуйте", "Welcome"], joinNow: ["Միանալ", "Вступить", "Join now"], spaPool: ["Փակ լողավազան", "Крытый бассейн", "Indoor pool"], spaSauna: ["Ֆիննական սաունա", "Финская сауна", "Finnish sauna"], spaMassage: ["Մերսում 60/90 րոպե", "Массаж 60/90 мин", "Massage 60/90 min"], spaHours: ["Ամեն օր 09:00–22:00", "Ежедневно 09:00–22:00", "Daily 09:00–22:00"],
+  bookSpa: ["Ավելացնել սպա փաթեթ", "Добавить спа-пакет", "Add a spa package"], tierDiscount: ["զեղչ կեցության համար", "скидка на проживание", "off stays"], perAmd: ["միավոր յուրաքանչյուր 1 000 ֏-ի համար", "баллов за каждые 1 000 ֏", "points per 1,000 ֏ spent"],
 };
 
 export type GKey = keyof typeof D;

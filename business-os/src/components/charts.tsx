@@ -97,3 +97,18 @@ export function Spark({ values, className }: { values: number[]; className?: str
     </svg>
   );
 }
+
+/** Labelled horizontal bar list built on HBar. */
+export function Bars({ data, format = (n: number) => n.toLocaleString("en-US"), tone = "ink" }: { data: { label: string; value: number }[]; format?: (n: number) => string; tone?: "ink" | "signal" | "ok" | "warn" | "info" }) {
+  const max = Math.max(1, ...data.map((d) => d.value));
+  return (
+    <ul className="space-y-2.5">
+      {data.map((d) => (
+        <li key={d.label}>
+          <div className="mb-1 flex justify-between gap-3 text-[13px]"><span className="truncate">{d.label}</span><span className="tnum shrink-0 font-medium">{format(d.value)}</span></div>
+          <HBar value={d.value} max={max} tone={tone} />
+        </li>
+      ))}
+    </ul>
+  );
+}

@@ -76,6 +76,18 @@ button:disabled { cursor: not-allowed; }
 @keyframes flash { 0% { background: var(--color-signal-soft); } 100% { background: transparent; } }
 .flash { animation: flash 2.4s ease-out; }
 
+/* scroll reveal (components/hotel/motion.tsx) */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal[data-shown] { opacity: 1; transform: none; }
+.reveal-img { clip-path: inset(12% 0 0 0 round 24px); transition: clip-path 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal[data-shown] .reveal-img, .reveal-img[data-shown] { clip-path: inset(0 0 0 0 round 24px); }
+@keyframes hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+.hero-zoom { animation: hero-zoom 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes hero-in { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+.hero-in { animation: hero-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
 @media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+  .reveal-img { clip-path: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
