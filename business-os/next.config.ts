@@ -9,6 +9,10 @@ const headers = [
 ];
 
 const nextConfig: NextConfig = {
+  // This app lives inside the website repo and may sit under other folders with lockfiles:
+  // pin the project root to this folder (npm scripts run from here).
+  turbopack: { root: process.cwd() },
+  outputFileTracingRoot: process.cwd(),
   poweredByHeader: false,
   distDir: process.env.NEXT_DIST_DIR || ".next",
   async headers() {
