@@ -1,7 +1,7 @@
 # RISEUP Restaurant OS: First Professional Demo — Scope
 
 **Status:** Phase 1 recommendation, for approval. **Date:** 2026-11-27.
-**Restaurant:** Ember & Lavash, Tsaghkadzor (fictional). **Deployment:** inside the existing `business-os/` Netlify site, behind new routes; hotel demo unchanged.
+**Restaurant:** Summit Table, Tsaghkadzor (fictional). **Deployment:** inside the existing `business-os/` Netlify site, behind new routes; hotel demo unchanged.
 
 ## 1. Goal and boundary
 - **Goal:** convince the owner of an established restaurant, in **12–15 minutes** (or a 5-minute short version), that RISEUP can meaningfully improve operations, and get a paid pilot.
@@ -13,7 +13,7 @@
 |---|---|---|
 | Scenarios | A (QR table), B (takeaway), C (food cost), F (owner overview) | + D (retention), E (employee) |
 | Why | A/B/C/F show the three strongest value claims: fewer errors & faster kitchen, direct orders, margin control | D/E reuse the hotel's loyalty and workforce code, so they are cheaper than they look, but less decisive in a first meeting |
-| Effort | ≈ 110–150 h | ≈ 130–180 h |
+| Effort (exact phase sums, see implementation plan §2) | 107–148 h | 133–186 h |
 
 Recommendation: build **Core**, run it with 2–3 owners, then add D and E (the order of phases allows stopping after Core).
 

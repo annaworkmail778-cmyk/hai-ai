@@ -1,7 +1,7 @@
 # RISEUP Restaurant OS: User Journeys, Workflows and Automation Map
 
 **Status:** Phase 1 blueprint, for approval. **Date:** 2026-11-27.
-**Demo restaurant (fictional):** **Ember & Lavash**, Tsaghkadzor. Mountain fine-casual restaurant, 140 seats in five areas: Main hall (16 tables), Fireplace lounge (6), Terrace (8, seasonal), Private room (1 × 14 seats), Bar (8 seats). Stations: Hot, Grill (khorovats), Cold, Pastry, Bar. All people, phone numbers (`+374 00 …`) and e-mails (`@example.com`) are fictional. Name to be checked against real businesses before printing materials.
+**Demo restaurant (fictional):** **Summit Table**, Tsaghkadzor. Mountain fine-casual restaurant, 140 seats in five areas: Main hall (16 tables), Fireplace lounge (6), Terrace (8, seasonal), Private room (1 × 14 seats), Bar (8 seats). Stations: Hot, Grill (khorovats), Cold, Pastry, Bar. All people, phone numbers (`+374 00 …`) and e-mails (`@example.com`) are fictional. Name to be checked against real businesses before printing materials.
 
 Notation: **[A]** works in the demo · **[B]** simulated and labelled · **[C]** needs a production integration.
 
@@ -29,7 +29,7 @@ Notation: **[A]** works in the demo · **[B]** simulated and labelled · **[C]**
 ## 2. Customer journeys
 
 ### 2.1 Discover and book (website)
-1. Opens `ember-lavash.example/hy` from Instagram bio or Google. **[A]** (demo URL)
+1. Opens `summit-table.example/hy` from Instagram bio or Google. **[A]** (demo URL)
 2. Hero film-still with slow reveal, story ("Fire, lavash and the mountain"), signature dishes, atmosphere gallery, events. **[A]**
 3. Taps **Book a table** → date, time, party size, area preference (Fireplace lounge), occasion (Anniversary), requests ("window, one guest gluten-free"). **[A]**
 4. Sees **"Request sent · not confirmed yet. We'll confirm shortly."** Never "Confirmed". **[A]**

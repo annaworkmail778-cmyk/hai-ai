@@ -53,7 +53,7 @@ The latest commit (`5b425a4`, "Hospitality OS foundation") added to the **hotel*
 ### 1.5 Earlier, conflicting restaurant decisions in the docs
 | Document | Position |
 |---|---|
-| `LEAN_DEMO_SCOPE.md` §5, `TECHNICAL_ARCHITECTURE.md` §9 | Hotel and restaurant are **separate verticals**: separate routes, seed, screens, themes. Fictional "Ember & Lavash · Bistro" |
+| `LEAN_DEMO_SCOPE.md` §5, `TECHNICAL_ARCHITECTURE.md` §9 | Hotel and restaurant are **separate verticals**: separate routes, seed, screens, themes. Fictional "Summit Table" |
 | Commit `5b425a4` | Restaurant **inside** the hotel state (`Property.type = "hotel_restaurant"`) |
 
 This blueprint resolves the conflict in §3.
@@ -88,7 +88,7 @@ This blueprint resolves the conflict in §3.
 | **C. Shared kernel + separate vertical domains in `business-os/` (recommended)** | One deployment; `lib/kernel` (events, replay, sync), `lib/shared` (UI, loyalty, workforce), `lib/hotel`, `lib/restaurant`; separate sessions per vertical | Reuses everything that works; restaurant is demoable alone; hotel untouched; integration is an explicit, small bridge | Requires a careful, test-guarded extraction (≈ 7–10 h) |
 
 **Decision: C.**
-- Restaurant OS is its own vertical with its own state (`RestaurantState`), seed (fictional **Ember & Lavash**, Tsaghkadzor), routes, themes and session.
+- Restaurant OS is its own vertical with its own state (`RestaurantState`), seed (fictional **Summit Table**, Tsaghkadzor), routes, themes and session.
 - The restaurant slice already inside `HotelState` stays for now (it is not rendered anywhere). When the hotel room-service bridge is built (§10), the hotel slice is replaced by calls into the restaurant domain. Until then nothing in the hotel changes.
 - Shared application shell: **yes for staff apps** (same shell component, different nav and brand line: "RISEUP Restaurant OS"). **No for customer sites**: each vertical and each restaurant style has its own layout and theme.
 
@@ -211,7 +211,7 @@ submitted ──accept──► accepted ──(all tickets started)──► pr
 ### 7.1 Multi-location hierarchy
 ```
 Organization (legal business, billing, owner)
- └─ Brand (identity, master menu, loyalty programme)          e.g. "Ember & Lavash"
+ └─ Brand (identity, master menu, loyalty programme)          e.g. "Summit Table"
      └─ Location (address, hours, timezone, VAT setup, POS link, inventory, staff roster)
          └─ Dining area (Main hall, Fireplace lounge, Terrace, Private room, Bar)
              └─ Table (label, seats, shape, position, QR token)
@@ -240,7 +240,7 @@ Organization (legal business, billing, owner)
 | **Kitchen** | KDS | Dark, high contrast, 20 px+ body, colour = time, no decoration, 56 px touch targets, no animation except "new" pulse |
 
 ### 8.2 Restaurant theme presets (configurable per restaurant)
-A theme = tokens (colours, type scale, radius, image treatment) + **layout variants** (hero, menu layout, card style). Presets: `fine_dining`, `luxury`, `hotel_restaurant`, `family`, `casual`, `cafe_bistro`. The demo ships **one complete preset** (Ember & Lavash, `fine_dining`/mountain) and **one alternate preset** (`family`) switchable from the presenter, to prove configurability without building six designs.
+A theme = tokens (colours, type scale, radius, image treatment) + **layout variants** (hero, menu layout, card style). Presets: `fine_dining`, `luxury`, `hotel_restaurant`, `family`, `casual`, `cafe_bistro`. The demo ships **one complete preset** (Summit Table, `fine_dining`/mountain) and **one alternate preset** (`family`) switchable from the presenter, to prove configurability without building six designs.
 
 ### 8.3 Motion and performance (no new dependencies)
 - CSS only: scroll-driven animations (`animation-timeline: view()`) as progressive enhancement, `IntersectionObserver` fallback, View Transitions where supported for menu → dish detail.

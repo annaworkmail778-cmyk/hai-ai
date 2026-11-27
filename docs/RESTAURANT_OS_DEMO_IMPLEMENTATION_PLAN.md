@@ -1,34 +1,36 @@
 # RISEUP Restaurant OS: Demo Implementation Plan
 
-**Status:** Phase 1 plan, for approval. **No code is written until explicit approval.** **Date:** 2026-11-27.
+**Status:** Core Demo (R0–R6) **approved 2026-11-27**; R0 complete (see `RESTAURANT_OS_R0_REPORT.md`). Full-demo phases R7–R9 are **not approved** and stay on the roadmap. **Demo brand:** Summit Table (fictional, configurable).
 
 ## 1. Estimating assumptions
 - One senior full-stack engineer working with AI assistance, in the existing `business-os/` stack (Next.js 16.2.9, React 19, Tailwind 4, TypeScript, `node --test`).
-- **No new runtime dependencies.** (`qrcode` and `@netlify/blobs` already exist.) Playwright is available in this environment for smoke tests but is not added to `package.json` without approval.
-- Admin UI in Armenian; customer pages hy/ru/en with native-speaker review by the founders (not included in hours).
-- Photography: existing 17 licensed food photos plus ≈ 25 more licensed stock images (selection ≈ 3 h, included in R1). No custom shoot.
-- Fictional data only; no integrations.
-- Estimates include unit tests for domain logic and a manual QA pass per phase; they **exclude** sales materials, printing and meetings.
-- Ranges reflect uncertainty in design polish and device QA; the upper bound includes one round of design revisions per surface.
-- Capacity warning carried over from `MVP_ROADMAP.md`: most delivery hours before 22 Dec are committed to paid client work. The Core demo alone is roughly 3–4 working weeks of one person full time.
+- **No new runtime dependencies.** (`qrcode` and `@netlify/blobs` already exist.) Playwright is pre-installed in this environment and used for smoke tests from outside the project; it is not added to `package.json`.
+- Admin and kitchen UI in Armenian, with all strings kept in one dictionary per surface so more languages can be added; customer pages hy/ru/en. Native-speaker review by the founders is **not** included in the hours.
+- Photography: the existing 17 licensed food photos and the licensed hotel/restaurant photos in `public/img/`. No custom shoot.
+- Fictional data only; no integrations; no public deployment.
+- Included in every phase: domain unit tests, a manual QA pass, and one round of design revisions (that round is the difference between the low and high end).
+- **Excluded from all numbers:** sales materials, printing of QR tents, meetings, native-speaker review, Netlify deployment and production verification, real integrations, anything in R7–R9.
+- Capacity warning carried over from `MVP_ROADMAP.md`: most delivery hours before 22 Dec are committed to paid client work.
 
-## 2. Phases
-| Phase | Content | Hours | Output / exit check |
-|---|---|---|---|
-| **R0 Kernel extraction** | Generalise engine/replay, session store, session route (vertical + event allow-list), `DemoProvider`, presenter scenario runner, app shell (nav from permissions) into `lib/kernel` + `components/shared`. **Hotel behaviour unchanged.** Restaurant route with counter blob | 7–10 | 9/9 hotel tests pass; hotel presenter scenarios 1–3 manually verified on phone + laptop |
-| **R1 Restaurant domain + seed** | Types, reducer (orders, tickets, table sessions, requests, menu, recipes, stock ledger, POs, reservations, customers/loyalty, workforce reuse), selectors, deterministic seed with aggregated history, clock presets, permissions | 18–24 | Domain test suite (≥ 40 tests): state machines, idempotent stock, costing, VAT, loyalty keys, permissions, analytics consistency; replay < 40 ms benchmark |
-| **R2 Guest experience** | Theme system + 2 presets, website pages, menu + dish sheet + modifiers, cart, checkout rules, status page, QR entry and tents, accounts, scripted customer assistant | 24–32 | Scenario A/B guest side works on iPhone Safari + Android Chrome; Lighthouse mobile ≥ 85 |
-| **R3 Service operations** | Orders inbox/detail, overview, waiter app, floor plans (SVG) and table states, requests, KDS stations + expo, menu availability/price, settle-on-POS | 22–30 | Scenarios A and B end to end cross-device |
-| **R4 Menu & margin** | Ingredients, recipe editor/viewer, costing panels, price-change recalculation with before/after, inventory ledger, waste, alerts, suppliers, PO, receiving | 16–22 | Scenario C end to end; costing tests |
-| **R5 Owner analytics** | Sales, profitability, menu engineering, operations, team, customers tabs; insight cards with evidence; manager "ask" (canned) | 12–16 | Scenario F; cross-screen totals consistent (tested) |
-| **R6 Presenter + QA (Core)** | `/present/restaurant` scenarios A, B, C, F; launcher card; integrations page; settings; automation page; reset; local mode; full device QA; deploy to the existing Netlify site | 10–14 | Acceptance criteria §2, §3, §5–8 for Core |
-| **Core subtotal (R0–R6)** | | **≈ 110–150 h** | **Core demo done** |
-| **R7 Retention (D)** | CRM screens, segment builder, offers & eligibility, campaign simulation & labelled sample results, reservations book + host + waitlist | 14–20 | Scenario D |
-| **R8 Team (E)** | Restaurant positions, team admin, onboarding content for waiter/kitchen/host/cashier/manager, tasks with approval, messaging, `/r/me` | 8–12 | Scenario E |
-| **R9 Hotel bridge (optional)** | Hotel guest "Dining" tab → restaurant session; KDS shows room; simulated folio posting | 8–12 | Requires a small, approved change in the hotel guest site |
-| **Full total (R0–R8)** | | **≈ 130–180 h** (R9 adds 8–12 h) | |
+## 2. Phases (approved Core scope, reconciled)
+| Phase | Included | Excluded (moved) | Min h | Max h | Exit check |
+|---|---|---|---|---|---|
+| **R0 Shared foundation** ✅ done | Kernel replay, namespaced session store + shared route factory, generic client store, shared device frame / connection pill, per-vertical provider switch, kernel tests, before/after regression | Rewriting the hotel admin shell and hotel presenter into shared components (kept as-is to protect hotel behaviour) | 7 | 10 | Hotel tests 9/9; 20-page snapshot identical; presenter flow identical |
+| **R1 Restaurant domain + seed** | Types, reducer (orders, station tickets, table sessions, requests, menu & availability, recipes, stock ledger, waste, suppliers, POs, receipts), costing/VAT rules, analytics + savings formulas, deterministic Summit Table seed with history, clock presets, permissions, domain tests | Loyalty, customer accounts, reservations book, workforce/onboarding (→ R7/R8) | 16 | 22 | ≥ 40 domain tests; replay benchmark |
+| **R2 Guest experience** | Theme tokens + configurable brand, website home, menu, dish sheet with modifiers, cart, takeaway checkout rules, order status page, QR entry + printable tents, hy/ru/en | Customer accounts, loyalty, AI customer assistant, reservation page (→ R7) | 20 | 28 | A/B guest side on phone |
+| **R3 Service operations** | Orders inbox/detail, live overview, waiter app, SVG floor plans + table states, requests, KDS per station + expo, sold-out, settle-on-POS | Reservation book/host stand (→ R7) | 22 | 30 | A and B end to end across devices |
+| **R4 Menu & margin** | Ingredients, stock, recipe view with line costs, price change → recalculation with before/after, waste log, alerts, suppliers, PO + receiving, menu price/availability | Recipe editor for new recipes (view + quantities edit only) | 16 | 22 | Scenario C end to end |
+| **R5 Owner analytics + Business Performance & Savings Calculator** | Sales, channels, AOV, best sellers, margin per dish, menu engineering, food cost, ingredient price changes, waste cost, shortages, cancellations/remakes, prep times, insights with evidence, **Savings Calculator** (actual / calculated / hypothetical clearly separated) | Team and customer analytics (→ R7/R8) | 16 | 22 | Scenario F; cross-screen totals consistent |
+| **R6 Presenter + QA** | `/present/restaurant` with guided A, B, C, F, per-scenario restart, reset, simulation labels, integrations page, multi-session E2E (customer / waiter / kitchen / owner), performance check | Public deployment | 10 | 14 | Acceptance criteria for Core |
+| **Core total (R0–R6)** | | | **107** | **148** | |
+| R7 Retention + reservations *(not approved)* | Accounts, loyalty, CRM screens, segments, offers, campaign simulation, reservations book/host/waitlist, customer assistant | | 18 | 26 | Scenario D |
+| R8 Team *(not approved)* | Positions, onboarding, tasks, messaging, `/r/me` | | 8 | 12 | Scenario E |
+| **Full total (R0–R8)** | | | **133** | **186** | |
+| R9 Hotel bridge *(not approved, optional)* | Room-service ordering from Hotel OS, simulated folio posting | | 8 | 12 | → **141–198 h** with R9 |
 
-Ranges are the plain sum of the phase ranges. Reuse of the hotel's loyalty, workforce and messaging reducers is already reflected in the R7/R8 numbers. Hours are tracked per phase and the whole plan is re-estimated after R1, when the domain size is known.
+**Arithmetic check:** Core min 7+16+20+22+16+16+10 = 107; Core max 10+22+28+30+22+22+14 = 148. Full = Core + R7 + R8 = 107+18+8 = 133 to 148+26+12 = 186.
+
+**Change against the Phase 1 estimate (110–150 / 130–180):** R1 and R2 shrank (loyalty, accounts, reservations and the assistant moved to R7, which grew from 14–20 to 18–26); R5 grew by 4–6 h for the Savings Calculator. The earlier totals were rounded; these are exact sums.
 
 ## 3. Sequence and dependencies
 ```
@@ -38,7 +40,7 @@ R0 ─► R1 ─┬─► R2 ─┐
           └─► R5 ─┘
 ```
 - R2–R5 can interleave after R1 but are best built in the order A → B → C → F so each scenario is demoable as soon as it exists.
-- **Stop points:** after R3 (A+B usable for a first restaurant conversation, ≈ 71–96 h), after R6 (Core), after R8 (Full).
+- **Stop points:** after R3 (A+B usable for a first restaurant conversation, 65–90 h), after R6 (Core).
 
 ## 4. Technical task list (by phase)
 **R0**
@@ -79,6 +81,6 @@ R0 ─► R1 ─┬─► R2 ─┐
 ## 7. Approvals needed before or during implementation
 1. This blueprint (scope Core vs Full, decision C in `TECHNICAL_ARCHITECTURE.md` §3).
 2. Permission to make the **R0 refactor** touching hotel files (behaviour-preserving).
-3. Restaurant name/brand for the demo ("Ember & Lavash" or another) and the two theme presets.
+3. Restaurant name/brand for the demo ("Summit Table" or another) and the two theme presets.
 4. Later: extending the main site's `/go/` redirect for restaurant QR cards (changes the marketing site config).
 5. Later: adding Playwright as a dev dependency (optional).
