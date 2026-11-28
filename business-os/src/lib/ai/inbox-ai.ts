@@ -75,7 +75,7 @@ export function draftReply(state: HotelState, text: string, name?: string): Draf
   }
   const unknown = intents.includes("other") || parts.length === 0;
   const handoff = say(lang, { hy: "Մեր աշխատակիցը կպատասխանի Ձեզ շուտով։", ru: "Наш сотрудник скоро ответит вам.", en: "A member of our team will get back to you shortly." });
-  const body = [hi, ...parts, ...(risk === "high" || unknown ? [handoff] : [])].join(" ");
+  const body = [hi, ...new Set(parts), ...(risk === "high" || unknown ? [handoff] : [])].join(" ");
   const autoAllowed = risk === "low" && !unknown && intents.every((i) => !HIGH_RISK.includes(i));
   const reason = autoAllowed ? "Ցածր ռիսկ․ պատասխանը ամբողջությամբ հաստատված տվյալներից է" : intents.some((i) => ["payment", "refund"].includes(i)) ? "Վճարում/վերադարձ․ պահանջվում է աշխատակցի հաստատում" : intents.includes("medical") ? "Բժշկական հարց․ անմիջապես մարդ" : intents.includes("legal") ? "Իրավական հարց․ միայն ղեկավարը" : intents.includes("availability") ? "Հասանելիությունը հաստատում է աշխատակիցը" : unknown ? "Հաստատված պատասխան չկա" : "Բարձր ռիսկ․ պահանջվում է հաստատում";
   return { text: body, lang, intents, risk: autoAllowed ? "low" : "high", sources: [...new Set(sources)], autoAllowed, reason };

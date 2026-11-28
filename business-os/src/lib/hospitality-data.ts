@@ -1,6 +1,9 @@
 /* Static configuration of the fictional property: extras, loyalty, menu, services, training, SOPs. */
 import type { Dept, I18n, LoyaltyConfig, MenuCategory, MenuItem, Position, Reward, ServiceType, Sop, Table, TrainingModule } from "./types.ts";
 
+/** Tax configuration (demo assumption, configurable per hotel): prices include VAT; no separate tourist tax. */
+export const TAXES = { vatPct: 20, included: true };
+
 export const PROPERTY = { id: "pine-ridge", type: "hotel_restaurant" as const, brand: "Pine Ridge Hotel & Spa", modules: ["rooms", "reservations", "restaurant", "services", "loyalty", "staff", "training", "analytics"] };
 
 export type Extra = { id: string; name: I18n; desc: I18n; price: number; unit: "stay" | "night" | "person" };

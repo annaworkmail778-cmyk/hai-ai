@@ -157,6 +157,7 @@ function Journey({ lang }: { lang: Lang }) {
                 <h2 className="font-serif text-[26px] font-semibold">{g(lang, "breakdown")}</h2>
                 <ul className="mt-3 space-y-2 text-[14.5px]">{calc.lines.map((l, i) => <li key={i} className={cn("flex justify-between gap-3", l.kind === "discount" && "text-brass")}><span>{l.label[lang]}</span><span className="tnum">{l.amount < 0 ? "−" : ""}{amd(Math.abs(l.amount))}</span></li>)}</ul>
                 <div className="mt-3 flex justify-between border-t border-pine/10 pt-3 text-[18px] font-semibold"><span>{g(lang, "total")}</span><span className="tnum">{amd(calc.total)}</span></div>
+                {calc.vatIncluded > 0 && <div className="mt-1 flex justify-between text-[12.5px] text-pine/55"><span>{lang === "hy" ? "այդ թվում ԱԱՀ 20%" : lang === "ru" ? "в т.ч. НДС 20%" : "incl. VAT 20%"}</span><span className="tnum">{amd(calc.vatIncluded)}</span></div>}
                 <div className="mt-1 text-[12.5px] text-pine/55">{d.includes}</div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">

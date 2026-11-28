@@ -8,13 +8,17 @@ import { Badge, Button, cn, Input, Modal, Segmented, Toggle } from "@/components
 import { greeting, respond } from "@/lib/assistant";
 import { useDemo } from "@/lib/client/demo-store";
 import { freeRooms } from "@/lib/pricing";
+import { demoOtaBooking } from "@/lib/channel-adapters";
+import { draftReply } from "@/lib/ai/inbox-ai";
+import { draftReviewReply } from "@/lib/ai/review-ai";
+import { addDays } from "@/lib/dates";
 import { scenarioDates } from "@/lib/seed";
 import type { Lang } from "@/lib/types";
 
 type Step = { title: string; say: string; phone?: string; admin?: string; action?: { label: string; run: () => void }; icon: IconName };
 
 const uid = () => Math.random().toString(36).slice(2, 10);
-type ScenarioId = "night" | "checkout" | "question" | "booking" | "dining" | "qr" | "vip" | "onboarding" | "comms";
+type ScenarioId = "night" | "checkout" | "question" | "booking" | "dining" | "qr" | "vip" | "onboarding" | "comms" | "ota" | "frontdesk" | "inbox" | "review" | "copilot";
 
 /** Renders a page at a fixed "device" size and scales it to fit its box. */
 function Device({ src, w, h, kind, label, reloadKey }: { src: string; w: number; h: number; kind: "phone" | "laptop"; label: string; reloadKey: number }) {
@@ -89,6 +93,12 @@ export default function Present() {
     signGuest(accId); remember("bookRes", `r-${ev.id}`);
     show(`/hotel/${lang}/account`, "/admin/reservations?status=inquiry");
   };
+
+  const otaRes = state.reservations.find((r) => r.id === ids.ota);
+  const arriving = state.reservations.find((r) => r.checkIn === state.baseDate && r.status === "confirmed" && r.roomId);
+  const fdRes = state.reservations.find((r) => r.id === ids.fd) ?? arriving;
+  const waThread = state.inbox.find((t) => t.id === ids.wa);
+  const newReview = state.reviews.find((r) => r.id === ids.rv);
   const approve = (r?: typeof bookRes) => { if (!r || r.status !== "inquiry") return; const room = freeRooms(state, r.typeId, r.checkIn, r.checkOut, r.id)[0]; if (room) dispatch({ type: "reservation.approve", reservationId: r.id, roomId: room }); };
   const advanceOrder = (to: "accepted" | "preparing" | "ready" | "completed") => { if (newOrder) dispatch({ type: "order.status", target: newOrder.id, status: to }); };
   const question: Record<Lang, string> = {
@@ -222,6 +232,47 @@ export default function Present() {
         { icon: "users", title: "Մենեջերը տեսնում է ամբողջ պատկերը", say: "Վահանակում՝ անձնակազմի արձագանքի ժամանակը, ժամկետանց առաջադրանքները և onboarding-ի առաջընթացը։", admin: "/admin/analytics" },
       ],
     },
+    ota: {
+      title: "Ամրագրում OTA ալիքից (ցուցադրական ադապտեր)", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "refresh", title: "Ալիքների կառավարում", say: "Booking.com, Expedia, Airbnb ամրագրումները մեկ օրացույցում։ Կարգավիճակները ազնիվ են. իրական կապը պահանջում է հավաստագրված գործընկեր կամ channel manager, ցուցադրությունում աշխատում է ադապտեր։", admin: "/admin/channels" },
+        { icon: "external", title: "Booking.com-ից գալիս է ամրագրում", say: "Ամրագրումը ներմուծվում է, ստանում է ազատ սենյակ, պատրաստման առաջադրանք և ծանուցում ընդունարանին։", action: { label: otaRes ? `${otaRes.code} ✓` : "Ավտոմատ. ներմուծել ամրագրում", run: () => { const ev = dispatch({ type: "ota.import", booking: demoOtaBooking("booking", 500 + Math.floor(Math.random() * 400), addDays(state.baseDate, 12), addDays(state.baseDate, 14), "deluxe") }); remember("ota", `r-${ev.id}`); show(undefined, `/admin/reservations?open=r-${ev.id}`); } } },
+        { icon: "copy", title: "Կրկնակի ստացումը անվտանգ է", say: "Եթե ալիքը նույն ամրագրումը երկրորդ անգամ ուղարկի, կրկնօրինակ չի ստեղծվի, իսկ ծանուցումը չի կրկնվի։", action: otaRes ? { label: "Ավտոմատ. կրկնել նույնը", run: () => { dispatch({ type: "ota.import", booking: { channel: "booking", externalId: otaRes.external!.externalId, typeId: otaRes.typeId, checkIn: otaRes.checkIn, checkOut: otaRes.checkOut, adults: otaRes.adults, children: otaRes.children, total: otaRes.total, guest: { firstName: "x", lastName: "x", phone: "", email: "", lang: "en" } } }); show(undefined, "/admin/channels"); } } : undefined },
+        { icon: "alert", title: "Կոնֆլիկտների վերահսկում", say: "Եթե ազատ սենյակ չկա, համակարգը կրկնակի չի վաճառում սենյակը, այլ նշում է կոնֆլիկտ և առաջարկում լուծում։ Մատյանում երևում են բոլոր գործողությունները։", admin: "/admin/channels" },
+      ],
+    },
+    frontdesk: {
+      title: "Ընդունարան․ մուտք, հաշիվ, սենյակի փոփոխություն", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "calendar", title: "Այսօրվա ժամանումը", say: `Ընդունարանը բացում է ամրագրումը${fdRes ? ` (${fdRes.code}, սենյակ ${fdRes.roomId})` : ""}։ Տեսանելի են հյուրի նախասիրությունները, հաշիվը և սենյակի մաքրության կարգավիճակը։`, admin: fdRes ? `/admin/reservations?open=${fdRes.id}` : "/admin/reservations" },
+        { icon: "logIn", title: "Մուտք (check-in)", say: "Մեկ սեղմում՝ հյուրը ներսում է, սենյակը «զբաղված» է բոլոր էկրաններում։", action: fdRes ? { label: fdRes.status === "checked_in" ? "Ներսում է ✓" : "Ավտոմատ. գրանցել մուտքը", run: () => { remember("fd", fdRes.id); dispatch({ type: "reservation.checkin", reservationId: fdRes.id }); show(undefined, `/admin/reservations?open=${fdRes.id}`); } } : undefined },
+        { icon: "calc", title: "Հաշիվ (folio)", say: "Կանխավճար, լրացուցիչ գանձումներ, վճարումներ և մնացորդ մեկ տեղում։ Քարտեր չեն գանձվում․ գրանցումը ձեռքով է, մինչև վճարային համակարգի միացումը։", action: fdRes ? { label: "Ավտոմատ. մինիբար + կանխավճար", run: () => { dispatch({ type: "folio.add", reservationId: fdRes.id, kind: "charge", label: "Մինիբար", amount: 4500 }); dispatch({ type: "folio.add", reservationId: fdRes.id, kind: "deposit", label: "Կանխավճար", amount: 20000, method: "Քարտ (տերմինալ)" }); show(undefined, `/admin/reservations?open=${fdRes.id}`); } } : undefined },
+      ],
+    },
+    inbox: {
+      title: "WhatsApp հարց → AI սևագիր → աշխատակցի հաստատում", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "message", title: "Հյուրը գրում է WhatsApp-ով", say: "Բոլոր ալիքները (WhatsApp, Instagram, Messenger, էլ․ փոստ, կայք, Booking.com) մեկ մուտքում։ Ցուցադրության մեջ ալիքը սիմուլյացված է։", admin: "/admin/inbox", action: { label: waThread ? "Ստացված է ✓" : "Ավտոմատ. մուտքային հաղորդագրություն", run: () => { const id = `it-${uid()}`; dispatch({ type: "inbox.inbound", threadId: id, channel: "whatsapp", contact: { name: "Ирина", handle: "+7 900 000 77 31", lang: "ru" }, text: "Здравствуйте! Можно ли с собакой? И во сколько завтрак?" }); remember("wa", id); show(undefined, `/admin/inbox?t=${id}`); } } },
+        { icon: "sparkles", title: "AI-ն պատրաստում է սևագիր", say: "AI-ն ճանաչում է լեզուն և մտադրությունը, պատասխանում է միայն հաստատված տվյալներից (կենդանիներ, նախաճաշ) և ցույց է տալիս աղբյուրները։ Վճարման, չեղարկման, բժշկական հարցերը միշտ գնում են մարդու։", admin: waThread ? `/admin/inbox?t=${waThread.id}` : "/admin/inbox" },
+        { icon: "send", title: "Աշխատակիցը հաստատում և ուղարկում է", say: "Աշխատակիցը կարող է խմբագրել կամ հաստատել։ Պատասխանի ժամանակը և աուդիտը գրանցվում են։", action: waThread ? { label: "Ավտոմատ. հաստատել սևագիրը", run: () => { const last = [...waThread.messages].reverse().find((m) => m.dir === "in"); if (last) dispatch({ type: "inbox.reply", threadId: waThread.id, text: draftReply(state, last.text, "Ирина").text, ai: true }); show(undefined, `/admin/inbox?t=${waThread.id}`); } } : undefined },
+      ],
+    },
+    review: {
+      title: "Բացասական կարծիք → AI պատասխան → ղեկավարի հաստատում", time: "≈ 2 րոպե",
+      steps: [
+        { icon: "star", title: "Նոր կարծիք Booking.com-ում", say: "Հյուրը թողնում է 2/5 կարծիք։ Ավտոմատացումը ստեղծում է առաջադրանք ղեկավարին։ (Հարթակը միացված չէ, կարծիքը սիմուլյացված է։)", admin: "/admin/reviews", action: { label: newReview ? "Ստացված է ✓" : "Ավտոմատ. նոր կարծիք", run: () => { const ev = dispatch({ type: "review.add", review: { platform: "booking", rating: 2, lang: "en", author: "Michael B.", title: "Noisy night", text: "The location is great, but our room was noisy at night and the Wi-Fi was slow. Staff were friendly." } }); remember("rv", `rv-${ev.id}`); show(undefined, `/admin/reviews?r=rv-${ev.id}`); } } },
+        { icon: "sparkles", title: "AI սևագիր", say: "Պատասխանը կարծիքի լեզվով է, առանց փոխհատուցման խոստումների և անձնական տվյալների։ Թեմաները (աղմուկ, Wi‑Fi) փոխանցվում են պատասխանատու բաժիններին։", action: newReview ? { label: "Ավտոմատ. պահել սևագիրը", run: () => { dispatch({ type: "review.draft", target: newReview.id, text: draftReviewReply(state, newReview).text }); show(undefined, `/admin/reviews?r=${newReview.id}`); } } : undefined },
+        { icon: "check", title: "Ղեկավարը հաստատում է", say: "Հրապարակվում է միայն հաստատումից հետո, և միայն այն հարթակներում, որոնք ունեն պատասխանի API (Google, Booking.com՝ գործընկերային մուտքով)։ Tripadvisor-ի համար՝ ձեռքով։", action: newReview ? { label: "Ավտոմատ. հաստատել", run: () => { dispatch({ type: "review.approve", target: newReview.id }); show(undefined, `/admin/reviews?r=${newReview.id}`); } } : undefined },
+      ],
+    },
+    copilot: {
+      title: "AI բիզնես օգնական․ օրվա ամփոփում", time: "≈ 1.5 րոպե",
+      steps: [
+        { icon: "sparkles", title: "Ինչ պետք է ստուգել այսօր", say: "Ղեկավարը սեղմում է «Այսօրվա ամփոփում»։ Զբաղվածություն, պատրաստ չեղած սենյակներ, անպատասխան զրույցներ, ուշացած հարցումներ, բացասական կարծիքներ, ալիքների խնդիրներ՝ ամեն թիվ իր բանաձևով։", admin: "/admin/copilot" },
+        { icon: "tasks", title: "Գործողություն՝ միայն հաստատմամբ", say: "Օգնականը առաջարկում է առաջադրանքներ, բայց ոչինչ չի անում առանց հաստատման։ Ֆինանսական տվյալները հասանելի են միայն ղեկավարներին։", admin: "/admin/copilot" },
+        { icon: "home", title: "Ամբողջ պատկերը", say: "Ընդհանուր էջում «Ուշադրություն» տողը ցույց է տալիս նույն թվերը և տանում է այնտեղ, որտեղ խնդիրը լուծվում է։", admin: "/admin" },
+      ],
+    },
   };
   const cur = SCENARIOS[scenario];
   const go = (i: number) => {
@@ -256,7 +307,7 @@ export default function Present() {
       </header>
       <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[340px_1fr]">
         <aside className="flex min-h-0 flex-col border-r border-white/10">
-          <div className="space-y-1.5 p-3">
+          <div className="max-h-[36vh] shrink-0 space-y-1.5 overflow-y-auto border-b border-white/10 p-3">
             {(Object.keys(SCENARIOS) as (keyof typeof SCENARIOS)[]).map((k, i) => (
               <button key={k} onClick={() => { setScenario(k); setStep(0); const s = SCENARIOS[k].steps[0]; if (s.phone) setPhone(s.phone); if (s.admin) setAdmin(s.admin); setReload((x) => x + 1); }} className={cn("flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition", scenario === k ? "bg-white text-ink" : "bg-white/5 hover:bg-white/10")}>
                 <span className={cn("grid size-7 place-items-center rounded-lg text-[12px] font-bold", scenario === k ? "bg-signal text-white" : "bg-white/10")}>{i + 1}</span>

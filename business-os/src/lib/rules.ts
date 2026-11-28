@@ -3,7 +3,7 @@
  * loyalty tiers and balances, direct-booking price breakdown, restaurant order totals.
  * All amounts are AMD. Points are earned only on completed eligible transactions (see engine.ts).
  */
-import { EXTRAS } from "./hospitality-data.ts";
+import { EXTRAS, TAXES } from "./hospitality-data.ts";
 import { quote } from "./pricing.ts";
 import type { HotelState, I18n, Lang, MenuItem, RoomTypeId, Tier } from "./types.ts";
 
@@ -33,6 +33,8 @@ export type Line = { label: I18n; amount: number; kind: "room" | "extra" | "disc
 export type BookingCalc = {
   nights: number; roomTotal: number; extrasTotal: number; discount: number; total: number; lines: Line[];
   perRoom: number; memberPct: number; campaignPct: number; voucherAmount: number; campaignId?: string;
+  /** VAT contained in the total (informational, prices are VAT-inclusive). */
+  vatIncluded: number;
 };
 
 const L = (hy: string, ru: string, en: string): I18n => ({ hy, ru, en });
@@ -71,7 +73,7 @@ export function bookingCalc(state: HotelState, b: { typeId: RoomTypeId; rooms: n
   const rawDiscount = Math.round((roomTotal * (memberPct + campaignPct)) / 100) + voucherAmount;
   const discount = Math.min(rawDiscount, Math.round(roomTotal * 0.5)); // never more than half the room price
   if (discount < rawDiscount) lines.push({ label: L("Զեղչերի սահմանափակում (առավելագույնը 50%)", "Ограничение скидок (максимум 50%)", "Discount cap (max 50%)"), amount: rawDiscount - discount, kind: "discount" });
-  return { nights: q.nights, roomTotal, extrasTotal, discount, total: roomTotal + extrasTotal - discount, lines, perRoom: q.total, memberPct, campaignPct, voucherAmount, campaignId };
+  return { nights: q.nights, roomTotal, extrasTotal, discount, total: roomTotal + extrasTotal - discount, lines, perRoom: q.total, memberPct, campaignPct, voucherAmount, campaignId, vatIncluded: TAXES.included ? Math.round(((roomTotal + extrasTotal - discount) * TAXES.vatPct) / (100 + TAXES.vatPct)) : 0 };
 }
 
 export function itemPrice(item: MenuItem, options: string[]) {
