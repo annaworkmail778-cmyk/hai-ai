@@ -23,6 +23,10 @@ This is a standalone Next.js app, separate from the riseup-group.com website in 
 | `/kds` | Kitchen Display System (full screen, touch) |
 | `/staff` | Staff workspace, mobile-first: today, messages, learning (onboarding, SOPs, SOP assistant), team (managers) |
 | `/admin/requests`, `/admin/restaurant`, `/admin/loyalty`, `/admin/team`, `/admin/settings` | Guest requests, restaurant & menu, loyalty programme, team/RBAC/onboarding, property configuration |
+| `/admin/inbox` | Unified inbox (WhatsApp / Instagram / Messenger / e-mail / web chat / Booking.com — **simulated channels**), AI drafts with a risk gate, assignment, notes, escalation |
+| `/admin/reviews` | Reviews Center: feed, insights, monthly report, AI reply drafts, manager approval (publishing simulated or manual) |
+| `/admin/channels`, `/admin/integrations` | Channel manager (demo OTA adapter: import, duplicate, modify, cancel, conflict, retry, log) and the honest integration matrix |
+| `/admin/copilot` | AI business assistant: traceable figures, permission-aware, task creation only after approval |
 
 ## Run locally
 ```bash
@@ -128,7 +132,8 @@ Printed cards therefore keep working when the demo moves to a permanent subdomai
 - No payment, PMS, POS, channel-manager or messaging integration is connected. Payments are recorded manually by staff.
 - The SOP assistant uses deterministic keyword retrieval, not an LLM. It answers only from the approved SOPs or routes the question to the supervisor.
 - Lint: 0 errors, plus React Compiler advisory warnings (storage reads in effects, render-time clock in older screens) that are tracked in `../docs/HOSPITALITY_OS_IMPLEMENTATION_ROADMAP.md`.
-- Full status of every feature (working / simulated / needs integration): `../docs/HOSPITALITY_OS_FEATURE_MAP.md`.
+- Full status of every feature (working / simulated / needs integration): `../docs/HOTEL_OS_FEATURE_MAP.md`; integrations: `../docs/HOTEL_OS_INTEGRATION_MATRIX.md`; demo script: `../docs/HOTEL_OS_DEMO_GUIDE.md`.
+- No messaging, review or OTA channel is connected. Inbound messages, reviews and OTA bookings in the demo are generated; outbound replies are stored only.
 
 ## Photo credits
 Photos are from [Unsplash](https://unsplash.com) under the Unsplash License (free commercial use). They are stored in `public/img/`.
