@@ -41,6 +41,8 @@ export type DemoCtx<S, D> = {
   epoch: string;
   mode: "live" | "local";
   pending: number;
+  /** Ids of events created on this device that the server has not confirmed yet (offline / reconnecting). */
+  pendingIds: string[];
   dispatch: (e: D) => Stamped<D>;
   reset: (pin?: string) => Promise<"ok" | "pin" | "error">;
   setMode: (m: "live" | "local") => void;
@@ -251,7 +253,7 @@ export function createDemoStore<S, D extends { type: string }>(cfg: DemoStoreCon
       return cfg.replay(baseDateOf(cache.epochAt), [...cache.events.map((e) => e.ev), ...extra], cache.epochAt);
     }, [cache, pendingEvents]);
 
-    const value: DemoCtx<S, D> = { state, conn, backend, session, epoch: cache.epoch || "pending", mode, pending: pendingEvents.length, dispatch, reset, setMode, setSession, role, setRole, actor, setActor };
+    const value: DemoCtx<S, D> = { state, conn, backend, session, epoch: cache.epoch || "pending", mode, pending: pendingEvents.length, pendingIds: pendingEvents.map((e) => e.id), dispatch, reset, setMode, setSession, role, setRole, actor, setActor };
     // Demo state depends on the current date and local storage, so it is rendered on the client only
     // (avoids server/client mismatches). A neutral splash shows for the first frame.
     if (!mounted) return <div className={`grid min-h-dvh place-items-center ${cfg.splashClass ?? "bg-paper"}`}><span className="size-6 animate-spin rounded-full border-2 border-line-2 border-t-ink" aria-label="Loading" /></div>;
