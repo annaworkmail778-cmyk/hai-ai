@@ -10,23 +10,28 @@ import { Avatar, Badge, cn, DemoDataBadge } from "../ui";
 
 const NAV: { href: string; label: string; icon: IconName; group?: string; mod?: "rooms" | "restaurant" }[] = [
   { href: "/admin", label: "Ընդհանուր պատկեր", icon: "home" },
-  { mod: "rooms", href: "/admin/reservations", label: "Ամրագրումներ", icon: "list", group: "Ամրագրումներ" },
+  { href: "/admin/copilot", label: "AI բիզնես օգնական", icon: "sparkles" },
+  { mod: "rooms", href: "/admin/reservations", label: "Ամրագրումներ", icon: "list", group: "Ընդունարան" },
   { mod: "rooms", href: "/admin/calendar", label: "Օրացույց", icon: "calendar" },
   { mod: "rooms", href: "/admin/rooms", label: "Սենյակներ", icon: "bed" },
   { href: "/admin/guests", label: "Հյուրեր (CRM)", icon: "users" },
-  { href: "/admin/requests", label: "Հյուրերի հարցումներ (QR)", icon: "qr", group: "Աշխատանք" },
+  { href: "/admin/inbox", label: "Միասնական մուտքային", icon: "message", group: "Հաղորդակցություն" },
+  { href: "/admin/reviews", label: "Կարծիքներ", icon: "star" },
+  { href: "/admin/assistant", label: "Կայքի AI օգնական", icon: "sparkles" },
+  { href: "/admin/requests", label: "Հյուրերի հարցումներ (QR)", icon: "qr", group: "Գործառնություններ" },
   { mod: "rooms", href: "/admin/housekeeping", label: "Մաքրություն", icon: "broom" },
   { href: "/admin/maintenance", label: "Տեխնիկական սպասարկում", icon: "wrench" },
   { href: "/admin/staff", label: "Առաջադրանքներ", icon: "tasks" },
+  { mod: "rooms", href: "/admin/channels", label: "Ալիքներ (OTA)", icon: "refresh", group: "Եկամուտ և ալիքներ" },
+  { href: "/admin/loyalty", label: "Հավատարմություն", icon: "star" },
   { mod: "restaurant", href: "/admin/restaurant", label: "Ռեստորան և մենյու", icon: "coffee", group: "Ռեստորան" },
   { mod: "restaurant", href: "/kds", label: "Խոհանոցի էկրան (KDS)", icon: "flame" },
-  { href: "/admin/loyalty", label: "Հավատարմություն", icon: "star", group: "Հյուրեր և աճ" },
   { href: "/admin/team", label: "Թիմ, դերեր, ուսուցում", icon: "users", group: "Թիմ" },
   { href: "/staff", label: "Աշխատակցի հավելված", icon: "smartphone" },
-  { href: "/admin/assistant", label: "AI օգնական", icon: "sparkles", group: "Ավտոմատացում" },
-  { href: "/admin/automations", label: "Ավտոմատացումներ", icon: "zap" },
   { href: "/admin/analytics", label: "Վերլուծություն", icon: "chart", group: "Կառավարում" },
+  { href: "/admin/automations", label: "Ավտոմատացումներ", icon: "zap" },
   { href: "/admin/roi", label: "Արժեքի հաշվիչ", icon: "calc" },
+  { href: "/admin/integrations", label: "Ինտեգրացիաներ", icon: "external" },
   { href: "/admin/settings", label: "Օբյեկտի կարգավորումներ", icon: "home" },
 ];
 
@@ -117,6 +122,9 @@ export function AdminShell({ children }: { children: ReactNode }) {
     "/admin/requests": state.services.filter((x) => x.status === "new").length,
     "/kds": state.orders.filter((o) => o.status === "submitted").length,
     "/admin/team": state.enrollments.filter((e) => e.status === "submitted").length,
+    "/admin/inbox": state.inbox.filter((t) => t.status !== "resolved" && t.messages.filter((m) => m.dir === "in" || m.dir === "out").slice(-1)[0]?.dir === "in").length,
+    "/admin/reviews": state.reviews.filter((r) => r.status === "new").length,
+    "/admin/channels": state.reservations.filter((r) => r.external?.syncState === "conflict" && !["cancelled", "checked_out"].includes(r.status)).length + state.syncLog.filter((l) => l.result === "failed").length,
   };
   const night = state.clock.mode === "night";
   const nav = (
@@ -129,7 +137,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             <Link href={n.href} className={cn("flex h-9 items-center gap-2.5 rounded-lg px-3 text-[13.5px] font-medium transition", active ? "bg-ink text-white" : "text-ink-2 hover:bg-black/[0.05]")}>
               <Icon name={n.icon} size={17} className={active ? "text-white" : "text-muted"} />
               <span className="flex-1 truncate">{n.label}</span>
-              {counts[n.href] ? <span className={cn("tnum rounded-md px-1.5 text-[11px] font-semibold leading-5", active ? "bg-white/20" : n.href === "/admin/reservations" || n.href === "/admin/assistant" || n.href === "/admin/requests" || n.href === "/kds" ? "bg-signal text-white" : "bg-black/[0.07] text-ink-2")}>{counts[n.href]}</span> : null}
+              {counts[n.href] ? <span className={cn("tnum rounded-md px-1.5 text-[11px] font-semibold leading-5", active ? "bg-white/20" : n.href === "/admin/reservations" || n.href === "/admin/assistant" || n.href === "/admin/requests" || n.href === "/kds" || n.href === "/admin/inbox" || n.href === "/admin/channels" ? "bg-signal text-white" : "bg-black/[0.07] text-ink-2")}>{counts[n.href]}</span> : null}
             </Link>
           </div>
         );

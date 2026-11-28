@@ -20,7 +20,7 @@ export default function Reservations() {
   const [q, setQ] = useState("");
   const [src, setSrc] = useState<"" | Source>("");
   const [open, setOpen] = useState<string | null>(sp.get("open"));
-  const [newRes, setNewRes] = useState(false);
+  const [newRes, setNewRes] = useState(sp.get("new") === "1");
   const [limit, setLimit] = useState(40);
   useEffect(() => { if (sp.get("open")) setOpen(sp.get("open")); }, [sp]);
   const today = state.baseDate;

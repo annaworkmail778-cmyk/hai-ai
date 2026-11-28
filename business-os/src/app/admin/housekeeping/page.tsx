@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { PageTitle } from "@/components/admin/shell";
+import { LostFound } from "@/components/admin/lost-found";
 import { Icon } from "@/components/icons";
 import { Avatar, Badge, Button, Card, CardHead, cn, Empty, Kpi, Segmented, Select } from "@/components/ui";
 import { useDemo } from "@/lib/client/demo-store";
@@ -59,6 +60,7 @@ export default function Housekeeping() {
         </div>
       </Card>
       {!all.length && <div className="mt-4"><Empty title="Այս օրվա համար առաջադրանքներ չկան" /></div>}
+      <LostFound />
     </>
   );
 

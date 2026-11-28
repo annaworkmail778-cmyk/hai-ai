@@ -15,10 +15,16 @@ const WF: { id: WorkflowId; trigger: string; action: string; icon: IconName; cha
   { id: "checkout_task", trigger: "Հյուրը մեկնում է", action: "Ստեղծվում է մաքրման առաջադրանք, շտապ՝ եթե նույն օրը նոր հյուր է գալիս", icon: "logOut", channels: "Մաքրության վահանակ", manualBefore: "Ընդունարանը զանգում է հավաքարարին" },
   { id: "review_request", trigger: "Մեկնումից հաջորդ օրը, 11:00", action: "Շնորհակալություն և կարծիքի խնդրանք", icon: "star", channels: "Էլ. փոստ", manualBefore: "Սովորաբար չի արվում" },
   { id: "unanswered_followup", trigger: "Օգնականը չունի հաստատված պատասխան", action: "Հարցը փոխանցվում է անձնակազմին, ստեղծվում է առաջադրանք ընդունարանին", icon: "sparkles", channels: "Վահանակ · առաջադրանք", manualBefore: "Հարցը մնում է անպատասխան" },
+  { id: "ota_booking_alert", trigger: "Նոր ամրագրում OTA ալիքից (ցուցադրական ադապտեր)", action: "Ծանուցում ընդունարանին․ կոնֆլիկտի դեպքում՝ նախազգուշացում (մեկ անգամ յուրաքանչյուր արտաքին ID-ի համար)", icon: "refresh", channels: "Վահանակ", manualBefore: "Ընդունարանը ստուգում է extranet-ը ձեռքով" },
+  { id: "room_ready_notify", trigger: "Հավաքարարը ավարտեց մաքրումը", action: "Ընդունարանը ստանում է «սենյակը պատրաստ է» ծանուցում", icon: "bed", channels: "Վահանակ", manualBefore: "Զանգ կամ բղավոց միջանցքում" },
+  { id: "urgent_maint_escalation", trigger: "Շտապ/բարձր առաջնահերթության տեխնիկական հայտ", action: "Վերահսկման առաջադրանք գլխավոր մենեջերին", icon: "wrench", channels: "Վահանակ", manualBefore: "Մենեջերը իմանում է ուշ" },
+  { id: "negative_review_task", trigger: "Կարծիք ≤ 3 աստղ", action: "Առաջադրանք ղեկավարին՝ պատասխանել և ստուգել պատճառը", icon: "star", channels: "Վահանակ", manualBefore: "Բացասական կարծիքը մնում է անպատասխան" },
+  { id: "inbox_escalation", trigger: "Հաղորդագրություն վճարման, վերադարձի, բողոքի, բժշկական կամ տեխնիկական թեմայով", action: "Բարձր առաջնահերթություն, ճիշտ բաժին, ծանուցում ղեկավարին", icon: "alert", channels: "Միասնական մուտքային", manualBefore: "Զգայուն հարցերին պատասխանում է առաջին պատահած աշխատակիցը" },
+  { id: "onboarding_start", trigger: "Ավելացվեց նոր աշխատակից", action: "Նշանակվում են պաշտոնին համապատասխան ուսուցման մոդուլները", icon: "users", channels: "Աշխատակցի հավելված", manualBefore: "Նոր աշխատակիցը սովորում է «տեսնելով»" },
 ];
 
 const CH: Record<OutboxItem["channel"], string> = { email: "Էլ. փոստ", whatsapp: "WhatsApp", telegram: "Telegram", sms: "SMS", in_app: "Վահանակ" };
-const INTEGRATIONS: [string, string][] = [["Telegram (անձնակազմի ծանուցումներ)", "Telegram Bot API"], ["WhatsApp (հյուրերին)", "WhatsApp Business Platform"], ["Էլ. փոստ", "Էլ. փոստի ծառայություն (օր.՝ Resend)"], ["Booking.com / Airbnb օրացույց", "iCal համաժամեցում"], ["Աշխատանքային հոսքեր", "n8n"]];
+const INTEGRATIONS: [string, string][] = [["Telegram (անձնակազմի ծանուցումներ)", "Telegram Bot API"], ["WhatsApp (հյուրերին)", "WhatsApp Business Platform"], ["Էլ. փոստ", "Էլ. փոստի ծառայություն (օր.՝ Resend)"], ["Booking.com / Expedia / Airbnb", "Հավաստագրված ալիքների կառավարչի միջոցով (iCal-ը միայն զբաղվածություն է, ոչ լիարժեք ինտեգրացիա)"], ["Աշխատանքային հոսքեր", "n8n"]];
 
 export default function Automations() {
   const { state, dispatch } = useDemo();
@@ -67,6 +73,10 @@ export default function Automations() {
             ))}
             {!log.length && <li className="py-6 text-center text-muted">Դեռ հաղորդագրություններ չկան</li>}
           </ul>
+        </Card>
+        <Card>
+          <CardHead title="Կատարման մատյան" sub="Յուրաքանչյուր ավտոմատացում կատարվում է մեկ անգամ իր idempotency key-ով (կրկնակի համաժամեցումը կրկնակի գործողություն չի առաջացնում)" icon="zap" />
+          {state.autoLog.length === 0 ? <p className="text-[13px] text-muted">Այս սեսիայում դեռ չի կատարվել։ Փորձեք՝ սիմուլյացնել OTA ամրագրում կամ բացասական կարծիք։</p> : <ul className="max-h-72 space-y-1.5 overflow-y-auto text-[12.5px]">{state.autoLog.slice(0, 40).map((a) => <li key={a.id} className="rounded-lg bg-paper px-3 py-2"><div className="font-medium">{a.text}</div><div className="font-mono text-[11px] text-faint">{a.rule} · {a.key}</div></li>)}</ul>}
         </Card>
         <Card>
           <CardHead title="Ինտեգրացիաներ" sub="Այս ցուցադրության մեջ ոչ մեկը միացված չէ" icon="external" />

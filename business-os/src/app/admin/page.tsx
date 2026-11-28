@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { NewReservationModal, ReservationDrawer, SourceBadge, StatusBadge } from "@/components/admin/reservation";
+import { AttentionStrip } from "@/components/admin/attention";
 import { PageTitle } from "@/components/admin/shell";
 import { BarLine } from "@/components/charts";
 import { Icon } from "@/components/icons";
@@ -47,6 +48,7 @@ export default function Overview() {
         sub="Այսօրվա գործողությունները մեկ էկրանում։ Թվերը թարմանում են յուրաքանչյուր գործողությունից հետո։"
         right={<><Link href="/admin/calendar"><Button icon="calendar">Օրացույց</Button></Link><Button variant="primary" icon="plus" onClick={() => setNewRes(true)}>Նոր ամրագրում</Button></>}
       />
+      <AttentionStrip />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7">
         <Kpi label="Զբաղվածություն այսօր" value={pct(occupied / state.rooms.length)} sub={`${occupied} / ${state.rooms.length} սենյակ`} icon="bed" />
         <Kpi label="Ժամանումներ" value={arrivals.length} sub={`${arrivals.filter((a) => a.status === "checked_in").length} արդեն ժամանել են`} icon="logIn" tone="ok" />

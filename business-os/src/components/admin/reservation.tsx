@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { EXTRAS } from "@/lib/hospitality-data";
+import { FrontDeskPanel } from "./front-desk";
 import { useEffect, useState } from "react";
 import { useDemo } from "@/lib/client/demo-store";
 import { addDays, diffDays, eachNight } from "@/lib/dates";
@@ -120,6 +121,7 @@ export function ReservationDrawer({ id, onClose }: { id: string | null; onClose:
         )}
         {["confirmed", "checked_in", "checked_out"].includes(res.status) && res.payment !== "paid" && <p className="mt-2 text-[11.5px] text-muted">Վճարումը գրանցվում է ձեռքով։ Առցանց վճարման ինտեգրացիա չկա (ցուցադրական)։</p>}
       </section>
+      <FrontDeskPanel res={res} />
 
       {res.requests && <section className="mt-4 rounded-xl bg-paper p-4 text-[13px]"><div className="mb-1 font-semibold">Հյուրի խնդրանքը</div>{res.requests}</section>}
       {res.declineReason && <section className="mt-4 rounded-xl bg-bad-soft p-4 text-[13px] text-bad"><div className="mb-1 font-semibold">Մերժման պատճառ</div>{res.declineReason}</section>}
