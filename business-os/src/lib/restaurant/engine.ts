@@ -13,20 +13,22 @@
 import { replayEvents } from "../kernel/replay.ts";
 import { canMove, derivedKitchenStatus, linesCost, modifierError, modifiersOf, orderCode, recipeOf, unitCost } from "./rules.ts";
 import { createSeed } from "./seed.ts";
+import { applyOps, closeHook, onLateCancel, onLowStock, onOrderCompleted, onWaste, PO_APPROVAL_LIMIT, runAuto } from "./ops.ts";
 import type { CartLine, MoveKind, Order, OrderLine, RecipeLine, RestaurantState, RStamped, StationId, Ticket } from "./types.ts";
 
 const staffName = (s: RestaurantState, by: string) => (by === "guest" ? "Հյուր" : by === "presenter" ? "Ներկայացում" : by === "seed" ? "Համակարգ" : s.staff.find((x) => x.id === by)?.name ?? "Աշխատակից");
 
 export const onHand = (s: RestaurantState, ingredientId: string) => (s.stockStart[ingredientId] ?? 0) + s.moves.reduce((a, m) => (m.ingredientId === ingredientId ? a + m.qty : a), 0);
 
-function addMove(s: RestaurantState, key: string, ingredientId: string, qty: number, kind: MoveKind, at: number, extra: { ref?: string; reason?: string; by?: string } = {}) {
+export function addMove(s: RestaurantState, key: string, ingredientId: string, qty: number, kind: MoveKind, at: number, extra: { ref?: string; reason?: string; by?: string } = {}) {
   if (!qty || s.moves.some((m) => m.key === key)) return false; // idempotent by key
   const ing = s.ingredients.find((i) => i.id === ingredientId);
   if (!ing) return false;
   const before = onHand(s, ingredientId);
   s.moves.push({ key, ingredientId, qty, kind, unitCost: unitCost(ing), at, ...extra });
-  if (s.automations.low_stock_alert && qty < 0 && before >= ing.minLevel && before + qty < ing.minLevel && !s.notices.some((n) => n.id === `low-${ingredientId}`)) {
-    s.notices.unshift({ id: `low-${ingredientId}`, at, text: `Պաշարը նվազագույնից ցածր է՝ ${ing.name}`, href: `/r/admin/inventory?open=${ingredientId}`, read: false, kind: "stock" });
+  if (qty < 0 && before >= ing.minLevel && before + qty < ing.minLevel) {
+    if (s.automations.low_stock_alert && !s.notices.some((n) => n.id === `low-${ingredientId}`)) s.notices.unshift({ id: `low-${ingredientId}`, at, text: `Պաշարը նվազագույնից ցածր է՝ ${ing.name}`, href: `/r/admin/inventory?open=${ingredientId}`, read: false, kind: "stock" });
+    onLowStock(s, ingredientId, at);
   }
   return true;
 }
@@ -39,7 +41,7 @@ function lineUsage(s: RestaurantState, l: OrderLine): RecipeLine[] {
   return [...base, ...mods];
 }
 
-function moveLine(s: RestaurantState, l: OrderLine, kind: "consume" | "reverse" | "waste", at: number, tag: string, reason?: string) {
+export function moveLine(s: RestaurantState, l: OrderLine, kind: "consume" | "reverse" | "waste", at: number, tag: string, reason?: string) {
   if (!s.automations.stock_deduction) return;
   lineUsage(s, l).forEach((r, idx) => {
     const qty = (r.qty / (r.yieldPct || 1)) * l.qty;
@@ -56,12 +58,12 @@ function moveLine(s: RestaurantState, l: OrderLine, kind: "consume" | "reverse" 
 /** Quantity written off by a waste move (raw stock thrown away, or cooked food lost after an order was cancelled/remade). */
 export const wasteQty = (m: { qty: number; lost?: number; kind: MoveKind }) => (m.kind !== "waste" ? 0 : m.qty < 0 ? -m.qty : m.lost ?? 0);
 
-function recalc(o: Order) {
+export function recalc(o: Order) {
   o.subtotal = o.lines.filter((l) => l.status === "active").reduce((a, l) => a + l.unitPrice * l.qty, 0);
   o.total = o.subtotal + o.fee;
 }
 
-function setStatus(s: RestaurantState, o: Order, status: Order["status"], at: number, by: string, note?: string) {
+export function setStatus(s: RestaurantState, o: Order, status: Order["status"], at: number, by: string, note?: string) {
   if (o.status === status) return;
   o.status = status;
   o.history.push({ at, status, by, note });
@@ -72,11 +74,11 @@ function setStatus(s: RestaurantState, o: Order, status: Order["status"], at: nu
       s.notices.unshift({ id: `n-ready-${o.id}-${o.history.length}`, at, text: `Պատրաստ է՝ ${o.code}${o.tableId ? ` · սեղան ${tableLabel(s, o.tableId)}` : " · տանելու"}`, href: o.type === "takeaway" ? "/r/admin/orders" : "/r/floor", read: false, kind: "order" });
     }
   }
-  if (status === "completed") o.closedAt = at;
+  if (status === "completed") { o.closedAt = at; onOrderCompleted(s, o, at); }
 }
 
 /** Order status follows the kitchen tickets while the order is in the kitchen. */
-function syncFromTickets(s: RestaurantState, o: Order, at: number, by: string) {
+export function syncFromTickets(s: RestaurantState, o: Order, at: number, by: string) {
   if (!["accepted", "preparing", "ready", "served"].includes(o.status)) return;
   const k = derivedKitchenStatus(s.tickets.filter((t) => t.orderId === o.id));
   if (o.status === "served" && k === "ready") return;
@@ -85,7 +87,7 @@ function syncFromTickets(s: RestaurantState, o: Order, at: number, by: string) {
 
 const tableLabel = (s: RestaurantState, id: string) => s.tables.find((t) => t.id === id)?.label ?? id;
 
-function buildLines(s: RestaurantState, lines: CartLine[], idBase: string): OrderLine[] {
+export function buildLines(s: RestaurantState, lines: CartLine[], idBase: string): OrderLine[] {
   const out: OrderLine[] = [];
   lines.slice(0, 30).forEach((c, i) => {
     const item = s.items.find((x) => x.id === c.itemId);
@@ -95,21 +97,35 @@ function buildLines(s: RestaurantState, lines: CartLine[], idBase: string): Orde
     const mods = Array.from(new Set(c.modifierIds));
     if (modifierError(item, mods)) return;
     const m = modifiersOf(item, mods);
-    out.push({ id: `${idBase}-${i}`, itemId: item.id, name: item.name.hy, qty, unitPrice: item.price + m.reduce((a, x) => a + x.price, 0), modifiers: m.map((x) => ({ id: x.id, name: x.name.hy, price: x.price })), note: (c.note ?? "").slice(0, 200), station: item.station, status: "active" });
+    const course = Number.isInteger(c.course) && c.course! >= 0 && c.course! <= 3 ? c.course! : 0; // 0 = fire immediately
+    const seat = Number.isInteger(c.seat) && c.seat! >= 1 && c.seat! <= 30 ? c.seat : undefined;
+    out.push({ id: `${idBase}-${i}`, itemId: item.id, name: item.name.hy, qty, unitPrice: item.price + m.reduce((a, x) => a + x.price, 0), modifiers: m.map((x) => ({ id: x.id, name: x.name.hy, price: x.price })), note: (c.note ?? "").slice(0, 200), station: item.station, status: "active", course, seat });
   });
   return out;
 }
 
-function fire(s: RestaurantState, o: Order, lines: OrderLine[], at: number, idBase: string, remake = false) {
-  const by: Partial<Record<StationId, string[]>> = {};
-  for (const l of lines) if (l.status === "active") (by[l.station] ??= []).push(l.id);
-  for (const [station, ids] of Object.entries(by) as [StationId, string[]][]) {
-    s.tickets.push({ id: `tk-${idBase}-${station}`, orderId: o.id, station, lineIds: ids, status: "queued", rush: remake, firedAt: at, remake });
+/**
+ * Creates one kitchen ticket per station and course. Course 0 (drinks / "send now") and the first
+ * course present fire immediately; later courses are created as "held" until the waiter fires them.
+ */
+export function fire(s: RestaurantState, o: Order, lines: OrderLine[], at: number, idBase: string, remake = false) {
+  const active = lines.filter((l) => l.status === "active");
+  const courses = Array.from(new Set(active.map((l) => l.course).filter((c) => c > 0))).sort();
+  const firstCourse = courses[0] ?? 0;
+  const groups = new Map<string, { station: StationId; course: number; ids: string[] }>();
+  for (const l of active) {
+    const k = `${l.station}|${l.course}`;
+    if (!groups.has(k)) groups.set(k, { station: l.station, course: l.course, ids: [] });
+    groups.get(k)!.ids.push(l.id);
+  }
+  for (const g of groups.values()) {
+    const held = g.course > firstCourse;
+    s.tickets.push({ id: `tk-${idBase}-${g.station}${g.course ? `-c${g.course}` : ""}`, orderId: o.id, station: g.station, lineIds: g.ids, status: held ? "held" : "queued", rush: remake, firedAt: at, remake, course: g.course, itemsDone: [] });
   }
   for (const l of lines) if (l.status === "active") moveLine(s, l, "consume", at, "order");
 }
 
-function accept(s: RestaurantState, o: Order, at: number, by: string, auto: boolean) {
+export function accept(s: RestaurantState, o: Order, at: number, by: string, auto: boolean) {
   if (o.status !== "submitted") return;
   setStatus(s, o, "accepted", at, by, auto ? "Ավտոմատ ընդունում (կանոն)" : undefined);
   o.acceptedAt = at;
@@ -119,13 +135,14 @@ function accept(s: RestaurantState, o: Order, at: number, by: string, auto: bool
 }
 
 /** Undo or write off stock for lines that leave the kitchen. */
-function releaseLines(s: RestaurantState, o: Order, lineIds: string[], at: number, reason: string) {
+export function releaseLines(s: RestaurantState, o: Order, lineIds: string[], at: number, reason: string) {
   for (const id of lineIds) {
     const l = o.lines.find((x) => x.id === id);
     if (!l) continue;
     const t = s.tickets.find((x) => x.orderId === o.id && x.lineIds.includes(id));
-    const started = t && t.status !== "queued";
+    const started = t && t.status !== "queued" && t.status !== "held";
     moveLine(s, l, started ? "waste" : "reverse", at, started ? "Չեղարկված պատրաստելուց հետո" : "Չեղարկված", reason);
+    if (started) onLateCancel(s, o, reason, at, `${o.id}:${id}`);
     if (t) { t.lineIds = t.lineIds.filter((x) => x !== id); if (!t.lineIds.length) t.status = "voided"; }
   }
 }
@@ -137,7 +154,7 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
       const table = ev.tableToken ? s.tables.find((t) => t.token === ev.tableToken) : ev.tableId ? s.tables.find((t) => t.id === ev.tableId) : undefined;
       if (ev.orderType === "dine_in" && (!table || !s.areas.find((a) => a.id === table.areaId)?.open)) return s;
       if (ev.orderType === "takeaway" && (!s.settings.takeaway.enabled || !ev.contact?.name.trim() || ev.contact.phone.replace(/\D/g, "").length < 6)) return s;
-      const lines = buildLines(s, ev.lines, `ol-${id}`);
+      const lines = buildLines(s, ev.channel === "waiter" ? ev.lines : ev.lines.map((l) => ({ ...l, course: 0 })), `ol-${id}`);
       if (!lines.length) return s;
       const fee = ev.orderType === "takeaway" ? s.settings.takeaway.serviceFee : 0;
       const subtotal = lines.reduce((a, l) => a + l.unitPrice * l.qty, 0);
@@ -263,10 +280,9 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
     }
     case "table.open": {
       const table = s.tables.find((t) => t.id === ev.tableId);
-      if (!table || s.sessions.some((x) => x.tableId === table.id && x.status === "open")) return s;
+      if (!table || table.blocked || s.sessions.some((x) => x.status === "open" && (x.tableId === table.id || x.mergedTables?.includes(table.id)))) return s;
       s.sessions.push({ id: `ss-${id}`, tableId: table.id, openedAt: at, partySize: Math.max(1, Math.min(30, Math.floor(ev.partySize))), waiterId: ev.waiterId ?? table.waiterId, status: "open" });
       s.cleaning = s.cleaning.filter((x) => x !== table.id);
-      s.reservations = s.reservations.filter((r) => !(r.tableId === table.id && Math.abs(r.at - at) < 90 * 60000));
       s.activity.unshift({ id: `a-${id}`, at, text: `Սեղան ${table.label}՝ հյուրեր (${ev.partySize})`, by: who, kind: "table" });
       return s;
     }
@@ -275,8 +291,13 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
       if (!sess) return s;
       const orders = s.orders.filter((o) => o.sessionId === sess.id);
       if (orders.some((o) => ["submitted", "accepted", "preparing", "ready"].includes(o.status))) return s; // kitchen still working
-      orders.filter((o) => o.status === "served").forEach((o) => setStatus(s, o, "completed", at, who, "Հաշիվը փակվել է դրամարկղում (POS)"));
-      sess.status = "closed"; sess.closedAt = at;
+      const via = ev.via ?? "pos";
+      // closing through the bill requires every part to be paid (provider-approved) or recorded; a pending payment blocks closing
+      if (sess.bill && sess.bill.parts.some((p) => p.status === "pending")) return s;
+      if (via === "bill" && (!sess.bill || sess.bill.parts.some((p) => p.status !== "paid" && p.status !== "recorded"))) return s;
+      orders.filter((o) => o.status === "served").forEach((o) => setStatus(s, o, "completed", at, who, via === "bill" ? "Հաշիվը փակված է" : "Հաշիվը փակվել է դրամարկղում (POS)"));
+      sess.status = "closed"; sess.closedAt = at; sess.closedVia = via;
+      closeHook(s, sess, at, who);
       s.requests.filter((r) => r.tableId === ev.tableId && r.status !== "done").forEach((r) => { r.status = "done"; r.doneAt = at; });
       s.cleaning.push(ev.tableId);
       s.activity.unshift({ id: `a-${id}`, at, text: `Սեղան ${tableLabel(s, ev.tableId)}՝ հաշիվը փակված է (POS)`, by: who, kind: "table" });
@@ -288,10 +309,10 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
     case "table.request": {
       const table = ev.tableToken ? s.tables.find((t) => t.token === ev.tableToken) : s.tables.find((t) => t.id === ev.tableId);
       if (!table || s.requests.some((r) => r.tableId === table.id && r.kind === ev.kind && r.status !== "done")) return s;
-      let sess = s.sessions.find((x) => x.tableId === table.id && x.status === "open");
+      let sess = s.sessions.find((x) => x.status === "open" && (x.tableId === table.id || x.mergedTables?.includes(table.id)));
       if (!sess) { sess = { id: `ss-${id}`, tableId: table.id, openedAt: at, partySize: 2, waiterId: table.waiterId, status: "open" }; s.sessions.push(sess); }
-      if (ev.kind === "bill") sess.billRequested = true;
-      s.requests.push({ id: `rq-${id}`, tableId: table.id, sessionId: sess.id, kind: ev.kind, at, status: "new" });
+      if (ev.kind === "bill") { sess.billRequested = true; runAuto(s, "bill_request_notify", `${sess.id}:${id}`, at, `Սեղան ${table.label}՝ հաշվի խնդրանք → մատուցող`); }
+      s.requests.push({ id: `rq-${id}`, tableId: sess.tableId, sessionId: sess.id, kind: ev.kind, at, status: "new" });
       s.notices.unshift({ id: `n-${id}`, at, text: `Սեղան ${table.label}՝ ${{ waiter: "կանչում է մատուցողին", bill: "խնդրում է հաշիվը", help: "օգնության կարիք ունի" }[ev.kind]}`, href: `/r/floor?table=${table.id}`, read: false, kind: "request" });
       return s;
     }
@@ -343,6 +364,7 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
       const ing = s.ingredients.find((x) => x.id === ev.ingredientId);
       if (!ing || !(ev.qty > 0) || ev.qty > onHand(s, ing.id) + 1e-6) return s;
       addMove(s, `wastelog:${id}`, ing.id, -ev.qty, "waste", at, { reason: ev.reason.slice(0, 120), by: ev.by });
+      onWaste(s, ing.id, ev.qty, at, id);
       s.activity.unshift({ id: `a-${id}`, at, text: `Կորուստ՝ ${ing.name} ${ev.qty} ${ing.unit} (${ev.reason})`, by: who, kind: "stock" });
       return s;
     }
@@ -356,14 +378,16 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
       const lines = ev.lines.map((l) => ({ ...l, ing: s.ingredients.find((i) => i.id === l.ingredientId) })).filter((l) => l.ing && l.ing.supplierId === ev.supplierId && l.qty > 0);
       if (!lines.length) return s;
       s.seq.po += 1;
-      s.pos.unshift({ id: `po-${id}`, code: `PO-${String(s.seq.po).padStart(3, "0")}`, supplierId: ev.supplierId, status: "draft", createdAt: at, lines: lines.map((l) => ({ ingredientId: l.ingredientId, qty: l.qty, cost: l.ing!.cost, received: 0 })) });
+      const total = lines.reduce((a, l) => a + l.qty * l.ing!.cost, 0);
+      // purchases above the approval threshold need a manager's approval before they can be sent
+      s.pos.unshift({ id: `po-${id}`, code: `PO-${String(s.seq.po).padStart(3, "0")}`, supplierId: ev.supplierId, status: total > PO_APPROVAL_LIMIT ? "pending_approval" : "draft", createdAt: at, total, lines: lines.map((l) => ({ ingredientId: l.ingredientId, qty: l.qty, cost: l.ing!.cost, received: 0 })) });
       s.activity.unshift({ id: `a-${id}`, at, text: `Գնման պատվեր PO-${String(s.seq.po).padStart(3, "0")} (${s.suppliers.find((x) => x.id === ev.supplierId)?.name})`, by: who, kind: "stock" });
       return s;
     }
     case "po.send": {
       const po = s.pos.find((x) => x.id === ev.poId);
-      if (!po || po.status !== "draft") return s;
-      po.status = "sent";
+      if (!po || (po.status !== "draft" && po.status !== "approved")) return s;
+      po.status = "sent"; po.sentAt = at; po.expectedAt = at + (s.suppliers.find((x) => x.id === po.supplierId)?.leadDays ?? 1) * 864e5;
       const sup = s.suppliers.find((x) => x.id === po.supplierId);
       s.outbox.unshift({ id: `ob-${id}`, at, channel: "telegram", to: sup?.name ?? "", text: `${po.code}: ${po.lines.length} դիրք. Summit Table`, state: "simulated", ref: po.id });
       return s;
@@ -380,6 +404,7 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
         pl.received += r.qty;
       }
       po.status = po.lines.every((l) => l.received >= l.qty) ? "received" : "partial";
+      if (po.status === "received") po.receivedAt = at;
       s.activity.unshift({ id: `a-${id}`, at, text: `Ստացվեց ${po.code} (${po.status === "received" ? "ամբողջությամբ" : "մասնակի"})`, by: who, kind: "stock" });
       return s;
     }
@@ -405,8 +430,10 @@ export function apply(s: RestaurantState, ev: RStamped): RestaurantState {
     case "notices.read":
       s.notices.forEach((n) => (n.read = true));
       return s;
+    default:
+      applyOps(s, ev, who);
+      return s;
   }
-  return s;
 }
 
 /* ---------------- replay with a memoised seed ---------------- */

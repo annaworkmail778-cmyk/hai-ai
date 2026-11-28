@@ -50,7 +50,7 @@ export type SavingsAssumptions = {
 
 export type AreaId = "hall" | "lounge" | "terrace" | "private" | "bar";
 export type Area = { id: AreaId; name: I18n; open: boolean; note?: string; w: number; h: number };
-export type Table = { id: string; label: string; areaId: AreaId; seats: number; shape: "round" | "rect"; x: number; y: number; w: number; h: number; token: string; waiterId: string };
+export type Table = { id: string; label: string; areaId: AreaId; seats: number; shape: "round" | "rect"; x: number; y: number; w: number; h: number; token: string; waiterId: string; blocked?: string; combinableWith?: string[] };
 
 /* ---------------- menu, ingredients, recipes ---------------- */
 
@@ -89,6 +89,8 @@ export type OrderStatus = "submitted" | "accepted" | "preparing" | "ready" | "se
 export type OrderLine = {
   id: string; itemId: string; name: string; qty: number; unitPrice: number; modifiers: { id: string; name: string; price: number }[];
   note: string; station: StationId; status: "active" | "voided"; voidReason?: string; remakeOf?: string;
+  /** Seat number at the table (optional) and course: 0 = immediately (drinks), 1 starters, 2 mains, 3 desserts. */
+  seat?: number; course: number;
 };
 export type Order = {
   id: string; code: string; channel: Channel; type: OrderType; tableId?: string; sessionId?: string;
@@ -98,24 +100,41 @@ export type Order = {
   /** Hash of the guest device key: the status page shows an order only to the device that placed it. */
   deviceKey?: string;
 };
-export type TicketStatus = "queued" | "in_progress" | "ready" | "bumped" | "voided";
+export type TicketStatus = "held" | "queued" | "in_progress" | "ready" | "bumped" | "voided";
 export type Ticket = {
   id: string; orderId: string; station: StationId; lineIds: string[]; status: TicketStatus; rush: boolean;
   firedAt: number; startedAt?: number; readyAt?: number; bumpedAt?: number; remake?: boolean;
+  /** Course of this ticket (tickets of later courses are held until the waiter fires them) and item-level check-offs. */
+  course: number; itemsDone: string[]; reopenedBy?: string;
 };
-export type TableSession = { id: string; tableId: string; openedAt: number; partySize: number; waiterId: string; status: "open" | "closed"; closedAt?: number; billRequested?: boolean };
-export type TableState = "available" | "reserved" | "seated" | "ordering" | "waiting_food" | "eating" | "bill" | "cleaning";
+export type BillPart = { id: string; label: string; lineIds: string[] | null; amount: number; status: "open" | "pending" | "paid" | "declined" | "recorded"; paymentId?: string; method?: PayMethod };
+export type Bill = { mode: "single" | "seats" | "equal" | "items"; parts: BillPart[]; total: number; createdAt: number; by: string };
+export type TableSession = {
+  id: string; tableId: string; openedAt: number; partySize: number; waiterId: string; status: "open" | "closed"; closedAt?: number; billRequested?: boolean;
+  /** Allergies / dietary needs told to the waiter (shown on every ticket of this table), service notes, merged tables, bill. */
+  allergies?: string; notes?: string; mergedTables?: string[]; bill?: Bill; reservationId?: string; customerId?: string; closedVia?: "bill" | "pos";
+};
+export type PayMethod = "card_terminal" | "cash" | "online" | "pos";
+/** A payment changes to "approved" only from a provider/adapter result, never from a button click. */
+export type Payment = { id: string; sessionId: string; partId: string; amount: number; method: PayMethod; adapter: string; status: "pending" | "approved" | "declined" | "recorded"; providerRef?: string; createdAt: number; resultAt?: number; by: string };
+export type TableState = "available" | "reserved" | "seated" | "ordering" | "waiting_food" | "eating" | "bill" | "payment_pending" | "cleaning" | "blocked";
 export type RequestKind = "waiter" | "bill" | "help";
 export type ServiceRequest = { id: string; tableId: string; sessionId?: string; kind: RequestKind; at: number; status: "new" | "ack" | "done"; ackAt?: number; doneAt?: number; by?: string };
-export type Reservation = { id: string; name: string; partySize: number; at: number; tableId: string; note?: string; vip?: boolean };
+export type ResStatus = "requested" | "confirmed" | "seated" | "completed" | "declined" | "cancelled" | "no_show";
+export type ResSource = "website" | "phone" | "walk_in" | "inbox" | "assistant" | "thefork_import";
+export type Reservation = {
+  id: string; code: string; name: string; phone: string; partySize: number; at: number; durationMin: number; tableIds: string[]; status: ResStatus; source: ResSource;
+  note?: string; allergies?: string; occasion?: string; vip?: boolean; customerId?: string; deviceKey?: string; history: { at: number; text: string; by: string }[]; reminded?: boolean;
+};
+export type WaitEntry = { id: string; name: string; phone: string; partySize: number; addedAt: number; quotedMin: number; status: "waiting" | "notified" | "seated" | "left"; tableId?: string };
 
 /* ---------------- stock & purchasing ---------------- */
 
 export type MoveKind = "receive" | "consume" | "reverse" | "waste" | "adjust";
 /** qty = change of stock on hand. For waste of food that was already consumed by an order, qty = 0 and `lost` = quantity written off. */
 export type StockMove = { key: string; ingredientId: string; qty: number; kind: MoveKind; unitCost: number; at: number; ref?: string; reason?: string; by?: string; lost?: number };
-export type PoStatus = "draft" | "sent" | "partial" | "received" | "cancelled";
-export type PurchaseOrder = { id: string; code: string; supplierId: string; status: PoStatus; createdAt: number; lines: { ingredientId: string; qty: number; cost: number; received: number }[] };
+export type PoStatus = "draft" | "pending_approval" | "approved" | "sent" | "partial" | "received" | "cancelled";
+export type PurchaseOrder = { id: string; code: string; supplierId: string; status: PoStatus; createdAt: number; lines: { ingredientId: string; qty: number; cost: number; received: number }[]; auto?: boolean; approvedBy?: string; sentAt?: number; expectedAt?: number; receivedAt?: number; total: number };
 
 /* ---------------- history (read-only, shared between replays) ---------------- */
 
@@ -129,12 +148,46 @@ export type HistStockout = { day: string; itemId: string; minutes: number };
 
 /* ---------------- staff, activity ---------------- */
 
-export type RoleId = "owner" | "manager" | "waiter" | "chef" | "cook" | "bartender" | "cashier" | "stock";
+export type RoleId = "owner" | "manager" | "host" | "waiter" | "chef" | "cook" | "bartender" | "cashier" | "stock";
 export type Staff = { id: string; name: string; initials: string; role: RoleId; station?: StationId; areaIds?: AreaId[] };
 export type Activity = { id: string; at: number; text: string; by: string; kind: "order" | "kitchen" | "table" | "menu" | "stock" | "auto" | "settings" };
 export type Notice = { id: string; at: number; text: string; href: string; read: boolean; kind: "order" | "request" | "stock" | "late" };
 export type OutboxItem = { id: string; at: number; channel: "sms" | "whatsapp" | "telegram" | "email"; to: string; text: string; state: "simulated"; ref?: string };
-export type AutomationId = "station_routing" | "stock_deduction" | "ready_notify" | "low_stock_alert" | "price_change_alert" | "late_ticket_alert" | "request_escalation";
+export type AutomationId = "station_routing" | "stock_deduction" | "ready_notify" | "low_stock_alert" | "price_change_alert" | "late_ticket_alert" | "request_escalation"
+  | "reservation_host_alert" | "reservation_reminder" | "walkin_assign" | "bill_request_notify" | "cancel_manager_alert" | "low_stock_purchase_draft"
+  | "negative_review_task" | "inbox_auto_reply" | "unusual_waste_alert" | "shift_handover" | "daily_summary";
+export type AutoLog = { id: string; automationId: AutomationId; at: number; ref: string; result: "ok" | "skipped" | "failed"; detail: string };
+
+/* ---------------- customers, communication, reputation ---------------- */
+
+export type Customer = {
+  id: string; name: string; phone: string; email?: string; lang: Lang; firstSeen: number; lastVisit?: number; visits: number; spend: number; orders: number;
+  favourites: string[]; tags: string[]; dietary?: string; consent: { marketing: boolean; at: number; source: string }; points: number; tier: string; notes?: string;
+};
+export type LoyaltyEntry = { key: string; customerId: string; points: number; at: number; reason: string };
+export type InboxChannel = "whatsapp" | "instagram" | "messenger" | "webchat" | "email";
+export type InboxMessage = { id: string; dir: "in" | "out" | "note"; text: string; at: number; author: string; state?: "received" | "delivered" | "simulated" | "draft" | "auto_simulated" | "auto_delivered"; intent?: string };
+export type Conversation = {
+  id: string; channel: InboxChannel; customer: { name: string; handle: string }; customerId?: string; lang: Lang; status: "new" | "open" | "pending" | "resolved";
+  assigneeId?: string; priority: "normal" | "high"; tags: string[]; messages: InboxMessage[]; unread: number; draft?: { text: string; intent: string; risk: "low" | "approval" | "escalate"; facts: string[] };
+  firstInAt: number; firstReplyAt?: number; deviceKey?: string;
+};
+export type ReviewPlatform = "google" | "tripadvisor" | "thefork";
+export type Review = {
+  id: string; platform: ReviewPlatform; rating: number; text: string; lang: Lang; author: string; at: number;
+  categories: { food?: number; service?: number; price?: number; ambience?: number; wait?: number };
+  reply?: { text: string; status: "draft" | "approved" | "queued_not_connected" | "manual_required" | "published_simulated"; by: string; at: number };
+  taskId?: string;
+};
+
+/* ---------------- team ---------------- */
+
+export type Task = { id: string; title: string; assigneeId?: string; role?: RoleId; due?: number; priority: "normal" | "high"; status: "open" | "done"; createdAt: number; source: "manual" | "automation" | "assistant"; ref?: string; doneAt?: number };
+export type Shift = { id: string; staffId: string; day: string; start: string; end: string; section?: string };
+export type Handover = { id: string; at: number; by: string; text: string; auto: boolean };
+export type TeamMsg = { id: string; channel: "all" | "kitchen" | "floor" | "managers"; at: number; by: string; text: string; urgent?: boolean };
+export type StockCount = { id: string; at: number; by: string; lines: { ingredientId: string; expected: number; counted: number; unitCost: number }[] };
+export type DaySummary = { id: string; at: number; by: string; text: string[] };
 
 export type RestaurantState = {
   baseDate: string;
@@ -169,12 +222,27 @@ export type RestaurantState = {
   notices: Notice[];
   outbox: OutboxItem[];
   automations: Record<AutomationId, boolean>;
-  seq: { order: number; po: number };
+  autolog: AutoLog[];
+  payments: Payment[];
+  waitlist: WaitEntry[];
+  customers: Customer[];
+  loyalty: { enabled: boolean; earnPer1000: number; tiers: { id: string; name: string; min: number }[]; ledger: LoyaltyEntry[] };
+  inbox: Conversation[];
+  inboxSettings: { autoReplyIntents: string[] };
+  reviews: Review[];
+  tasks: Task[];
+  shifts: Shift[];
+  handovers: Handover[];
+  teamMsgs: TeamMsg[];
+  counts: StockCount[];
+  summaries: DaySummary[];
+  sops: { id: string; title: string; roles: RoleId[]; steps: string[]; tags: string[] }[];
+  seq: { order: number; po: number; res: number };
 };
 
 /* ---------------- events ---------------- */
 
-export type CartLine = { itemId: string; qty: number; modifierIds: string[]; note: string };
+export type CartLine = { itemId: string; qty: number; modifierIds: string[]; note: string; seat?: number; course?: number };
 
 export type RestaurantEvent =
   | { type: "order.submit"; channel: Channel; orderType: OrderType; tableToken?: string; tableId?: string; contact?: { name: string; phone: string }; pickupAt?: number; note: string; lines: CartLine[]; deviceKey?: string }
@@ -192,7 +260,7 @@ export type RestaurantEvent =
   | { type: "ticket.recall"; ticketId: string }
   | { type: "ticket.rush"; ticketId: string; rush: boolean }
   | { type: "table.open"; tableId: string; partySize: number; waiterId?: string }
-  | { type: "table.close"; tableId: string }
+  | { type: "table.close"; tableId: string; via?: "pos" | "bill" }
   | { type: "table.clean"; tableId: string }
   | { type: "table.request"; tableToken?: string; tableId?: string; kind: RequestKind }
   | { type: "request.ack"; requestId: string }
@@ -209,6 +277,57 @@ export type RestaurantEvent =
   | { type: "settings.update"; patch: Partial<Omit<Settings, "savings">> & { savings?: Partial<SavingsAssumptions> } }
   | { type: "brand.theme"; theme: ThemePreset }
   | { type: "automation.toggle"; target: AutomationId; on: boolean }
-  | { type: "notices.read" };
+  | { type: "notices.read" }
+  /* waiter & floor */
+  | { type: "table.notes"; tableId: string; allergies?: string; notes?: string; partySize?: number }
+  | { type: "table.transfer"; fromTableId: string; toTableId: string }
+  | { type: "table.assign"; tableId: string; waiterId: string }
+  | { type: "table.merge"; tableId: string; withTableId: string }
+  | { type: "table.block"; tableId: string; reason: string | null }
+  | { type: "table.layout"; tableId: string; x?: number; y?: number; seats?: number; shape?: "round" | "rect" }
+  | { type: "order.moveLines"; orderId: string; lineIds: string[]; toTableId: string }
+  | { type: "order.fireCourse"; tableId: string; course: number }
+  | { type: "ticket.itemDone"; ticketId: string; lineId: string; done: boolean }
+  | { type: "ticket.reopen"; ticketId: string; reason: string }
+  | { type: "bill.prepare"; tableId: string; mode: Bill["mode"]; n?: number; groups?: string[][] }
+  | { type: "payment.request"; tableId: string; partId: string; method: PayMethod }
+  | { type: "payment.result"; paymentId: string; approved: boolean; providerRef: string; adapter: string }
+  | { type: "payment.record"; tableId: string; partId: string; method: "cash" | "pos" }
+  /* reservations */
+  | { type: "reservation.request"; name: string; phone: string; partySize: number; at: number; note?: string; allergies?: string; occasion?: string; source: ResSource; deviceKey?: string }
+  | { type: "reservation.confirm"; reservationId: string; tableIds: string[] }
+  | { type: "reservation.decline"; reservationId: string; reason: string }
+  | { type: "reservation.modify"; reservationId: string; at?: number; partySize?: number; tableIds?: string[] }
+  | { type: "reservation.cancel"; reservationId: string; reason: string }
+  | { type: "reservation.seat"; reservationId: string }
+  | { type: "reservation.noShow"; reservationId: string }
+  | { type: "reservation.remind"; reservationId: string }
+  | { type: "waitlist.add"; name: string; phone: string; partySize: number }
+  | { type: "waitlist.notify"; entryId: string }
+  | { type: "waitlist.seat"; entryId: string; tableId: string }
+  | { type: "waitlist.remove"; entryId: string }
+  /* communication & reputation */
+  | { type: "inbox.receive"; channel: InboxChannel; from: { name: string; handle: string }; text: string; conversationId?: string; deviceKey?: string }
+  | { type: "inbox.send"; conversationId: string; text: string; approved: boolean; fromDraft?: boolean }
+  | { type: "inbox.assign"; conversationId: string; assigneeId: string }
+  | { type: "inbox.status"; conversationId: string; status: Conversation["status"] }
+  | { type: "inbox.note"; conversationId: string; text: string }
+  | { type: "inbox.tag"; conversationId: string; tag: string }
+  | { type: "inbox.read"; conversationId: string }
+  | { type: "inbox.autoreply"; intents: string[] }
+  | { type: "review.receive"; platform: ReviewPlatform; rating: number; text: string; author: string }
+  | { type: "review.reply"; reviewId: string; text: string; publish: boolean }
+  /* CRM, loyalty, team */
+  | { type: "customer.update"; customerId: string; consent?: boolean; tags?: string[]; notes?: string; dietary?: string }
+  | { type: "loyalty.config"; enabled?: boolean; earnPer1000?: number }
+  | { type: "task.create"; title: string; assigneeId?: string; role?: RoleId; priority: "normal" | "high"; due?: number; ref?: string; source?: "manual" | "assistant" }
+  | { type: "task.done"; taskId: string }
+  | { type: "team.msg"; channel: TeamMsg["channel"]; text: string; urgent?: boolean }
+  | { type: "shift.handover"; text?: string }
+  | { type: "day.close" }
+  /* inventory & purchasing */
+  | { type: "stock.count"; lines: { ingredientId: string; counted: number }[] }
+  | { type: "po.approve"; poId: string }
+  | { type: "po.cancel"; poId: string };
 
 export type RStamped = Stamped<RestaurantEvent>;

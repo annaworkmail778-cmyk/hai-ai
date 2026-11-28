@@ -8,6 +8,7 @@
 import { addDays, atTime, weekday } from "../dates.ts";
 import { AREAS, BRAND, CATEGORIES, INGREDIENTS, MENU, PRICE_CHANGES, RECIPES, STAFF, STATIONS, SUPPLIERS, TABLES } from "./data.ts";
 import { linesCost, netOf } from "./rules.ts";
+import { seedOps } from "./seed-ops.ts";
 import type { Channel, HistOrder, HistStockout, HistWaste, PricePoint, RestaurantEvent, RestaurantState, RStamped, Settings, StationId } from "./types.ts";
 
 function rng(seed: number) {
@@ -122,11 +123,17 @@ export function createSeed(baseDate: string, epochAt: number, apply: (s: Restaur
     stockStart,
     expiring: [{ ingredientId: "herbs", qty: 600, expiresDay: addDays(baseDate, 1) }, { ingredientId: "trout", qty: 1200, expiresDay: addDays(baseDate, 1) }, { ingredientId: "cream", qty: 1000, expiresDay: addDays(baseDate, 2) }],
     moves: [], orders: [], tickets: [], sessions: [], requests: [], reservations: [], cleaning: [], pos: [], activity: [], notices: [], outbox: [],
-    automations: { station_routing: true, stock_deduction: true, ready_notify: true, low_stock_alert: true, price_change_alert: true, late_ticket_alert: true, request_escalation: true },
-    seq: { order: 1240, po: 17 },
+    automations: { station_routing: true, stock_deduction: true, ready_notify: true, low_stock_alert: true, price_change_alert: true, late_ticket_alert: true, request_escalation: true,
+      reservation_host_alert: true, reservation_reminder: true, walkin_assign: true, bill_request_notify: true, cancel_manager_alert: true, low_stock_purchase_draft: true,
+      negative_review_task: true, inbox_auto_reply: true, unusual_waste_alert: true, shift_handover: true, daily_summary: true },
+    autolog: [], payments: [], waitlist: [], customers: [], loyalty: { enabled: true, earnPer1000: 10, tiers: [], ledger: [] }, inbox: [], inboxSettings: { autoReplyIntents: [] },
+    reviews: [], tasks: [], shifts: [], handovers: [], teamMsgs: [], counts: [], summaries: [], sops: [],
+    seq: { order: 1240, po: 17, res: 300 },
   };
 
+  seedOps(s, epochAt, r);
   liveService(s, epochAt, apply);
+  s.autolog = s.autolog.filter((x) => x.result === "ok").slice(0, 12); // keep a short, readable history from the seeded evening
   return s;
 }
 
@@ -211,13 +218,6 @@ function liveService(s: RestaurantState, E: number, apply: (s: RestaurantState, 
   { const id = run({ type: "order.submit", channel: "website", orderType: "takeaway", contact: { name: "Mila K.", phone: "+374 00 000 144" }, pickupAt: E + 20 * 60000, note: "", lines: [L("khorovats", 1, ["large"]), L("lavash-basket")] }, 9, "guest"); run({ type: "order.accept", orderId: `o-${id}` }, 8, "s-lusine"); }
   s.cleaning.push("T8");
 
-  /* reservations tonight (shown on the floor plan; the reservation book is a later phase) */
-  s.reservations.push(
-    { id: "rv-1", name: "Աննա Մ.", partySize: 4, at: E + 25 * 60000, tableId: "T3", note: "Ամուսնության տարեդարձ", vip: false },
-    { id: "rv-2", name: "James C.", partySize: 2, at: E + 40 * 60000, tableId: "T15", note: "Ալերգիա՝ ընկույզ", vip: true },
-    { id: "rv-3", name: "Ольга С.", partySize: 4, at: E + 55 * 60000, tableId: "T6" },
-    { id: "rv-4", name: "Սամվել Գ.", partySize: 2, at: E + 75 * 60000, tableId: "L2" },
-  );
   s.notices.forEach((x) => (x.read = true));
   // keep the two live guest-facing signals unread for the demo
   s.notices.filter((x) => x.href.includes("table=T12") || x.kind === "request").forEach((x) => (x.read = false));

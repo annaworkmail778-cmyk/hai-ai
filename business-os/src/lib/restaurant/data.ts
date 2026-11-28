@@ -50,7 +50,8 @@ const TOKENS = ["k3f9", "p8d2", "w4m7", "z1q6", "c9t3", "n5r8", "h2v4", "b7x1", 
 
 const hall: Table[] = Array.from({ length: 16 }, (_, i) => {
   const col = i % 4, row = Math.floor(i / 4);
-  return { id: `T${i + 1}`, label: `${i + 1}`, areaId: "hall" as const, seats: i % 5 === 0 ? 6 : i % 3 === 0 ? 2 : 4, shape: i % 5 === 0 ? "rect" as const : "round" as const, x: 6 + col * 24, y: 5 + row * 15, w: i % 5 === 0 ? 18 : 12, h: 10, token: TOKENS[i], waiterId: i < 8 ? "s-ani" : "s-davit" };
+  const combinableWith = [col > 0 ? `T${i}` : "", col < 3 ? `T${i + 2}` : ""].filter(Boolean);
+  return { id: `T${i + 1}`, label: `${i + 1}`, areaId: "hall" as const, seats: i % 5 === 0 ? 6 : i % 3 === 0 ? 2 : 4, shape: i % 5 === 0 ? "rect" as const : "round" as const, x: 6 + col * 24, y: 5 + row * 15, w: i % 5 === 0 ? 18 : 12, h: 10, token: TOKENS[i], waiterId: i < 8 ? "s-ani" : "s-davit", combinableWith };
 });
 const lounge: Table[] = Array.from({ length: 6 }, (_, i) => ({ id: `L${i + 1}`, label: `L${i + 1}`, areaId: "lounge" as const, seats: i < 2 ? 2 : 4, shape: "round" as const, x: 6 + i * 15.5, y: i % 2 ? 22 : 8, w: 11, h: 10, token: TOKENS[16 + i], waiterId: "s-mariam" }));
 const terrace: Table[] = Array.from({ length: 8 }, (_, i) => ({ id: `E${i + 1}`, label: `E${i + 1}`, areaId: "terrace" as const, seats: 4, shape: "round" as const, x: 5 + (i % 4) * 24, y: i < 4 ? 5 : 20, w: 11, h: 10, token: TOKENS[22 + i], waiterId: "s-mariam" }));
@@ -65,6 +66,7 @@ export const TABLES: Table[] = [
 export const STAFF: Staff[] = [
   { id: "s-owner", name: "Արամ Սարգսյան", initials: "ԱՍ", role: "owner" },
   { id: "s-lusine", name: "Լուսինե Հակոբյան", initials: "ԼՀ", role: "manager" },
+  { id: "s-elen", name: "Էլեն Սահակյան", initials: "ԷՍ", role: "host" },
   { id: "s-ani", name: "Անի Մարտիրոսյան", initials: "ԱՄ", role: "waiter", areaIds: ["hall"] },
   { id: "s-davit", name: "Դավիթ Պետրոսյան", initials: "ԴՊ", role: "waiter", areaIds: ["hall", "bar"] },
   { id: "s-mariam", name: "Մարիամ Ավետիսյան", initials: "ՄԱ", role: "waiter", areaIds: ["lounge", "private", "terrace"] },
@@ -222,4 +224,4 @@ export const PRICE_CHANGES: { ingredientId: string; daysAgo: number; from: numbe
   { ingredientId: "greens", daysAgo: 6, from: 2200 },
 ];
 
-export const ROLE_LABEL: Record<string, string> = { owner: "Սեփականատեր", manager: "Մենեջեր", waiter: "Մատուցող", chef: "Խոհարար-շեֆ", cook: "Խոհարար", bartender: "Բարմեն", cashier: "Գանձապահ", stock: "Պահեստապետ" };
+export const ROLE_LABEL: Record<string, string> = { owner: "Սեփականատեր", manager: "Մենեջեր", host: "Հյուրընկալող", waiter: "Մատուցող", chef: "Խոհարար-շեֆ", cook: "Խոհարար", bartender: "Բարմեն", cashier: "Գանձապահ", stock: "Պահեստապետ" };

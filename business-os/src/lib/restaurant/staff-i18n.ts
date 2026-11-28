@@ -24,9 +24,9 @@ export type StaffKey = keyof (typeof D)["hy"];
 export const st = (k: StaffKey) => D[STAFF_LANG][k];
 
 export const ORDER_STATUS_HY: Record<OrderStatus, string> = { submitted: "Սպասում է ընդունման", accepted: "Ընդունված", preparing: "Պատրաստվում է", ready: "Պատրաստ է", served: "Մատուցված", picked_up: "Վերցված", completed: "Փակված", rejected: "Մերժված", cancelled: "Չեղարկված" };
-export const TICKET_STATUS_HY: Record<TicketStatus, string> = { queued: "Նոր", in_progress: "Պատրաստվում է", ready: "Պատրաստ", bumped: "Հանձնված", voided: "Չեղարկված" };
+export const TICKET_STATUS_HY: Record<TicketStatus, string> = { held: "Պահված", queued: "Նոր", in_progress: "Պատրաստվում է", ready: "Պատրաստ", bumped: "Հանձնված", voided: "Չեղարկված" };
 export const CHANNEL_HY: Record<Channel, string> = { waiter: "Մատուցող", qr: "QR սեղանից", website: "Կայք (տանելու)" };
 export const STATION_HY: Record<StationId, string> = { hot: "Տաք խոհանոց", grill: "Մանղալ", cold: "Սառը խոհանոց", pastry: "Աղանդեր", bar: "Բար" };
-export const TABLE_STATE_HY: Record<TableState, string> = { available: "Ազատ", reserved: "Ամրագրված", seated: "Նստած", ordering: "Պատվեր է սպասում", waiting_food: "Սպասում է ուտեստին", eating: "Սնվում են", bill: "Հաշիվ է խնդրել", cleaning: "Մաքրում" };
+export const TABLE_STATE_HY: Record<TableState, string> = { available: "Ազատ", reserved: "Ամրագրված", seated: "Նստած", ordering: "Պատվեր է սպասում", waiting_food: "Սպասում է ուտեստին", eating: "Սնվում են", bill: "Հաշիվ է խնդրել", payment_pending: "Վճարում է ընթացքում", cleaning: "Մաքրում", blocked: "Անհասանելի" };
 export const REQUEST_HY: Record<RequestKind, string> = { waiter: "Կանչում է մատուցողին", bill: "Խնդրում է հաշիվը", help: "Օգնություն" };
 export const AREA_HY: Record<AreaId, string> = { hall: "Գլխավոր սրահ", lounge: "Բուխարու սրահ", private: "Առանձնասենյակ", bar: "Բար", terrace: "Տեռաս" };

@@ -8,7 +8,7 @@ import * as A from "@/lib/restaurant/analytics";
 import { useR } from "@/lib/restaurant/client";
 import type { PurchaseOrder } from "@/lib/restaurant/types";
 
-const STATUS: Record<PurchaseOrder["status"], [string, "neutral" | "info" | "warn" | "ok" | "bad"]> = { draft: ["Սևագիր", "neutral"], sent: ["Ուղարկված", "info"], partial: ["Մասնակի ստացված", "warn"], received: ["Ստացված", "ok"], cancelled: ["Չեղարկված", "bad"] };
+const STATUS: Record<PurchaseOrder["status"], [string, "neutral" | "info" | "warn" | "ok" | "bad"]> = { draft: ["Սևագիր", "neutral"], pending_approval: ["Սպասում է հաստատման", "warn"], approved: ["Հաստատված", "info"], sent: ["Ուղարկված", "info"], partial: ["Մասնակի ստացված", "warn"], received: ["Ստացված", "ok"], cancelled: ["Չեղարկված", "bad"] };
 
 function Receive({ po, onClose }: { po: PurchaseOrder; onClose: () => void }) {
   const { state, dispatch } = useR();

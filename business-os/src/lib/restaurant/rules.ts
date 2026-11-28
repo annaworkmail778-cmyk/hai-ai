@@ -128,9 +128,10 @@ export const COMMITTED: OrderStatus[] = ["accepted", "preparing", "ready", "serv
  * "ready" before every station has finished.
  */
 export function derivedKitchenStatus(tickets: Ticket[]): "accepted" | "preparing" | "ready" {
-  const active = tickets.filter((t) => t.status !== "voided");
+  const active = tickets.filter((t) => t.status !== "voided" && t.status !== "held");
   if (active.length && active.every((t) => t.status === "ready" || t.status === "bumped")) return "ready";
   if (active.some((t) => t.status !== "queued")) return "preparing";
+  if (tickets.some((t) => t.status === "held") && !active.length) return "accepted";
   return "accepted";
 }
 
@@ -139,13 +140,15 @@ export function ticketAge(t: Ticket, now: number) {
 }
 
 export function tableState(state: RestaurantState, table: Table, now: number): TableState {
+  if (table.blocked) return "blocked";
   if (state.cleaning.includes(table.id)) return "cleaning";
-  const s = state.sessions.find((x) => x.tableId === table.id && x.status === "open");
+  const s = state.sessions.find((x) => x.status === "open" && (x.tableId === table.id || x.mergedTables?.includes(table.id)));
   if (!s) {
-    const res = state.reservations.find((r) => r.tableId === table.id && r.at - now < 90 * 60000 && r.at - now > -20 * 60000);
+    const res = state.reservations.find((r) => r.status === "confirmed" && r.tableIds.includes(table.id) && r.at - now < 90 * 60000 && r.at - now > -20 * 60000);
     return res ? "reserved" : "available";
   }
-  if (s.billRequested || state.requests.some((r) => r.tableId === table.id && r.kind === "bill" && r.status !== "done")) return "bill";
+  if (s.bill?.parts.some((p) => p.status === "pending")) return "payment_pending";
+  if (s.billRequested || state.requests.some((r) => r.sessionId === s.id && r.kind === "bill" && r.status !== "done")) return "bill";
   const orders = state.orders.filter((o) => o.sessionId === s.id && !["rejected", "cancelled"].includes(o.status));
   if (!orders.length) return "seated";
   if (orders.some((o) => o.status === "submitted")) return "ordering";
