@@ -26,6 +26,8 @@ export function useReveal() {
   return ref;
 }
 
+export const RESERVE: Record<Lang, string> = { hy: "Ամրագրել սեղան", ru: "Забронировать", en: "Book a table" };
+
 export function LangSwitch({ lang }: { lang: Lang }) {
   const path = usePathname() ?? `/restaurant/${lang}`;
   return (
@@ -50,9 +52,11 @@ export function GuestShell({ lang, children, overlay }: { lang: Lang; children: 
         <nav className="ml-auto hidden items-center gap-6 text-[14px] text-[var(--rt-muted)] md:flex">
           <Link href={`/restaurant/${lang}/menu`} className="hover:text-[var(--rt-text)]">{t("menu", lang)}</Link>
           <Link href={`/restaurant/${lang}/menu?mode=takeaway`} className="hover:text-[var(--rt-text)]">{t("takeaway", lang)}</Link>
-          <a href="#visit" className="hover:text-[var(--rt-text)]">{t("visit", lang)}</a>
+          <Link href={`/restaurant/${lang}/reserve`} className="hover:text-[var(--rt-text)]">{RESERVE[lang]}</Link>
+          <a href={`/restaurant/${lang}#visit`} className="hover:text-[var(--rt-text)]">{t("visit", lang)}</a>
         </nav>
-        <div className="ml-auto md:ml-4"><LangSwitch lang={lang} /></div>
+        <Link href={`/restaurant/${lang}/reserve`} className="ml-auto rounded-full border border-[var(--rt-line)] px-3 py-1.5 text-[12.5px] md:hidden">{RESERVE[lang]}</Link>
+        <div className="md:ml-4"><LangSwitch lang={lang} /></div>
       </header>
       {children}
       <footer className="border-t border-[var(--rt-line)] px-5 py-10 text-[13px] text-[var(--rt-faint)] sm:px-8">

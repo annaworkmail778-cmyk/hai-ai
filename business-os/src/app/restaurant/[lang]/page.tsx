@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { use } from "react";
 import { Icon } from "@/components/icons";
-import { GuestShell, money, useReveal } from "@/components/restaurant/guest/shell";
+import { ChatWidget } from "@/components/restaurant/guest/chat";
+import { GuestShell, money, RESERVE, useReveal } from "@/components/restaurant/guest/shell";
 import { useR } from "@/lib/restaurant/client";
 import { t } from "@/lib/restaurant/i18n";
 import type { Lang } from "@/lib/restaurant/types";
@@ -41,6 +42,7 @@ export default function RestaurantHome({ params }: { params: Promise<{ lang: Lan
             <div className="rt-rise rt-rise-3 mt-8 flex flex-wrap gap-3">
               <Link href={`/restaurant/${lang}/menu`} className="rt-btn rt-btn-accent">{t("menu", lang)}<Icon name="arrowRight" size={17} /></Link>
               <Link href={`/restaurant/${lang}/menu?mode=takeaway`} className="rt-btn rt-btn-ghost">{t("takeaway", lang)}</Link>
+              <Link href={`/restaurant/${lang}/reserve`} className="rt-btn rt-btn-ghost">{RESERVE[lang]}</Link>
             </div>
           </div>
         </section>
@@ -99,6 +101,7 @@ export default function RestaurantHome({ params }: { params: Promise<{ lang: Lan
           </div>
         </section>
       </div>
+      <ChatWidget lang={lang} />
     </GuestShell>
   );
 }

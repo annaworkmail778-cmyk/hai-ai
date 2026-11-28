@@ -11,7 +11,7 @@ const D = {
   hy: {
     nav_overview: "Ընդհանուր պատկեր", nav_orders: "Պատվերներ", nav_floor: "Սրահ և սեղաններ", nav_kds: "Խոհանոցի էկրան", nav_menu: "Մենյու",
     nav_inventory: "Պահեստ", nav_recipes: "Բաղադրատոմսեր և ինքնարժեք", nav_purchasing: "Գնումներ", nav_analytics: "Վերլուծություն", nav_savings: "Արդյունավետություն և խնայողություն",
-    nav_automations: "Ավտոմատացումներ", nav_integrations: "Ինտեգրացիաներ", nav_settings: "Կարգավորումներ", nav_site: "Ռեստորանի կայքը", nav_present: "Ներկայացման ռեժիմ",
+    nav_automations: "Ավտոմատացումներ", nav_integrations: "Ինտեգրացիաներ", nav_settings: "Կարգավորումներ", nav_host: "Ամրագրումներ (հոստես)", nav_floorplan: "Սրահի պլան", nav_inbox: "Հաղորդագրություններ", nav_reviews: "Կարծիքներ", nav_customers: "Հաճախորդներ և լոյալություն", nav_assistant: "AI բիզնես օգնական", nav_team: "Թիմ և հերթափոխեր", grp_guests: "Հյուրեր", nav_site: "Ռեստորանի կայքը", nav_present: "Ներկայացման ռեժիմ",
     grp_service: "Սպասարկում", grp_margin: "Մենյու և մարժա", grp_insight: "Վերլուծություն", grp_system: "Համակարգ",
     accept: "Ընդունել", reject: "Մերժել", start: "Սկսել", ready: "Պատրաստ է", bump: "Հանձնված", recall: "Վերադարձնել", serve: "Մատուցված", pickup: "Վերցվեց",
     cancel: "Չեղարկել", void: "Չեղարկել դիրքը", remake: "Վերապատրաստել", open_table: "Նստեցնել հյուրերին", close_table: "Հաշիվը փակված է (POS)", clean_done: "Մաքրված է",
