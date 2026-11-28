@@ -129,3 +129,17 @@ Unsplash photo IDs:
 | Spa | 1544161515-4ab6ce6db874, 1540555700478-4be289fbecef |
 | Breakfast and restaurant | 1504754524776-8f4f37790ca0, 1414235077428-338989a2e8c0 |
 | Ski and hiking | 1551524559-8af4e6624178, 1551632811-561732d1e306 |
+
+## RISEUP Restaurant OS (Core Demo)
+A second vertical in the same app, sharing the demo kernel (`src/lib/kernel`) but with its own state, routes and session (`/api/rsession/{a|b}`, storage prefix `rst:`). Fictional restaurant: **Summit Table** (configurable in `src/lib/restaurant/data.ts`).
+
+| Path | What it is |
+|---|---|
+| `/r` | Restaurant launcher |
+| `/present/restaurant` | Presenter: scenarios A (QR table), B (takeaway), C (food cost), F (owner overview); phone + laptop + kitchen frames |
+| `/restaurant/{hy,ru,en}` | Guest site, menu, takeaway checkout, order status |
+| `/q/{a\|b}/{token}` | Table QR entry (token identifies the table only) |
+| `/r/admin/*` | Owner/manager: overview, orders, menu, recipes & food cost, inventory, purchasing, analytics, savings calculator, automations, integrations, settings |
+| `/r/floor` · `/r/kds` | Waiter app · kitchen display |
+
+Build and QA report: `../docs/RESTAURANT_OS_CORE_DEMO_REPORT.md`. POS, fiscal receipts, payments, delivery platforms and messaging are **not connected**; messages are simulated and labelled.
