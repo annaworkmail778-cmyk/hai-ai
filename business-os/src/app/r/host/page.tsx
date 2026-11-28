@@ -33,9 +33,10 @@ export default function Host() {
   const [toast, setToast] = useState("");
   const label = (ids: string[]) => ids.map((id) => state.tables.find((t) => t.id === id)?.label).join(" + ");
   const list = state.reservations.filter((r) => dayOf(r.at) === day).sort((a, b) => a.at - b.at);
-  const requests = list.filter((r) => r.status === "requested");
+  const requests = state.reservations.filter((r) => r.status === "requested" && r.at > now - 3600000).sort((a, b) => a.at - b.at);
   const upcoming = list.filter((r) => r.status === "confirmed");
   const done = list.filter((r) => !["requested", "confirmed"].includes(r.status));
+  // `list` is the selected day; pending requests are shown for every upcoming day so none is missed.
   const waiting = state.waitlist.filter((w) => w.status === "waiting" || w.status === "notified");
   const covers = list.filter((r) => ["confirmed", "seated", "completed"].includes(r.status)).reduce((a, r) => a + r.partySize, 0);
   const slots = useMemo(() => (form ? slotsFor(state, day, form.party) : []), [state, day, form]);
@@ -47,7 +48,7 @@ export default function Host() {
     return (
       <li className={cn("rounded-2xl border bg-surface p-3", late ? "border-warn/50" : "border-line")}>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="tnum text-[20px] font-bold">{hm(r.at)}</span>
+          <span className="tnum text-[20px] font-bold">{dayOf(r.at) !== today ? <span className="mr-1 text-[13px] font-semibold text-muted">{dayOf(r.at).slice(5).split("-").reverse().join(".")}</span> : null}{hm(r.at)}</span>
           <span className="text-[16px] font-semibold">{r.name}{r.vip ? " ★" : ""}</span>
           <span className="rounded-md bg-black/[0.05] px-1.5 py-0.5 text-[13px] font-semibold"><Icon name="users" size={13} className="mr-1 inline" />{r.partySize}</span>
           {r.tableIds.length > 0 && <span className="rounded-md bg-ink px-1.5 py-0.5 text-[13px] font-semibold text-white">{label(r.tableIds)}</span>}

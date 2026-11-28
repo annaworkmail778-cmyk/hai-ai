@@ -68,7 +68,7 @@ export default function Kds() {
         <footer className="p-2 pt-0">
           {t.status === "queued" && <button onClick={() => dispatch({ type: "ticket.start", ticketId: t.id })} className="h-14 w-full rounded-xl bg-white text-[18px] font-bold text-black active:scale-[0.98]">{L.t("start")}</button>}
           {t.status === "in_progress" && <button onClick={() => dispatch({ type: "ticket.ready", ticketId: t.id })} className="h-14 w-full rounded-xl bg-[#22c55e] text-[18px] font-bold text-black active:scale-[0.98]">{L.t("ready")}</button>}
-          {t.status === "ready" && <button onClick={() => dispatch({ type: "ticket.bump", ticketId: t.id })} className="h-14 w-full rounded-xl border-2 border-[#22c55e] text-[18px] font-bold text-[#22c55e] active:scale-[0.98]">{L.t("bumped")} ✓</button>}
+          {t.status === "ready" && <button onClick={() => dispatch({ type: "ticket.bump", ticketId: t.id })} className="h-14 w-full rounded-xl border-2 border-[#22c55e] text-[18px] font-bold text-[#22c55e] active:scale-[0.98]">{L.t("bumped")}</button>}
           <div className="mt-1 text-center text-[12px] text-white/40">{L.t("received")} {hm(t.firedAt)}{t.reopenedBy ? ` · ${L.t("reopen")}` : ""}</div>
         </footer>
       </article>
@@ -138,9 +138,9 @@ export default function Kds() {
         {soldOut && (
           <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4" role="dialog" aria-modal="true">
             <div className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-[#17171a] p-4">
-              <div className="mb-3 flex items-center justify-between"><h2 className="text-[20px] font-bold">{L.t("soldOut")}</h2><button onClick={() => setSoldOut(false)} className="grid size-11 place-items-center rounded-xl bg-white/10" aria-label="Փակել"><Icon name="x" /></button></div>
+              <div className="mb-3 flex items-center justify-between"><h2 className="text-[20px] font-bold">{L.t("availability")}</h2><button onClick={() => setSoldOut(false)} className="grid size-11 place-items-center rounded-xl bg-white/10" aria-label="Փակել"><Icon name="x" /></button></div>
               <p className="mb-3 text-[14px] text-white/60">«Վերջացել է» նշումն անմիջապես երևում է QR մենյուում, կայքում և մատուցողի հավելվածում։</p>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{state.items.filter((i) => view === "all" || view === "expo" || i.station === view).map((i) => <button key={i.id} onClick={() => dispatch({ type: "menu.availability", itemId: i.id, available: !i.available })} className={cn("flex h-14 items-center justify-between rounded-xl px-4 text-left text-[16px] font-semibold", i.available ? "bg-white/10" : "bg-[#7f1d1d]")}>{L.item(i.name)}<span className="text-[13px]">{i.available ? L.t("free") : L.t("soldOut")}</span></button>)}</div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{state.items.filter((i) => view === "all" || view === "expo" || i.station === view).map((i) => <button key={i.id} onClick={() => dispatch({ type: "menu.availability", itemId: i.id, available: !i.available })} className={cn("flex h-14 items-center justify-between rounded-xl px-4 text-left text-[16px] font-semibold", i.available ? "bg-white/10" : "bg-[#7f1d1d]")}>{L.item(i.name)}<span className="text-[13px]">{i.available ? L.t("available") : L.t("soldOut")}</span></button>)}</div>
             </div>
           </div>
         )}
