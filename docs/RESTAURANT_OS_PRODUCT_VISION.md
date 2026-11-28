@@ -3,7 +3,26 @@
 **Status:** Phase 1 blueprint, for approval. **Date:** 2026-11-27.
 **Scope:** medium, large, premium and hotel restaurants; first market Tsaghkadzor, Armenia; architected for restaurant groups.
 
+
 ---
+
+## Revision 2 — after the deep refinement phase (2026-11-28)
+
+The vision is unchanged; the product is now a **standalone restaurant operating platform** rather than an ordering + food-cost layer:
+
+* **Digital waiter is the core**: paperless table service with seats, courses, held courses, item status, bill split and payment through a payment adapter (WAITER_WORKFLOWS).
+* **Front of house**: host workspace with availability engine, combinations, waitlist and no-show rules; guest booking and website chat.
+* **Guest communication**: one inbox for website chat, WhatsApp, Instagram, Messenger and email with AI drafts and human approval; review center for Google, Tripadvisor and TheFork.
+* **Back of house**: KDS v2 (courses, item check-off, guest allergies, reopen with permission), stocktake, purchase approvals, supplier performance.
+* **Management**: CRM & loyalty with explicit consent, AI business assistant with sources and confirm-before-action, automation registry with execution log, team tasks / handover / day close.
+* Positioning stays: beside the existing cash register, fiscal device and accounting; external channels are integrated only through official APIs and are shown as simulations until connected.
+
+Status of every capability: FEATURE_MAP. Sequencing: IMPLEMENTATION_ROADMAP.
+
+---
+
+## Revision 1 — Phase 1 blueprint (kept for reference)
+
 
 ## 1. What we are building (one paragraph)
 RISEUP Restaurant OS is the operating layer **between the guest and the kitchen, and between the kitchen and the owner's numbers**. Guests get a premium branded website, a QR table menu, online ordering, reservations and a membership account, all without an app. Staff get one order inbox, a kitchen display routed by station, a live floor plan, inventory, recipes and tasks. Owners get one consistent picture of sales, gross margin, food cost, customers and team performance. It **works beside the restaurant's existing cash register, payment terminal and accounting** and connects to them where an official integration exists.

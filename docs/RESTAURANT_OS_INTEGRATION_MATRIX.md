@@ -8,7 +8,31 @@
 - **S** secondary source only (integrator page, community library, press)
 - **U** unverified / not found
 
+
 ---
+
+## Revision 2 — channels, reviews, reservations and payment adapter (2026-11-28)
+
+| Integration | Official path | Requirements | Demo state |
+|---|---|---|---|
+| Website chat | Own product | — | **Works** (in product) |
+| WhatsApp Business Platform | Cloud API | Meta Business verification, phone number, webhook, approved templates; 24 h free-form window, templates after | Simulated, labelled |
+| Instagram Messaging | Instagram Graph / Messenger Platform | Professional account linked to a Page, App Review (`instagram_manage_messages`), webhooks; 24 h window, HUMAN_AGENT tag up to 7 days with approval | Simulated, labelled |
+| Messenger | Messenger Platform | Page, App Review (`pages_messaging`), webhooks; 24 h window, Human Agent tag 7 days; several tags retired in 2026 (**verify**) | Simulated, labelled |
+| Email | IMAP/SMTP, Gmail API, Microsoft Graph | Mailbox access, SPF/DKIM | Simulated, labelled |
+| Google Business Profile reviews | Business Profile API (`reviews.updateReply`) | Verified location, API access approval, OAuth `business.manage`; replies may be moderated | Publish simulated, labelled |
+| Tripadvisor reviews | Management Center (no public reply API) | Owner account | Manual posting |
+| TheFork reviews / bookings | TheFork Manager, B2B/Partners API | Accepted partnership | Manual |
+| OpenTable | Partner API | Partner approval + contract, OAuth 2.0 | Not connected |
+| Card terminal | Acquirer / POS vendor SDK | Merchant contract, test terminal | `demo-terminal` simulated adapter: pending → approved/declined with unique provider reference |
+| SMS reminders | Local gateway | Contract, consent | Simulated, labelled |
+
+Rule: no unofficial scraping; nothing is shown as connected until it is connected and verified.
+
+---
+
+## Revision 1 — Phase 1 matrix (kept for reference)
+
 
 ## 1. Principles
 1. **Coexist first.** Restaurant OS never requires replacing the POS, fiscal register, payment terminal or accountant's software.

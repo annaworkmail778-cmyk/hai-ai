@@ -4,7 +4,27 @@
 **Date:** 2026-11-27
 **Related:** `RESTAURANT_OS_DATA_MODEL.md` (entities), `RESTAURANT_OS_INTEGRATION_MATRIX.md` (external systems), `RESTAURANT_OS_DEMO_IMPLEMENTATION_PLAN.md` (build order).
 
+
 ---
+
+## Revision 2 — implemented architecture (2026-11-28)
+
+* **Next.js 16 App Router** app in `business-os/`; Restaurant OS routes: guest `/restaurant/[lang]/*`, QR `/q/[session]/[token]`, staff `/r/floor`, `/r/kds`, `/r/host`, admin `/r/admin/*`, presenter `/present/restaurant`, API `/api/rsession/[code]`.
+* **Shared kernel with Hotel OS** (`src/lib/kernel/*`, `src/lib/server/*`): replay, namespaced session store, session route factory, client store with pending queue and local mode. This phase added only an additive `pendingIds` field to the client store (used for "not yet confirmed" order flags); Hotel OS behaviour verified unchanged.
+* **Domain** (`src/lib/restaurant/`): `engine.ts` (orders, tickets, stock, sessions), `ops.ts` (courses, floor ops, bills, payments, reservations, waitlist, inbox, reviews, CRM, loyalty, team, stocktake, purchasing approvals, automations runner), `nlp.ts`, `assistant.ts`, `channels.ts` (honest integration states), `rules.ts`, `analytics.ts`, `permissions.ts`, seeds `seed.ts` + `seed-ops.ts`.
+* **Events**: 79 allow-listed types; sensitive rules enforced in the reducer (DATA_ARCHITECTURE §1).
+* **Adapters**: payment adapter interface with `demo-terminal` simulated implementation; message and review channels expose state `in_product | simulated | manual_only | partner_only`.
+* **Staff i18n**: `staff-t.ts` (hy/ru/en per device) for waiter, KDS and host; admin Armenian-first via `staff-i18n.ts`.
+* **AI**: deterministic engines; Claude adapter design in AI_ARCHITECTURE.
+* **Security posture and production gaps**: SECURITY_REQUIREMENTS.
+
+### Hotel OS bridge (optional, not built)
+Contract: Hotel OS exposes `room.lookup(roomNumber, guestName) → {stayId, allowCharge}` and accepts `folio.post(stayId, amount, ref, lines)`; Restaurant OS adds bill part method `room_charge` that becomes "paid" only after `folio.post` succeeds, and a room-service channel on the QR/guest site. Shared guest profile only with guest consent.
+
+---
+
+## Revision 1 — Phase 1 architecture (kept for reference)
+
 
 ## 1. Audit of the existing repository (verified in code, 2026-11-27)
 

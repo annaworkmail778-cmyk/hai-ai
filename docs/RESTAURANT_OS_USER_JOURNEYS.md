@@ -5,7 +5,27 @@
 
 Notation: **[A]** works in the demo · **[B]** simulated and labelled · **[C]** needs a production integration.
 
+
 ---
+
+## Revision 2 — journeys added in the deep refinement phase (2026-11-28)
+
+| Journey | Steps (implemented in the demo) |
+|---|---|
+| Waiter serves a table without paper | Floor map → open table (party) → Add: seat + course + modifiers → send (later courses held) → ready alert → served → fire course 2 → add dessert → Bill by seat → card via adapter (simulated) / cash recorded by cashier → close → cleaned. Detail: WAITER_WORKFLOWS |
+| Cook works a station | Station view → start → tick items → ready → bump; held-course panel; guest allergy band; reopen with reason (chef/manager). Detail: KITCHEN_WORKFLOWS |
+| Host runs the evening | Requests with suggested table → confirm / choose / decline → reminders (simulated SMS) → seat → no-show after +15 min; waitlist with quotes; walk-ins with suggested table |
+| Guest books a table | Website → date, party, live slots → request → "Awaiting confirmation" → host confirms → "Confirmed" on the same device; cancel |
+| Guest asks a question | Website chat → staff inbox → AI draft (language, intent, risk, facts) → staff approves → reply appears in chat. Low-risk questions (e.g. hours) can be auto-answered only if the manager enabled it |
+| Manager handles a bad review | 2★ arrives → task created → topic analysis → AI reply draft → approve → Google: publish via adapter (simulated); Tripadvisor/TheFork: copy and post manually |
+| Owner asks the assistant | "Which dishes have low margin?" → answer with numbers and sources → proposed action → confirm dialog → executed as the owner |
+| Stock keeper counts stock | Stocktake by storage → counted values → variance value → confirm → ledger adjusted |
+| Manager closes the day | Team → handover (automatic summary) → day close summary |
+
+---
+
+## Revision 1 — Phase 1 journeys (kept for reference)
+
 
 ## 1. Users and what each one needs
 | User | Device | "My job in one sentence" | Sees | Never sees |

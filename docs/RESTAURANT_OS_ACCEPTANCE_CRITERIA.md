@@ -3,6 +3,60 @@
 **Status:** Phase 1, for approval. **Date:** 2026-11-27.
 The demo is complete only when **every** criterion for the chosen scope (Core = A, B, C, F; Full = + D, E) passes. "Passes" means verified by a person on the listed devices, or by an automated test where named.
 
+---
+
+## Revision 2 — acceptance criteria for the deep refinement phase (2026-11-28)
+
+Each line: criterion → how verified → result in this build.
+
+### Waiter
+1. Order lines carry seat and course; later courses are held until fired → unit + E2E W1/K1/W2 → **pass**.
+2. A held course cancelled before firing returns stock without waste → unit → **pass**.
+3. Waiter sees "ready" and can mark served from the queue → E2E W3 → **pass**.
+4. Move items, transfer, merge, assign keep totals and sessions consistent → unit → **pass**.
+5. Bill parts always sum to the session total (single, seat, equal) → unit → **pass**.
+6. Card payment is "paid" only after an adapter result; decline keeps the part open; provider reference unique → unit + E2E P1/S1 → **pass**.
+7. Cash/POS recording only by cashier/manager/owner → unit → **pass**.
+8. Table closes only when settled and kitchen idle → unit + E2E P2 → **pass**.
+9. Unsent orders show "not yet confirmed" → implemented from the pending queue; **not automated** (manual offline check pending).
+10. No horizontal scroll at 390 px on waiter screens → screenshot QA → **pass**.
+
+### Kitchen
+11. Held tickets never appear as cooking tickets → unit + E2E K1 → **pass**.
+12. Reopen only by chef/manager/owner with reason → unit → **pass**.
+13. Guest allergy shown on every ticket of the table → implemented; visual check → **pass**.
+
+### Host & reservations
+14. No overlapping assignment of a table (turn time + buffer) → unit → **pass**.
+15. Suggestion uses a combinable pair when no single table fits → unit → **pass**.
+16. No-show only after +15 min → unit → **pass**.
+17. Website booking is a request until confirmed; guest sees the status → E2E R1/R2 → **pass**.
+
+### Inbox & reviews
+18. Auto-reply only for enabled low-risk intents; allergy/complaint/discount/manager escalate → unit + E2E I1 → **pass**.
+19. Every non-webchat outgoing message is labelled simulated → unit (states) + UI → **pass**.
+20. Approved webchat reply reaches the guest → E2E I2 → **pass**.
+21. ≤3★ review creates exactly one task; Google publish simulated, others manual → unit + presenter M replay check → **pass**.
+
+### Stock, purchasing, CRM, team
+22. Low stock creates one draft PO per supplier, never sent automatically → unit + presenter O replay check → **pass**.
+23. PO above the limit needs manager/owner approval → unit → **pass**.
+24. Stocktake adjusts the ledger to counted values → unit → **pass**.
+25. Loyalty points once per completed order → unit → **pass**.
+26. Disabled automation does not run and is logged as skipped → unit → **pass**.
+
+### AI
+27. Assistant answers include sources; actions need permission and confirmation → unit (grounding) + UI → **pass**.
+
+### Platform
+28. Hotel OS behaviour unchanged → behavioural snapshot (20 routes + sync flow): only relative-time strings and a timestamped key differ; all tests pass → **pass**.
+29. Core demo scenarios A/B/C/F still pass → E2E → **pass**.
+30. "10 consecutive cross-device runs" (Revision 1 §1) → **not yet repeated 10×** for the new scenarios; each automated suite ran green at least once after the final build.
+
+---
+
+## Revision 1 — Phase 1 acceptance criteria (kept for reference)
+
 ## 1. Definition of done (summary)
 1. All end-to-end scenarios pass **10 consecutive runs** cross-device with Reset between runs.
 2. All domain tests pass, including the hotel suite (no regression).
