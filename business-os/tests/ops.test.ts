@@ -8,6 +8,7 @@ import { askCopilot } from "../src/lib/ai/copilot.ts";
 import { demoOtaBooking } from "../src/lib/channel-adapters.ts";
 import { computeKpis, occupiedOn, periods } from "../src/lib/analytics.ts";
 import { addDays } from "../src/lib/dates.ts";
+import { roomIsFree } from "../src/lib/pricing.ts";
 import type { StampedEvent } from "../src/lib/types.ts";
 
 const BASE = "2026-11-27";
@@ -94,12 +95,13 @@ test("channel manager: import, duplicate is idempotent, modification, cancellati
   const chalets = replay(BASE, []).rooms.filter((x) => x.typeId === "chalet");
   const fill = chalets.map((_, i) => ev({ type: "ota.import", booking: demoOtaBooking("expedia", 100 + i, addDays(BASE, 60), addDays(BASE, 62), "chalet") }));
   const over = demoOtaBooking("expedia", 999, addDays(BASE, 60), addDays(BASE, 62), "chalet");
-  s = replay(BASE, [...fill, ev({ type: "ota.import", booking: over })]);
+  const overEv = ev({ type: "ota.import", booking: over });
+  s = replay(BASE, [...fill, overEv]);
   const c = s.reservations.find((x) => x.external?.externalId === over.externalId)!;
   assert.equal(c.external!.syncState, "conflict");
   assert.equal(c.roomId, null, "never double-books a room");
-  const alt = s.rooms.find((room) => !s.reservations.some((r) => r.roomId === room.id && ["confirmed", "checked_in"].includes(r.status) && r.checkIn < over.checkOut && r.checkOut > over.checkIn))!;
-  const s2 = replay(BASE, [...fill, ev({ type: "ota.import", booking: over }), ev({ type: "ota.resolve", reservationId: c.id, roomId: alt.id })]);
+  const alt = s.rooms.find((room) => roomIsFree(s, room.id, over.checkIn, over.checkOut))!;
+  const s2 = replay(BASE, [...fill, overEv, ev({ type: "ota.resolve", reservationId: c.id, roomId: alt.id })]);
   const resolved = s2.reservations.find((x) => x.external?.externalId === over.externalId)!;
   assert.equal(resolved.roomId, alt.id);
   assert.equal(resolved.external!.syncState, "synced");
