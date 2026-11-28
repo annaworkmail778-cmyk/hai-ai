@@ -1,6 +1,7 @@
 "use client";
 /*
- * Restaurant OS presenter: guided scenarios A (QR table), B (takeaway), C (food cost), F (owner overview).
+ * Restaurant OS presenter: guided scenarios A (QR table), W (paperless waiter service, courses, bill, simulated payment),
+ * B (takeaway), M (messages & reviews), C (food cost), O (stock, reorder, AI summary), F (owner overview).
  * Three live devices on one session: guest phone, owner/manager laptop, kitchen display.
  * Every auto-action dispatches the same events a real user would; nothing is faked on screen.
  */
@@ -13,11 +14,13 @@ import { Device } from "@/components/shared/device-frame";
 import { money } from "@/components/restaurant/staff/shell";
 import { Badge, Button, cn, Input, Modal, Segmented } from "@/components/ui";
 import * as A from "@/lib/restaurant/analytics";
+import { onHand } from "@/lib/restaurant/engine";
+import { draftReviewReply } from "@/lib/restaurant/nlp";
 import { useR } from "@/lib/restaurant/client";
 import { tableQrUrl } from "@/lib/restaurant/qr";
 import type { Lang } from "@/lib/restaurant/types";
 
-type ScenarioId = "A" | "B" | "C" | "F";
+type ScenarioId = "A" | "W" | "B" | "M" | "C" | "O" | "F";
 type Step = { title: string; say: string; icon: IconName; phone?: string; laptop?: string; kds?: string; action?: { label: string; run: () => void; done?: boolean } };
 
 const readLs = <T,>(k: string, f: T): T => { try { const v = localStorage.getItem(k); return v ? (JSON.parse(v) as T) : f; } catch { return f; } };
@@ -61,6 +64,22 @@ export default function PresentRestaurant() {
     writeLs("rst:myorders", [`o-${ev.id}`, ...myIds()].slice(0, 20));
     goPhone(`/restaurant/${lang}/order/o-${ev.id}`); setReload((x) => x + 1);
   };
+  /* W: paperless waiter service on table 11 */
+  const wSess = state.sessions.find((x) => x.tableId === "T11" && x.status === "open" && x.openedAt > state.epochAt);
+  const wOrders = state.orders.filter((o) => o.tableId === "T11" && o.channel === "waiter" && o.createdAt > state.epochAt);
+  const wTickets = state.tickets.filter((t) => wOrders.some((o) => o.id === t.orderId) && t.status !== "voided");
+  const wClosed = state.sessions.some((x) => x.tableId === "T11" && x.status === "closed" && x.openedAt > state.epochAt);
+  const wReady = wOrders.find((o) => o.status === "ready");
+  const kitchenRun = () => { wTickets.filter((t) => t.status === "queued").forEach((t) => dispatch({ type: "ticket.start", ticketId: t.id })); wTickets.filter((t) => t.status === "queued" || t.status === "in_progress").forEach((t) => dispatch({ type: "ticket.ready", ticketId: t.id })); };
+  const wPart = wSess?.bill?.parts.find((p) => p.status === "open" || p.status === "declined");
+  const wPendingPay = wSess ? state.payments.find((p) => p.sessionId === wSess.id && p.status === "pending") : undefined;
+  /* M: messages & reviews */
+  const mWa = state.inbox.find((c) => c.channel === "whatsapp" && c.customer.handle === "whatsapp:demo-aram");
+  const mIg = state.inbox.find((c) => c.channel === "instagram" && c.customer.handle === "instagram:demo-maria");
+  const mRev = state.reviews.find((r) => r.author === "Davit K. (demo)");
+  /* O: stock → reorder */
+  const nearMin = [...state.ingredients].map((i) => ({ i, gap: onHand(state, i.id) - i.minLevel })).filter((x) => x.gap > 0 && !state.pos.some((p) => p.supplierId === x.i.supplierId && ["draft", "pending_approval", "approved", "sent"].includes(p.status))).sort((a, b) => a.gap / a.i.minLevel - b.gap / b.i.minLevel)[0];
+  const autoPo = state.pos.find((p) => p.auto && p.createdAt > state.epochAt);
   const tickets = (orderId?: string) => state.tickets.filter((t) => t.orderId === orderId && t.status !== "voided");
   const startAll = (id?: string) => tickets(id).filter((t) => t.status === "queued").forEach((t) => dispatch({ type: "ticket.start", ticketId: t.id }));
   const readyAll = (id?: string) => tickets(id).filter((t) => t.status === "queued" || t.status === "in_progress").forEach((t) => dispatch({ type: "ticket.ready", ticketId: t.id }));
@@ -76,6 +95,17 @@ export default function PresentRestaurant() {
       { icon: "users", title: "Մատուցողը մատուցում է", say: "Մատուցողը ստանում է ծանուցում և նշում «Մատուցված»։ Վճարումը կատարվում է Ձեր դրամարկղում, ինչպես հիմա։", laptop: "/r/floor?table=T7", action: { label: "Ավտոմատ. մատուցված է", run: () => lastQr && dispatch({ type: "order.serve", orderId: lastQr.id }) } },
       { icon: "chart", title: "Պատվերն արդեն վերլուծության մեջ է", say: `Այսօրվա վաճառքը՝ ${money(today.gross)}, որից QR՝ ${money(today.byChannel.find((c) => c.channel === "qr")?.gross ?? 0)}։ Նույն տվյալները, առանց ձեռքով հաշվարկի։`, laptop: "/r/admin" },
     ] },
+    W: { title: "Մատուցողը՝ առանց թղթի", time: "≈ 5 րոպե", steps: [
+      { icon: "users", title: "Մատուցողը նստեցնում է 3 հյուրի սեղան 11-ում", say: "Մատուցողի հեռախոսում՝ իր սեղանները, պլանը և «Ուշադրություն» ցուցակը։ Սեղանը բացվում է մեկ սեղմումով։", phone: "/r/floor?table=T11", laptop: "/r/host", kds: "/r/kds", action: { label: "Ավտոմատ. նստեցնել 3 հյուր", run: () => dispatch({ type: "table.open", tableId: "T11", partySize: 3 }), done: Boolean(wSess) } },
+      { icon: "send", title: "Պատվեր ըստ տեղերի և կուրսերի", say: "Աղցան և բանջարեղեն՝ առաջին կուրս, խորոված և կողեր՝ երկրորդ կուրս (պահված), գինին՝ միանգամից։ Տեղի համարը հետո օգնում է բաժանել հաշիվը։", phone: "/r/floor?table=T11", action: { label: "Ավտոմատ. ուղարկել խոհանոց", run: () => dispatch({ type: "order.submit", channel: "waiter", orderType: "dine_in", tableId: "T11", note: "", lines: [{ itemId: "salad", qty: 1, modifierIds: [], note: "", seat: 1, course: 1 }, { itemId: "veg-bowl", qty: 1, modifierIds: [], note: "", seat: 2, course: 1 }, { itemId: "khorovats", qty: 1, modifierIds: [], note: "", seat: 1, course: 2 }, { itemId: "ribs", qty: 1, modifierIds: [], note: "", seat: 2, course: 2 }, { itemId: "areni", qty: 2, modifierIds: [], note: "", course: 0 }] }), done: wOrders.length > 0 } },
+      { icon: "flame", title: "Խոհանոցը տեսնում է միայն առաջին կուրսը", say: "Կայանները ստանում են իրենց տոմսերը, երկրորդ կուրսը «պահված» է՝ խոհանոցը չի սկսում ժամանակից շուտ։", kds: "/r/kds?station=all", action: { label: "Ավտոմատ. խոհանոցը պատրաստում է", run: kitchenRun } },
+      { icon: "bell", title: "«Պատրաստ է» ծանուցում և մատուցում", say: "Երբ բոլոր կայաններն ավարտել են, մատուցողը ստանում է ծանուցում։ «Մատուցված» նշումը թարմացնում է սեղանի վիճակը։", phone: "/r/floor", action: { label: "Ավտոմատ. մատուցել", run: () => wReady && dispatch({ type: "order.serve", orderId: wReady.id }), done: !wReady && wOrders.some((o) => o.status === "served") } },
+      { icon: "play", title: "Մատուցողը կրակում է երկրորդ կուրսը", say: "Մեկ սեղմում՝ «Ուղարկել կուրս 2»։ Միայն հիմա են տոմսերը հայտնվում մանղալի էկրանին։", phone: "/r/floor?table=T11", kds: "/r/kds?station=grill", action: { label: "Ավտոմատ. ուղարկել կուրս 2", run: () => dispatch({ type: "order.fireCourse", tableId: "T11", course: 2 }), done: wTickets.some((t) => t.course === 2 && t.status !== "held") } },
+      { icon: "plus", title: "Հյուրերը ավելացնում են աղանդեր", say: "Նոր դիրքերը ավելանում են նույն սեղանին, առանձին տոմսով։ Ամբողջ պատմությունը պահպանվում է։", action: { label: "Ավտոմատ. կուրսն ավարտվեց, ավելացնել աղանդեր", run: () => { kitchenRun(); wOrders.filter((o) => ["accepted", "preparing", "ready"].includes(o.status)).forEach((o) => dispatch({ type: "order.serve", orderId: o.id })); dispatch({ type: "order.submit", channel: "waiter", orderType: "dine_in", tableId: "T11", note: "", lines: [{ itemId: "cake", qty: 2, modifierIds: [], note: "", course: 0 }] }); } } },
+      { icon: "calc", title: "Հաշիվ՝ ըստ տեղերի", say: "Համակարգը բաժանում է հաշիվը ըստ տեղերի, ընդհանուր դիրքերը՝ հավասար։ Գումարը միշտ համընկնում է պատվերի հետ։", phone: "/r/floor?table=T11", action: { label: "Ավտոմատ. ավարտել աղանդերը և պատրաստել հաշիվը", run: () => { kitchenRun(); wOrders.filter((o) => ["accepted", "preparing", "ready"].includes(o.status)).forEach((o) => dispatch({ type: "order.serve", orderId: o.id })); dispatch({ type: "bill.prepare", tableId: "T11", mode: "seats" }); }, done: Boolean(wSess?.bill) } },
+      { icon: "check", title: "Վճարում՝ սիմուլյացված տերմինալով", say: "«Վճարված» նշվում է միայն տերմինալի պատասխանից հետո։ Ցուցադրությունում տերմինալը սիմուլյացված է և այդպես էլ նշված է։ Կանխիկը գրանցում է գանձապահը։", phone: "/r/floor?table=T11", action: { label: wPendingPay ? "Ավտոմատ. տերմինալը հաստատում է" : "Ավտոմատ. քարտով վճարման հարցում", run: () => { if (wPendingPay) dispatch({ type: "payment.result", paymentId: wPendingPay.id, approved: true, providerRef: `DEMO-${Date.now().toString(36).toUpperCase()}`, adapter: "demo-terminal" }); else if (wPart) dispatch({ type: "payment.request", tableId: "T11", partId: wPart.id, method: "card_terminal" }); } } },
+      { icon: "broom", title: "Մնացածը՝ կանխիկ, սեղանը փակվում է", say: "Սեղանը փակվում է միայն երբ բոլոր մասերը վճարված կամ գրանցված են։ Ֆիսկալ կտրոնը տրվում է ռեստորանի գործող ՀԴՄ-ով։", action: { label: "Ավտոմատ. գրանցել կանխիկ և փակել", run: () => { wSess?.bill?.parts.filter((p) => p.status === "open" || p.status === "declined").forEach((p) => dispatch({ type: "payment.record", tableId: "T11", partId: p.id, method: "cash" })); dispatch({ type: "table.close", tableId: "T11", via: "bill" }); }, done: wClosed } },
+    ] },
     B: { title: "Առցանց պատվեր՝ տանելու համար", time: "≈ 3 րոպե", steps: [
       { icon: "globe", title: "Ռեստորանի սեփական կայքը", say: "Պրեմիում կայք՝ ռեստորանի ոճով, երեք լեզվով։ Սա Ձեր ուղիղ ալիքն է՝ առանց առաքման հարթակի միջնորդավճարի։", phone: `/restaurant/${lang}`, laptop: "/r/admin/orders" },
       { icon: "coffee", title: "Ընտրում է ուտեստներ և վերցնելու ժամ", say: "Նվազագույն պատվերը, փաթեթավորումը և ժամի գնահատականը հաշվարկվում են կարգավորված կանոններով և խոհանոցի ներկայիս ծանրաբեռնվածությամբ, ոչ թե պատահական խոստումներով։", phone: `/restaurant/${lang}/menu?mode=takeaway`, action: { label: "Ավտոմատ. հաճախորդը ուղարկում է պատվերը", run: submitTa, done: Boolean(lastTa) } },
@@ -84,6 +114,14 @@ export default function PresentRestaurant() {
       { icon: "bell", title: "Հաճախորդը տեսնում է «Պատրաստ է»", say: "Կարգավիճակի էջում՝ վերցնելու կոդը։ SMS-ը կպատրաստվեր ավտոմատ (ցուցադրության մեջ՝ սիմուլյացիա, չի ուղարկվում)։", phone: lastTa ? `/restaurant/${lang}/order/${lastTa.id}` : undefined, laptop: "/r/admin/automations" },
       { icon: "chart", title: "Վերցված է, տվյալները թարմացված են", say: "Գանձապահը նշում է «Վերցվեց»։ Վաճառքը և կայքի ալիքի մասնաբաժինը թարմացվում են։", laptop: "/r/admin", action: { label: "Ավտոմատ. վերցվեց", run: () => lastTa && dispatch({ type: "order.pickup", orderId: lastTa.id }) } },
     ] },
+    M: { title: "Հաղորդագրություններ և կարծիքներ", time: "≈ 4 րոպե", steps: [
+      { icon: "message", title: "WhatsApp հարցում (սիմուլյացիա)", say: "Հյուրը հայերենով հարցնում է սեղան այսօր երեկոյան։ Ալիքը միացված չէ, հաղորդագրությունը սիմուլյացված է և նշված է այդպես։", laptop: mWa ? `/r/admin/inbox?c=${mWa.id}` : "/r/admin/inbox", action: { label: "Ավտոմատ. ստանալ WhatsApp հաղորդագրություն", run: () => dispatch({ type: "inbox.receive", channel: "whatsapp", from: { name: "Արամ Ս.", handle: "whatsapp:demo-aram" }, text: "Բարև, այսօր երեկոյան 4 հոգու համար սեղան կա՞ ժամը 8-ին" }), done: Boolean(mWa) } },
+      { icon: "sparkles", title: "AI-ն ճանաչում է լեզուն և նպատակը, պատրաստում նախագիծ", say: "Լեզու՝ հայերեն, նպատակ՝ ամրագրում, ռիսկ՝ պահանջում է հաստատում։ Նախագիծը ցույց է տալիս, թե որ փաստերն է օգտագործել (ազատ ժամեր)։", laptop: mWa ? `/r/admin/inbox?c=${mWa.id}` : "/r/admin/inbox" },
+      { icon: "check", title: "Աշխատակիցը հաստատում և ուղարկում է", say: "Ոչինչ չի ուղարկվում առանց մարդու հաստատման։ Ցուցադրությունում պատասխանը գրանցվում է որպես «սիմուլյացիա, չի ուղարկվել»։", action: { label: "Ավտոմատ. հաստատել նախագիծը", run: () => mWa?.draft && dispatch({ type: "inbox.send", conversationId: mWa.id, text: mWa.draft.text, approved: true, fromDraft: true }), done: Boolean(mWa && !mWa.draft && mWa.messages.some((m) => m.dir === "out")) } },
+      { icon: "zap", title: "Instagram՝ աշխատանքային ժամերի հարց → ավտոմատ պատասխան", say: "Միայն մենեջերի թույլատրած ցածր ռիսկի թեմաները (ժամեր) ստանում են ավտոմատ պատասխան։ Ալերգիա, բողոք կամ զեղչ՝ երբեք։", laptop: mIg ? `/r/admin/inbox?c=${mIg.id}` : "/r/admin/inbox", action: { label: "Ավտոմատ. Instagram հաղորդագրություն", run: () => dispatch({ type: "inbox.receive", channel: "instagram", from: { name: "maria.travels", handle: "instagram:demo-maria" }, text: "Hi! What time do you open on Sunday?" }), done: Boolean(mIg) } },
+      { icon: "star", title: "Նոր Google կարծիք՝ 2★", say: "Կարծիքը վերլուծվում է ըստ թեմաների (սպասում, ուտեստ), ավտոմատ ստեղծվում է առաջադրանք մենեջերին։", laptop: mRev ? `/r/admin/reviews?r=${mRev.id}` : "/r/admin/reviews", action: { label: "Ավտոմատ. ստանալ կարծիք (սիմուլյացիա)", run: () => dispatch({ type: "review.receive", platform: "google", rating: 2, author: "Davit K. (demo)", text: "We waited 40 minutes for the main course and the khorovats was cold. Service was friendly but slow." }), done: Boolean(mRev) } },
+      { icon: "send", title: "Պատասխանը հաստատված է և հրապարակված Google ադապտերով", say: "Google-ն ունի պաշտոնական պատասխանի API, ցուցադրությունում՝ սիմուլյացված ադապտեր։ Tripadvisor-ի և TheFork-ի համար պատասխանը տեղադրվում է ձեռքով։", laptop: mRev ? `/r/admin/reviews?r=${mRev.id}` : "/r/admin/reviews", action: { label: "Ավտոմատ. հաստատել AI պատասխանը", run: () => mRev && dispatch({ type: "review.reply", reviewId: mRev.id, text: draftReviewReply(mRev, state.brand.name), publish: true }), done: Boolean(mRev?.reply && mRev.reply.status !== "draft") } },
+    ] },
     C: { title: "Ինքնարժեք և պահեստ", time: "≈ 3 րոպե", steps: [
       { icon: "kitchen", title: "Պահեստը", say: "Պաշարը նվազում է ավտոմատ յուրաքանչյուր ընդունված պատվերով։ Կարմիրով՝ նվազագույնից ցածր բաղադրիչները։", laptop: "/r/admin/inventory" },
       { icon: "search", title: "Բաղադրիչ՝ խոզի վիզ", say: `Պաշար, գին (${money(pork.cost)}/կգ), գնի պատմություն և որ ուտեստներում է օգտագործվում։`, laptop: "/r/admin/inventory?open=pork" },
@@ -91,6 +129,13 @@ export default function PresentRestaurant() {
       { icon: "refresh", title: "Մատակարարը բարձրացրել է գինը", say: "Նոր հաշիվ՝ 4 100 ֏/կգ։ Մուտքագրում ենք մեկ անգամ, և բոլոր բաղադրատոմսերը վերահաշվարկվում են անմիջապես։", laptop: "/r/admin/inventory?open=pork", action: { label: "Ավտոմատ. գինը՝ 4 100 ֏/կգ", run: () => dispatch({ type: "ingredient.price", ingredientId: "pork", cost: 4100, source: "invoice" }), done: pork.cost === 4100 } },
       { icon: "alert", title: "Մարժան նվազեց, տեսնում ենք ամսական ազդեցությունը", say: "Տեսնում ենք մինչև/հետո ինքնարժեքը և մարժան, ինչպես նաև ամսական ազդեցությունը փաստացի վաճառքի ծավալով։ Ծանուցում ստացավ նաև մենեջերը։", laptop: "/r/admin/recipes?item=khorovats" },
       { icon: "chart", title: "Վերլուծությունը թարմացվեց", say: "Գների փոփոխության աղյուսակում և խնայողության հաշվիչում արդեն երևում է նոր գինը։ Անցած վաճառքի ինքնարժեքը չի փոխվում։", laptop: "/r/admin/inventory?tab=prices" },
+    ] },
+    O: { title: "Պաշար, գնում և AI ամփոփում", time: "≈ 3 րոպե", steps: [
+      { icon: "kitchen", title: "Պաշարը նվազել է պատվերներից", say: "Յուրաքանչյուր ընդունված պատվեր նվազեցնում է պաշարը ըստ բաղադրատոմսի՝ մեկ անգամ։ Բացեք խոզի վիզը՝ տեսնելու շարժերը։", laptop: "/r/admin/inventory?open=pork" },
+      { icon: "alert", title: "Բաղադրիչը իջնում է նվազագույնից", say: nearMin ? `${nearMin.i.name}-ի պաշարը մոտ է նվազագույնին։ Գրանցում ենք կորուստ, և պաշարը իջնում է սահմանից։` : "Պաշարը նվազագույնից ցածր է։", laptop: "/r/admin/inventory", action: { label: "Ավտոմատ. գրանցել կորուստ", run: () => nearMin && dispatch({ type: "stock.waste", ingredientId: nearMin.i.id, qty: Math.ceil((nearMin.gap + nearMin.i.minLevel * 0.1) * 100) / 100, reason: "Ցուցադրական՝ փչացած" }), done: Boolean(autoPo) } },
+      { icon: "car", title: "Ավտոմատ գնման նախագիծ", say: "Համակարգը ստեղծում է գնման ՆԱԽԱԳԻԾ մատակարարին (մեկ բաց նախագիծ մատակարարի համար)։ Մեծ գումարները պահանջում են մենեջերի հաստատում։ Ոչինչ չի ուղարկվում ինքնաբերաբար։", laptop: "/r/admin/purchasing" },
+      { icon: "sparkles", title: "AI բիզնես օգնական", say: "Հարցրեք՝ «Ո՞ր ուտեստներն ունեն ցածր մարժա»։ Պատասխանը թվերով է և ցույց է տալիս աղբյուրը։ Գործողությունները կատարվում են միայն հաստատումից հետո։", laptop: "/r/admin/assistant" },
+      { icon: "moon", title: "Օրվա ամփոփում", say: "Մենեջերը փակում է օրը՝ վաճառք, լավագույն ուտեստներ, կորուստ, անպատասխան հաղորդագրություններ և բաց առաջադրանքներ մեկ էկրանով։", laptop: "/r/admin/team", action: { label: "Ավտոմատ. փակել օրը", run: () => dispatch({ type: "day.close" }), done: state.summaries.some((x) => x.at > state.epochAt) } },
     ] },
     F: { title: "Սեփականատիրոջ առավոտը", time: "≈ 3 րոպե", steps: [
       { icon: "home", title: "Վաճառքը մեկ էկրանում", say: "Վերջին 7 օրը նախորդ շաբաթվա համեմատ, միջին չեկ, համախառն մարժա։", laptop: "/r/admin" },
@@ -136,10 +181,10 @@ export default function PresentRestaurant() {
       </header>
       <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[340px_1fr]">
         <aside className="flex min-h-0 flex-col border-r border-white/10">
-          <div className="space-y-1.5 p-3">
+          <div className="max-h-[42vh] space-y-1 overflow-y-auto p-3">
             {(Object.keys(S) as ScenarioId[]).map((k) => (
               <div key={k} className={cn("flex items-center rounded-xl transition", scenario === k ? "bg-white text-ink" : "bg-white/5 hover:bg-white/10")}>
-                <button onClick={() => choose(k)} className="flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 text-left">
+                <button onClick={() => choose(k)} className="flex min-w-0 flex-1 items-center gap-3 px-3 py-1.5 text-left">
                   <span className={cn("grid size-7 shrink-0 place-items-center rounded-lg text-[12px] font-bold", scenario === k ? "bg-signal text-white" : "bg-white/10")}>{k}</span>
                   <span className="min-w-0"><span className="block truncate text-[13.5px] font-semibold">{S[k].title}</span><span className={cn("text-[12px]", scenario === k ? "text-muted" : "text-white/50")}>{S[k].steps.length} քայլ · {S[k].time}</span></span>
                 </button>
