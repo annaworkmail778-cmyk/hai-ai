@@ -10,6 +10,7 @@ import { roomType } from "./hotel-data.ts";
 import { quote, roomIsFree } from "./pricing.ts";
 import { createSeed } from "./seed.ts";
 import { SERVICE_META, TRAINING } from "./hospitality-data.ts";
+import { applyOps, runAuto } from "./engine-ops.ts";
 import { bookingCalc, earnFor, loyaltyOf, ORDER_FLOW, orderCalc, accountOf, tierRank } from "./rules.ts";
 import type { Guest, GuestInput, HotelState, Lang, OutboxItem, Reservation, StampedEvent, Staff, TrainingModule } from "./types.ts";
 
@@ -54,7 +55,7 @@ function vars(state: HotelState, res: Reservation, g: Guest) {
   };
 }
 
-function upsertGuest(state: HotelState, input: GuestInput, id: string): Guest {
+export function upsertGuest(state: HotelState, input: GuestInput, id: string): Guest {
   const phone = input.phone.replace(/\s+/g, "");
   const found = phone.length > 5 ? state.guests.find((g) => g.phone.replace(/\s+/g, "") === phone) : undefined;
   if (found) return found;
@@ -209,6 +210,9 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       t.status = ev.status;
       if (["checkout", "arrival_prep"].includes(t.kind)) state.hk[t.roomId] = ev.status === "done" ? "clean" : ev.status === "in_progress" ? "cleaning" : state.hk[t.roomId];
       if (ev.status === "done") state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "task", text: `Սենյակ ${t.roomId}. ${kindLabel[t.kind]} ավարտված է`, by: who });
+      if (ev.status === "done" && ["checkout", "arrival_prep"].includes(t.kind)) runAuto(state, "room_ready_notify", `room_ready:${t.id}`, ev.at, `Սենյակ ${t.roomId} պատրաստ է → ծանուցում ընդունարանին`, () => {
+        state.notifications.unshift({ id: `n-${id}`, at: ev.at, text: `Սենյակ ${t.roomId}-ը մաքուր է և պատրաստ`, href: "/admin/rooms", read: false, kind: "task" });
+      });
       return state;
     }
     case "hk.assign": {
@@ -224,6 +228,10 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       state.maint.unshift({ id: `m-${id}`, roomId: ev.roomId, area: ev.area, title: ev.title, description: ev.description, priority: ev.priority, status: "open", assigneeId: state.staff.find((s) => s.role === "maintenance")?.id ?? null, createdAt: ev.at, outOfOrder: ev.outOfOrder, log: [{ at: ev.at, text: "Հայտը ստեղծվեց", by: who }] });
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "maint", text: `Նոր տեխնիկական հայտ՝ ${ev.roomId ? "սենյակ " + ev.roomId : ev.area}. ${ev.title}`, by: who });
       state.notifications.unshift({ id: `n-${id}`, at: ev.at, text: `Տեխնիկական հայտ՝ ${ev.title}`, href: "/admin/maintenance", read: false, kind: "maint" });
+      if (ev.priority === "urgent" || ev.priority === "high") runAuto(state, "urgent_maint_escalation", `urgent_maint:m-${id}`, ev.at, `Շտապ տեխնիկական հայտ → ծանուցում գլխավոր մենեջերին`, () => {
+        const gmId = state.staff.find((s) => s.position === "general_manager")?.id;
+        if (gmId) state.staffTasks.unshift({ id: `st-${id}`, title: `Վերահսկել շտապ հայտը՝ ${ev.title}`, detail: ev.roomId ? `Սենյակ ${ev.roomId}` : ev.area, assigneeId: gmId, priority: "high", due: state.baseDate, status: "todo", createdAt: ev.at, origin: "automation" });
+      });
       return state;
     }
     case "maint.status": {
@@ -302,12 +310,12 @@ export function apply(state: HotelState, ev: StampedEvent): HotelState {
       state.notifications.forEach((n) => (n.read = true));
       return state;
     default:
-      applyHospitality(state, ev, who);
+      if (!applyOps(state, ev, who)) applyHospitality(state, ev, who);
       return state;
   }
 }
 
-function afterApprove(state: HotelState, res: Reservation, g: Guest, id: string, at: number, who: string) {
+export function afterApprove(state: HotelState, res: Reservation, g: Guest, id: string, at: number, who: string) {
   void who;
   if (state.workflows.approve_calendar) {
     outbox(state, { at, channel: g.email ? "email" : "whatsapp", to: `${g.firstName} ${g.lastName}`, template: "Ամրագրման հաստատում (հյուրին)", text: T_CONFIRM[g.lang](vars(state, res, g)), state: "simulated", workflowId: "approve_calendar", reservationId: res.id }, `oc-${id}`);
@@ -527,7 +535,7 @@ function applyHospitality(state: HotelState, ev: StampedEvent, who: string) {
       const role = ev.dept === "housekeeping" ? "housekeeping" : ev.dept === "maintenance" ? "maintenance" : ev.dept === "management" ? "manager" : "reception";
       const s: Staff = { id: sid, name: ev.name.trim(), role, initials: initials(ev.name), phone: ev.phone, shift: "09:00–18:00", dept: ev.dept, position: ev.position, supervisorId: ev.supervisorId, active: true, email: ev.email, startedAt: state.baseDate };
       state.staff.push(s);
-      enroll(state, s, ev.at);
+      runAuto(state, "onboarding_start", `onboarding:${sid}`, ev.at, `Նոր աշխատակից ${s.name} → նշանակվեց onboarding`, () => enroll(state, s, ev.at));
       state.channels.push({ id: `dm-${sid}-${ev.supervisorId ?? "s-narek"}`, kind: "direct", name: "", members: [sid, ev.supervisorId ?? "s-narek"] });
       state.messages.push({ id: `m-${id}`, channelId: `dm-${sid}-${ev.supervisorId ?? "s-narek"}`, authorId: ev.supervisorId ?? "s-narek", text: `Բարի գալուստ թիմ, ${s.name.split(" ")[0]}։ Ձեր ուսուցման ծրագիրը պատրաստ է «Ուսուցում» բաժնում։ Հարցերի դեպքում գրեք ինձ։`, at: ev.at });
       state.activity.unshift({ id: `a-${id}`, at: ev.at, icon: "note", text: `Նոր աշխատակից՝ ${s.name}. ստեղծվեց ուսուցման ծրագիր`, by: who });

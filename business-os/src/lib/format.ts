@@ -40,7 +40,7 @@ export function stamp(ms: number, today: string) {
 }
 
 export const SOURCE_LABEL: Record<Source, string> = {
-  website: "Կայք", assistant: "AI օգնական", phone: "Հեռախոս", booking: "Booking.com", airbnb: "Airbnb", instagram: "Instagram", walkin: "Անմիջապես",
+  website: "Կայք", assistant: "AI օգնական", phone: "Հեռախոս", booking: "Booking.com", airbnb: "Airbnb", instagram: "Instagram", walkin: "Անմիջապես", expedia: "Expedia", whatsapp: "WhatsApp",
 };
 export const STATUS_LABEL: Record<ResStatus, string> = {
   inquiry: "Հարցում", confirmed: "Հաստատված", checked_in: "Հյուրանոցում", checked_out: "Մեկնած", declined: "Մերժված", cancelled: "Չեղարկված", no_show: "Չներկայացած",

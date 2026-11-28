@@ -18,7 +18,7 @@ export function StatusBadge({ s }: { s: ResStatus }) {
 }
 
 export function SourceBadge({ s }: { s: Source }) {
-  const icon = { website: "globe", assistant: "sparkles", phone: "phone", booking: "external", airbnb: "external", instagram: "message", walkin: "door" } as const;
+  const icon = { website: "globe", assistant: "sparkles", phone: "phone", booking: "external", airbnb: "external", instagram: "message", walkin: "door", expedia: "external", whatsapp: "message" } as const;
   return <span className="inline-flex items-center gap-1 text-[12.5px] text-ink-2"><Icon name={icon[s]} size={14} className={s === "assistant" ? "text-signal" : "text-muted"} />{SOURCE_LABEL[s]}</span>;
 }
 

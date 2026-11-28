@@ -309,7 +309,7 @@ export function createSeed(baseDate: string): HotelState {
   ];
 
   const workflows: Record<WorkflowId, boolean> = {
-    inquiry_alert: true, approve_calendar: true, approve_prep_task: true, pre_arrival: true, checkout_task: true, review_request: true, unanswered_followup: true,
+    inquiry_alert: true, approve_calendar: true, approve_prep_task: true, pre_arrival: true, checkout_task: true, review_request: true, unanswered_followup: true, ota_booking_alert: true, room_ready_notify: true, urgent_maint_escalation: true, negative_review_task: true, inbox_escalation: true, onboarding_start: true,
   };
 
   const staff = STAFF.map((x) => ({ ...x }));

@@ -1,5 +1,6 @@
 /* Deterministic seed for the Hospitality OS modules (accounts, loyalty, restaurant, services, staff learning, messages). */
 import { addDays, atTime } from "./dates.ts";
+import { opsSeed } from "./seed-ops.ts";
 import { LOYALTY, MENU_CATEGORIES, MENU_ITEMS, PROPERTY, REWARDS, SOPS, TABLES, TRAINING, SERVICE_META } from "./hospitality-data.ts";
 import type { Account, Campaign, Channel, Enrollment, Guest, HospitalityState, LedgerEntry, Msg, Order, OrderStatus, Reservation, ServiceRequest, ServiceType, Staff, Voucher } from "./types.ts";
 
@@ -156,5 +157,6 @@ export function hospitalitySeed(baseDate: string, r: () => number, guests: Guest
     property: PROPERTY, accounts, loyalty: structuredClone(LOYALTY), ledger, rewards: REWARDS, vouchers, campaigns,
     menu: { categories: MENU_CATEGORIES, items: MENU_ITEMS.map((m) => ({ ...m })) }, tables: TABLES, orders, services,
     training: TRAINING.map((m) => ({ ...m })), enrollments, sops: SOPS, channels, messages,
+    ...opsSeed(baseDate, reservations, guests),
   };
 }

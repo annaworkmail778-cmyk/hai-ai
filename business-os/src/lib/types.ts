@@ -29,7 +29,7 @@ export type Room = { id: string; number: string; floor: number; typeId: RoomType
 
 export type HkStatus = "clean" | "dirty" | "cleaning" | "inspected";
 
-export type Source = "website" | "assistant" | "phone" | "booking" | "airbnb" | "instagram" | "walkin";
+export type Source = "website" | "assistant" | "phone" | "booking" | "airbnb" | "instagram" | "walkin" | "expedia" | "whatsapp";
 
 export type ResStatus =
   | "inquiry" // request received, not confirmed
@@ -84,6 +84,10 @@ export type Reservation = {
   /** "paid" is only ever set by staff recording a payment; the demo never charges cards. */
   payment?: "unpaid" | "paid";
   review?: { score: number; text: string };
+  /** Present only for reservations imported through a channel adapter. Internal status stays separate from sync state. */
+  external?: { channel: OtaChannel; externalId: string; version: number; syncState: SyncState; lastSyncAt: number; commissionPct: number };
+  /** Folio lines added after booking (charges, payments, deposits, refunds). Room/extras/discount come from the booking itself. */
+  folio?: FolioLine[];
 };
 
 export type TaskStatus = "todo" | "in_progress" | "done";
@@ -191,7 +195,13 @@ export type WorkflowId =
   | "pre_arrival"
   | "checkout_task"
   | "review_request"
-  | "unanswered_followup";
+  | "unanswered_followup"
+  | "ota_booking_alert"
+  | "room_ready_notify"
+  | "urgent_maint_escalation"
+  | "negative_review_task"
+  | "inbox_escalation"
+  | "onboarding_start";
 
 export type ActivityItem = {
   id: string;
@@ -273,7 +283,8 @@ export type DemoEvent =
   | { type: "kb.update"; patch: Partial<KnowledgeBase> }
   | { type: "clock.set"; mode: DemoClock["mode"] }
   | { type: "notifications.read" }
-  | HospitalityEvent;
+  | HospitalityEvent
+  | OpsEvent;
 
 export type StampedEvent = DemoEvent & { id: string; at: number; by: string };
 
@@ -338,7 +349,7 @@ export type HospitalityState = {
   sops: Sop[];
   channels: Channel[];
   messages: Msg[];
-};
+} & OpsState;
 
 export type BookingInput = {
   guest: GuestInput; guestId?: string; typeId: RoomTypeId; rooms: number; checkIn: string; checkOut: string; adults: number; children: number;
@@ -371,3 +382,61 @@ export type HospitalityEvent =
   | { type: "msg.send"; channelId: string; text: string; urgent?: boolean; handover?: boolean }
   | { type: "channel.open"; channel: Channel }
   | { type: "property.update"; patch: { type?: Property["type"]; brand?: string } };
+
+/* ---------- Hotel OS operations: inbox, reviews, channel manager, folio, lost & found, automation log ---------- */
+
+export type MsgChannel = "whatsapp" | "instagram" | "messenger" | "webchat" | "email" | "booking";
+export type ThreadStatus = "new" | "open" | "pending" | "resolved";
+export type InboxMsg = { id: string; dir: "in" | "out" | "note" | "system"; text: string; at: number; by?: string; ai?: boolean };
+export type InboxThread = {
+  id: string; channel: MsgChannel; contact: { name: string; handle: string; lang: Lang }; guestId?: string; reservationId?: string;
+  status: ThreadStatus; priority: Priority; assigneeId: string | null; dept: Dept; tags: string[]; messages: InboxMsg[];
+  createdAt: number; lastInboundAt: number; firstResponseAt?: number; escalated?: boolean; audit: { at: number; text: string; by: string }[];
+};
+
+export type ReviewPlatform = "google" | "booking" | "tripadvisor" | "expedia";
+export type ReviewStatus = "new" | "draft" | "approved" | "published_demo" | "manual_required";
+export type Review = {
+  id: string; platform: ReviewPlatform; rating: number; lang: Lang; author: string; title?: string; text: string; at: number; reservationId?: string;
+  status: ReviewStatus; reply?: { text: string; by: string; at: number; approvedBy?: string; approvedAt?: number }; taskId?: string;
+};
+
+export type OtaChannel = "booking" | "expedia" | "airbnb";
+export type SyncState = "synced" | "pending" | "failed" | "conflict";
+export type SyncLogEntry = { id: string; at: number; channel: OtaChannel; op: "import" | "modify" | "cancel" | "retry" | "duplicate"; externalId: string; result: "ok" | "conflict" | "failed" | "ignored"; text: string; reservationId?: string };
+
+export type FolioLine = { id: string; at: number; kind: "charge" | "payment" | "deposit" | "refund"; label: string; amount: number; method?: string; by: string };
+
+export type LostItem = { id: string; roomId: string | null; item: string; foundAt: number; foundBy: string; status: "stored" | "returned" | "disposed"; note?: string };
+
+export type AutoRun = { id: string; key: string; rule: WorkflowId; at: number; text: string };
+
+export type OpsState = {
+  inbox: InboxThread[];
+  reviews: Review[];
+  syncLog: SyncLogEntry[];
+  lostFound: LostItem[];
+  autoLog: AutoRun[];
+};
+
+export type OtaBooking = { channel: OtaChannel; externalId: string; typeId: RoomTypeId; checkIn: string; checkOut: string; adults: number; children: number; guest: GuestInput; total: number };
+
+export type OpsEvent =
+  | { type: "inbox.inbound"; threadId: string; channel: MsgChannel; contact: { name: string; handle: string; lang: Lang }; text: string; guestId?: string; reservationId?: string }
+  | { type: "inbox.reply"; threadId: string; text: string; ai?: boolean }
+  | { type: "inbox.note"; threadId: string; text: string }
+  | { type: "inbox.assign"; threadId: string; assigneeId: string | null; dept?: Dept }
+  | { type: "inbox.status"; threadId: string; status: ThreadStatus }
+  | { type: "inbox.tag"; threadId: string; tag: string; on: boolean }
+  | { type: "inbox.escalate"; threadId: string; reason: string }
+  | { type: "review.add"; review: Omit<Review, "id" | "status" | "reply" | "taskId" | "at"> }
+  | { type: "review.draft"; target: string; text: string }
+  | { type: "review.approve"; target: string }
+  | { type: "ota.import"; booking: OtaBooking }
+  | { type: "ota.cancel"; channel: OtaChannel; externalId: string }
+  | { type: "ota.resolve"; reservationId: string; roomId: string }
+  | { type: "reservation.move"; reservationId: string; roomId: string; reason: string }
+  | { type: "reservation.noshow"; reservationId: string }
+  | { type: "folio.add"; reservationId: string; kind: FolioLine["kind"]; label: string; amount: number; method?: string }
+  | { type: "lost.create"; roomId: string | null; item: string; note?: string }
+  | { type: "lost.status"; target: string; status: LostItem["status"] };
