@@ -105,6 +105,49 @@ function IngredientDrawer({ id, onClose }: { id: string; onClose: () => void }) 
   );
 }
 
+function Stocktake() {
+  const { state, dispatch, can } = useR();
+  const stock = useMemo(() => A.stockStatus(state), [state]);
+  const [storage, setStorage] = useState<string>("fridge");
+  const [vals, setVals] = useState<Record<string, string>>({});
+  const rows = stock.filter((x) => x.ingredient.storage === storage);
+  const entered = rows.filter((x) => vals[x.ingredient.id] !== undefined && vals[x.ingredient.id] !== "");
+  const variance = entered.reduce((a, x) => a + (Number(vals[x.ingredient.id]) - x.qty) * (x.ingredient.cost / x.ingredient.unitsPerPurchase), 0);
+  const last = state.counts[0];
+  return (
+    <div className="mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+      <Card pad={false}>
+        <div className="flex flex-wrap items-center gap-2 border-b border-line p-3">{Object.entries(STORAGE).map(([k, v]) => <button key={k} onClick={() => setStorage(k)} className={cn("h-8 rounded-lg px-3 text-[12.5px] font-medium", storage === k ? "bg-ink text-white" : "bg-paper")}>{v}</button>)}<span className="ml-auto text-[12.5px] text-muted">Տարբերություն՝ <b className={cn("tnum", variance < 0 ? "text-bad" : "text-ink")}>{money(variance)}</b></span></div>
+        <table className="w-full text-[13px]"><thead className="text-left text-[11.5px] text-muted"><tr><th className="px-3 py-2">Բաղադրիչ</th><th className="px-2 text-right">Համակարգում</th><th className="px-2 text-right">Հաշվված</th><th className="px-3 text-right">Տարբերություն</th></tr></thead>
+          <tbody>{rows.map((x) => { const v = vals[x.ingredient.id]; const d = v === undefined || v === "" ? null : Number(v) - x.qty; return (
+            <tr key={x.ingredient.id} className="border-t border-line"><td className="px-3 py-1.5 font-medium">{x.ingredient.name}</td><td className="tnum px-2 text-right text-muted">{fmtQty(x.qty, x.ingredient.unit)}</td>
+              <td className="px-2 text-right"><input inputMode="decimal" aria-label={`${x.ingredient.name} հաշվված`} className="h-9 w-24 rounded-lg border border-line-2 px-2 text-right tnum" value={v ?? ""} onChange={(e) => setVals({ ...vals, [x.ingredient.id]: e.target.value.replace(",", ".") })} /> <span className="text-[11px] text-muted">{x.ingredient.unit}</span></td>
+              <td className={cn("tnum px-3 text-right", d !== null && d < 0 ? "text-bad" : "text-muted")}>{d === null ? "—" : `${d > 0 ? "+" : ""}${Math.round(d * 100) / 100}`}</td></tr>
+          ); })}</tbody></table>
+        <div className="flex items-center gap-2 border-t border-line p-3"><span className="text-[12.5px] text-muted">{entered.length} դիրք լրացված</span><Button className="ml-auto" variant="primary" icon="check" disabled={!entered.length || !can("inventory.adjust")} onClick={() => { dispatch({ type: "stock.count", lines: entered.map((x) => ({ ingredientId: x.ingredient.id, counted: Number(vals[x.ingredient.id]) })) }); setVals({}); }}>Հաստատել գույքագրումը</Button></div>
+      </Card>
+      <Card><h2 className="text-[15px] font-semibold">Վերջին գույքագրումը</h2>
+        {!last ? <p className="mt-2 text-[13px] text-muted">Դեռ չի կատարվել այս ցուցադրությունում։</p> : <>
+          <p className="mt-1 text-[12.5px] text-muted">{state.staff.find((x) => x.id === last.by)?.name ?? last.by} · {last.lines.length} դիրք · տարբերություն՝ <b className="tnum text-ink">{money(last.lines.reduce((a, l) => a + (l.counted - l.expected) * l.unitCost, 0))}</b></p>
+          <ul className="mt-2 space-y-1 text-[12.5px]">{last.lines.filter((l) => l.counted !== l.expected).map((l) => <li key={l.ingredientId} className="flex justify-between"><span>{state.ingredients.find((i) => i.id === l.ingredientId)?.name}</span><span className={cn("tnum", l.counted < l.expected ? "text-bad" : "text-ok")}>{money((l.counted - l.expected) * l.unitCost)}</span></li>)}</ul>
+        </>}
+        <p className="mt-3 text-[12px] text-muted">Հաստատումից հետո համակարգի պաշարը ճշգրտվում է հաշվվածին, տարբերությունը գրանցվում է որպես ճշգրտում։</p>
+      </Card>
+    </div>
+  );
+}
+
+function AllergenCheck() {
+  const { state } = useR();
+  const missing = state.items.filter((i) => !i.allergensVerified);
+  return (
+    <Card className="mt-4"><div className="mb-2 flex items-center gap-2"><h2 className="text-[15px] font-semibold">Ալերգենների ստուգում</h2><Badge tone={missing.length ? "warn" : "ok"}>{missing.length} ուտեստ առանց հաստատված ալերգենների</Badge></div>
+      <p className="mb-3 text-[12.5px] text-muted">Ալերգենները նշվում և հաստատվում են խոհարարի կողմից յուրաքանչյուր ուտեստի համար։ Չհաստատված ուտեստի դեպքում հյուրը տեսնում է «Հարցրեք մատուցողին»։ Համակարգը չի երաշխավորում ալերգենների բացակայություն։</p>
+      <ul className="divide-y divide-line text-[13px]">{state.items.map((i) => <li key={i.id} className="flex flex-wrap items-center gap-2 py-2"><span className="min-w-0 flex-1 font-medium">{i.name.hy}</span>{i.allergens.map((a) => <Badge key={a}>{a}</Badge>)}{i.allergensVerified ? <Badge tone="ok">հաստատված</Badge> : <Badge tone="warn">չի հաստատված</Badge>}</li>)}</ul>
+    </Card>
+  );
+}
+
 export default function Inventory() {
   const { state } = useR();
   const sp = useSearchParams();
@@ -122,7 +165,9 @@ export default function Inventory() {
   return (
     <Guard perm="inventory.view">
       <div className="mb-4"><h1 className="text-[22px] font-semibold tracking-tight sm:text-[26px]">Պահեստ</h1><p className="mt-1 text-[13.5px] text-muted">Պաշարը նվազում է ավտոմատ, երբ խոհանոցն ընդունում է պատվերը (ըստ բաղադրատոմսի)։ Չեղարկումը մինչև պատրաստելը վերադարձնում է պաշարը, իսկ պատրաստելուց հետո՝ գրանցվում է որպես կորուստ։</p></div>
-      <Tabs value={tab} onChange={setTab} items={[{ id: "stock", label: "Պաշար", count: stock.filter((x) => x.low).length }, { id: "prices", label: "Գների փոփոխություն", count: changes.length }, { id: "waste", label: "Կորուստներ" }]} />
+      <Tabs value={tab} onChange={setTab} items={[{ id: "stock", label: "Պաշար", count: stock.filter((x) => x.low).length }, { id: "prices", label: "Գների փոփոխություն", count: changes.length }, { id: "waste", label: "Կորուստներ" }, { id: "count", label: "Գույքագրում" }, { id: "allergens", label: "Ալերգեններ" }]} />
+      {tab === "count" && <Stocktake />}
+      {tab === "allergens" && <AllergenCheck />}
       {tab === "stock" && (
         <Card pad={false} className="mt-4 overflow-hidden">
           <div className="flex flex-wrap items-center gap-2 border-b border-line p-3"><Input className="max-w-xs" placeholder="Որոնել բաղադրիչ" value={q} onChange={(e) => setQ(e.target.value)} /><label className="flex items-center gap-2 text-[13px]"><input type="checkbox" checked={lowOnly} onChange={(e) => setLowOnly(e.target.checked)} />Միայն նվազագույնից ցածր</label><span className="ml-auto text-[13px] text-muted">Պաշարի արժեք՝ <b className="tnum text-ink">{money(stock.reduce((a, x) => a + x.value, 0))}</b></span></div>

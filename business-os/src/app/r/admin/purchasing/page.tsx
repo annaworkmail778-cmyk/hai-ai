@@ -6,8 +6,10 @@ import { Guard, hm, money } from "@/components/restaurant/staff/shell";
 import { Badge, Button, Card, CardHead, Input, Modal, SimBadge } from "@/components/ui";
 import * as A from "@/lib/restaurant/analytics";
 import { useR } from "@/lib/restaurant/client";
+import { PO_APPROVAL_LIMIT } from "@/lib/restaurant/ops";
 import type { PurchaseOrder } from "@/lib/restaurant/types";
 
+const PO_LIMIT_NOTE = `Պատվերները ${PO_APPROVAL_LIMIT.toLocaleString("en-US").replace(/,/g, " ")} ֏-ից բարձր պահանջում են մենեջերի կամ սեփականատիրոջ հաստատում։`;
 const STATUS: Record<PurchaseOrder["status"], [string, "neutral" | "info" | "warn" | "ok" | "bad"]> = { draft: ["Սևագիր", "neutral"], pending_approval: ["Սպասում է հաստատման", "warn"], approved: ["Հաստատված", "info"], sent: ["Ուղարկված", "info"], partial: ["Մասնակի ստացված", "warn"], received: ["Ստացված", "ok"], cancelled: ["Չեղարկված", "bad"] };
 
 function Receive({ po, onClose }: { po: PurchaseOrder; onClose: () => void }) {
@@ -27,7 +29,7 @@ function Receive({ po, onClose }: { po: PurchaseOrder; onClose: () => void }) {
 }
 
 export default function Purchasing() {
-  const { state, dispatch } = useR();
+  const { state, dispatch, can } = useR();
   const [rec, setRec] = useState<PurchaseOrder | null>(null);
   const stock = useMemo(() => A.stockStatus(state), [state]);
   const onOrder = (id: string) => state.pos.filter((p) => p.status === "sent" || p.status === "partial" || p.status === "draft").flatMap((p) => p.lines).filter((l) => l.ingredientId === id).reduce((a, l) => a + (l.qty - l.received), 0);
@@ -56,14 +58,19 @@ export default function Purchasing() {
           {!state.pos.length && <p className="py-6 text-center text-[13px] text-muted">Այս ցուցադրության ընթացքում պատվերներ դեռ չկան</p>}
           <ul className="space-y-3">{state.pos.map((p) => (
             <li key={p.id} className="rounded-xl border border-line p-3">
-              <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{p.code}</span><Badge tone={STATUS[p.status][1]}>{STATUS[p.status][0]}</Badge><span className="text-[12.5px] text-muted">{state.suppliers.find((s) => s.id === p.supplierId)?.name} · {hm(p.createdAt)}</span>
-                <span className="ml-auto flex gap-2">{p.status === "draft" && <Button size="sm" variant="primary" icon="send" onClick={() => dispatch({ type: "po.send", poId: p.id })}>Ուղարկել</Button>}{(p.status === "sent" || p.status === "partial") && <Button size="sm" variant="ok" icon="check" onClick={() => setRec(p)}>Ստանալ</Button>}</span></div>
+              <div className="flex flex-wrap items-center gap-2"><span className="font-semibold">{p.code}</span><Badge tone={STATUS[p.status][1]}>{STATUS[p.status][0]}</Badge><span className="text-[12.5px] text-muted">{state.suppliers.find((s) => s.id === p.supplierId)?.name} · {hm(p.createdAt)} · <b className="tnum text-ink">{money(p.total)}</b>{p.auto ? " · ավտոմատ նախագիծ" : ""}{p.approvedBy ? ` · հաստատել է ${state.staff.find((x) => x.id === p.approvedBy)?.name ?? p.approvedBy}` : ""}</span>
+                <span className="ml-auto flex gap-2">{p.status === "pending_approval" && (can("purchasing.approve") ? <Button size="sm" variant="ok" icon="check" onClick={() => dispatch({ type: "po.approve", poId: p.id })}>Հաստատել</Button> : <span className="text-[12px] text-warn">Սպասում է մենեջերի</span>)}{(p.status === "draft" || p.status === "approved") && <Button size="sm" variant="primary" icon="send" onClick={() => dispatch({ type: "po.send", poId: p.id })}>Ուղարկել</Button>}{["draft", "pending_approval", "approved"].includes(p.status) && <Button size="sm" variant="ghost" onClick={() => dispatch({ type: "po.cancel", poId: p.id })}>Չեղարկել</Button>}{(p.status === "sent" || p.status === "partial") && <Button size="sm" variant="ok" icon="check" onClick={() => setRec(p)}>Ստանալ</Button>}</span></div>
               <ul className="mt-2 space-y-0.5 text-[12.5px] text-muted">{p.lines.map((l) => { const ing = state.ingredients.find((i) => i.id === l.ingredientId)!; return <li key={l.ingredientId} className="flex justify-between"><span>{ing.name}</span><span className="tnum">{l.received}/{l.qty} {ing.purchaseUnit} · {money(l.cost)}</span></li>; })}</ul>
               {p.status !== "draft" && <div className="mt-2"><SimBadge /></div>}
             </li>
           ))}</ul>
         </Card>
       </div>
+      <Card className="mt-4"><CardHead title="Մատակարարների արդյունավետություն" sub="Ստացված պատվերների հիման վրա (այս ցուցադրությունում)" icon="chart" />
+        <table className="w-full text-[13px]"><thead className="text-left text-[11.5px] text-muted"><tr><th className="py-2">Մատակարար</th><th className="text-right">Պատվերներ</th><th className="text-right">Ժամանակին</th><th className="text-right">Ամբողջական</th><th className="text-right">Ծավալ</th></tr></thead>
+          <tbody>{state.suppliers.map((sp) => { const ps = state.pos.filter((p) => p.supplierId === sp.id && p.receivedAt); const onTime = ps.filter((p) => !p.expectedAt || p.receivedAt! <= p.expectedAt + 6 * 3600000).length; const full = ps.filter((p) => p.lines.every((l) => l.received >= l.qty)).length; return <tr key={sp.id} className="border-t border-line"><td className="py-2 font-medium">{sp.name}</td><td className="tnum text-right">{state.pos.filter((p) => p.supplierId === sp.id && p.status !== "cancelled").length}</td><td className="tnum text-right">{ps.length ? `${Math.round((onTime / ps.length) * 100)}%` : "—"}</td><td className="tnum text-right">{ps.length ? `${Math.round((full / ps.length) * 100)}%` : "—"}</td><td className="tnum text-right">{money(state.pos.filter((p) => p.supplierId === sp.id && p.status !== "cancelled").reduce((a, p) => a + p.total, 0))}</td></tr>; })}</tbody></table>
+        <p className="mt-2 text-[12px] text-muted">{PO_LIMIT_NOTE}</p>
+      </Card>
       <p className="mt-4 flex items-center gap-1.5 text-[12px] text-faint"><Icon name="info" size={13} />Մատակարարները ցուցադրական են։ Պատվերը մատակարարին չի ուղարկվում (Telegram/էլ. փոստ՝ սիմուլյացիա)։</p>
       {rec && <Receive po={rec} onClose={() => setRec(null)} />}
     </Guard>

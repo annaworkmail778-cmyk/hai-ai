@@ -30,6 +30,13 @@ export default function Overview() {
   const [openIns, setOpenIns] = useState<string | null>(null);
 
   const pending = state.orders.filter((o) => o.status === "submitted");
+  const dayKey = (ms: number) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Yerevan" }).format(ms);
+  const resToday = state.reservations.filter((r) => dayKey(r.at) === dayKey(now) && ["requested", "confirmed", "seated", "completed"].includes(r.status));
+  const resReq = resToday.filter((r) => r.status === "requested").length;
+  const unanswered = state.inbox.filter((c) => c.status !== "resolved" && c.messages.at(-1)?.dir === "in").length;
+  const avgRating = state.reviews.length ? state.reviews.reduce((a, r) => a + r.rating, 0) / state.reviews.length : 0;
+  const noReply = state.reviews.filter((r) => !r.reply || r.reply.status === "draft").length;
+  const openTasks = state.tasks.filter((t) => t.status === "open");
   const late = state.tickets.filter((t) => (t.status === "queued" || t.status === "in_progress") && ticketAge(t, now) > (state.stations.find((s) => s.id === t.station)?.thresholds.red ?? 99));
   const reqs = state.requests.filter((r) => r.status !== "done");
   const low = stock.filter((x) => x.low);
@@ -52,6 +59,12 @@ export default function Overview() {
         <Kpi label="Միջին չեկ" value={money(sm.aov)} sub={cmp(sm.aov, prev?.aov)} icon="calc" />
         <Kpi label="Համախառն մարժա" value={pct(sm.gm)} sub={<>Սննդի ինքնարժեք՝ {pct(sm.foodCostPct)}</>} icon="sparkles" tone="ok" />
         <Kpi label="Կորուստ և վերապատրաստում" value={money(sm.waste.cost + sm.remakes.cost)} sub={<>{sm.remakes.count} վերապատրաստում · {sm.cancelled.orders} չեղարկում</>} icon="alert" tone="warn" />
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Link href="/r/host" className="rounded-[var(--radius-card)] border border-line bg-surface p-3 hover:border-line-2"><div className="text-[12px] text-muted">Ամրագրումներ այսօր</div><div className="tnum text-[20px] font-semibold">{resToday.length} <span className="text-[13px] font-normal text-muted">· {resToday.reduce((a, r) => a + r.partySize, 0)} հյուր</span></div>{resReq > 0 && <div className="text-[12px] font-medium text-signal">{resReq} սպասում է հաստատման</div>}</Link>
+        <Link href="/r/admin/inbox" className="rounded-[var(--radius-card)] border border-line bg-surface p-3 hover:border-line-2"><div className="text-[12px] text-muted">Անպատասխան հաղորդագրություններ</div><div className={cn("tnum text-[20px] font-semibold", unanswered > 0 && "text-signal")}>{unanswered}</div><div className="text-[12px] text-muted">5 ալիք · արտաքինները՝ սիմուլյացիա</div></Link>
+        <Link href="/r/admin/reviews" className="rounded-[var(--radius-card)] border border-line bg-surface p-3 hover:border-line-2"><div className="text-[12px] text-muted">Կարծիքներ</div><div className="tnum text-[20px] font-semibold">{avgRating.toFixed(2)}★ <span className="text-[13px] font-normal text-muted">· {state.reviews.length}</span></div><div className="text-[12px] text-muted">{noReply} առանց պատասխանի</div></Link>
+        <Link href="/r/admin/team" className="rounded-[var(--radius-card)] border border-line bg-surface p-3 hover:border-line-2"><div className="text-[12px] text-muted">Բաց առաջադրանքներ</div><div className="tnum text-[20px] font-semibold">{openTasks.length}</div><div className="text-[12px] text-bad">{openTasks.filter((t) => t.priority === "high").length} կարևոր</div></Link>
       </div>
       <p className="mt-2 text-[12px] text-muted">Վաճառք = ընդունված և փակված պատվերներ (չեղարկվածները՝ ոչ)։ Մարժան համախառն է (ԱԱՀ-ից հետո, բաղադրատոմսային ինքնարժեքով)։ Զուտ շահույթը ցույց չի տրվում, քանի դեռ ծախսերը մուտքագրված չեն։</p>
 

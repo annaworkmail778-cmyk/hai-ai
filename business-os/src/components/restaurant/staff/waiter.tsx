@@ -135,7 +135,7 @@ function AddTab({ sess, L, onSent }: { sess: TableSession; L: L; onSent: () => v
   const [course, setCourse] = useState(0);
   const [draft, setDraft] = useState<CartLine[]>([]);
   const [pick, setPick] = useState<MenuItem | null>(null);
-  const fav = useMemo(() => ["khorovats", "salad", "areni", "cappuccino", "ribeye", "salmon", "burger", "water"], []);
+  const fav = useMemo(() => [...state.items].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0)).slice(0, 10).map((i) => i.id), [state.items]);
   const list = state.items.filter((i) => (q ? [i.name.hy, i.name.ru, i.name.en].some((n) => n.toLowerCase().includes(q.toLowerCase())) : cat === "fav" ? fav.includes(i.id) : i.categoryId === cat));
   const add = (item: MenuItem, modifierIds: string[] = [], note = "", qty = 1) => setDraft((d) => {
     const line: CartLine = { itemId: item.id, qty, modifierIds, note, seat: seat || undefined, course: item.categoryId === "drinks" ? 0 : course };
@@ -340,5 +340,5 @@ export function TableScreen({ tableId, L, onBack }: { tableId: string; L: L; onB
 }
 
 export function LangSwitch({ lang, setLang }: { lang: SL; setLang: (l: SL) => void }) {
-  return <div className="flex rounded-lg border border-line-2 bg-surface p-0.5" role="group" aria-label="Language">{(["hy", "ru", "en"] as const).map((l) => <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className={cn("h-8 rounded-md px-2 text-[12px] font-semibold uppercase", lang === l ? "bg-ink text-white" : "text-muted")}>{l}</button>)}</div>;
+  return <div className="flex rounded-lg border border-line-2 bg-surface p-0.5" role="group" aria-label="Language">{(["hy", "ru", "en"] as const).map((l) => <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className={cn("h-8 rounded-md px-1.5 text-[12px] font-semibold uppercase sm:px-2", lang === l ? "bg-ink text-white" : "text-muted")}>{l}</button>)}</div>;
 }

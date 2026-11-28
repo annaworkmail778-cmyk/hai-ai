@@ -107,7 +107,8 @@ export function TopBar({ title, compact }: { title?: ReactNode; compact?: boolea
     <div className="flex items-center gap-2">
       {title}
       {!compact && <Badge tone="warn" className="hidden uppercase tracking-wide md:inline-flex">Ցուցադրական տվյալներ</Badge>}
-      <ConnPillView conn={conn} mode={mode} backend={backend} pending={pending} />
+      <span className={compact ? "hidden sm:contents" : "contents"}><ConnPillView conn={conn} mode={mode} backend={backend} pending={pending} /></span>
+      {compact && (conn !== "live" && conn !== "local" || pending > 0) && <span className="size-2.5 rounded-full bg-warn sm:hidden" aria-label="Կապ չկա" />}
       <Bell />
       <ActorPicker />
     </div>
@@ -133,9 +134,9 @@ export function RShell({ children }: { children: ReactNode }) {
         const showGroup = n.group && items.findIndex((x) => x.group === n.group) === i;
         return (
           <div key={n.href}>
-            {showGroup && <div className="px-3 pb-1.5 pt-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">{st(n.group!)}</div>}
-            <Link href={n.href} className={cn("flex h-9 items-center gap-2.5 rounded-lg px-3 text-[13.5px] font-medium transition", active ? "bg-ink text-white" : "text-ink-2 hover:bg-black/[0.05]")}>
-              <Icon name={n.icon} size={17} className={active ? "text-white" : "text-muted"} />
+            {showGroup && <div className="px-3 pb-1.5 pt-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/35">{st(n.group!)}</div>}
+            <Link href={n.href} className={cn("flex h-9 items-center gap-2.5 rounded-lg px-3 text-[13.5px] font-medium transition", active ? "bg-signal text-white shadow-[0_6px_18px_-8px_var(--color-signal)]" : "text-white/70 hover:bg-white/[0.06] hover:text-white")}>
+              <Icon name={n.icon} size={17} className={active ? "text-white" : "text-white/45"} />
               <span className="flex-1 truncate">{st(n.key)}</span>
               {counts[n.href] ? <span className={cn("tnum rounded-md px-1.5 text-[11px] font-semibold leading-5", active ? "bg-white/20" : "bg-signal text-white")}>{counts[n.href]}</span> : null}
             </Link>
@@ -146,22 +147,22 @@ export function RShell({ children }: { children: ReactNode }) {
   );
   const brand = (
     <div className="flex items-center gap-2.5 px-5 pb-3 pt-5">
-      <span className="grid size-9 place-items-center rounded-xl bg-ink text-[13px] font-bold tracking-tight text-white">R<span className="text-signal">.</span></span>
-      <div className="leading-tight"><div className="text-[14px] font-semibold tracking-tight">RISEUP Restaurant OS</div><div className="text-[12px] text-muted">{state.brand.name} · {state.brand.city.hy}</div></div>
+      <span className="grid size-9 place-items-center rounded-xl bg-white text-[13px] font-bold tracking-tight text-black">R<span className="text-signal">.</span></span>
+      <div className="leading-tight"><div className="text-[14px] font-semibold tracking-tight text-white">RISEUP Restaurant OS</div><div className="text-[12px] text-white/50">{state.brand.name} · {state.brand.city.hy}</div></div>
     </div>
   );
   return (
     <div className="min-h-dvh bg-paper lg:pl-[264px]">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] flex-col border-r border-line bg-surface lg:flex">{brand}{nav}
-        <div className="border-t border-line p-3 text-[12px] text-muted">
-          <Link href="/present/restaurant" className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-paper"><Icon name="play" size={15} />{st("nav_present")}</Link>
-          <Link href="/restaurant/hy" target="_blank" className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-paper"><Icon name="globe" size={15} />{st("nav_site")}<Icon name="external" size={13} /></Link>
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[264px] flex-col border-r border-black bg-[#0c0c0e] lg:flex">{brand}{nav}
+        <div className="border-t border-white/10 p-3 text-[12px] text-white/60">
+          <Link href="/present/restaurant" className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-white/[0.06]"><Icon name="play" size={15} />{st("nav_present")}</Link>
+          <Link href="/restaurant/hy" target="_blank" className="flex items-center gap-2 rounded-lg px-2 py-2 hover:bg-white/[0.06]"><Icon name="globe" size={15} />{st("nav_site")}<Icon name="external" size={13} /></Link>
         </div>
       </aside>
       {menu && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/30" onClick={() => setMenu(false)} />
-          <aside className="rise-in absolute inset-y-0 left-0 flex w-[280px] flex-col bg-surface">{brand}{nav}</aside>
+          <aside className="rise-in absolute inset-y-0 left-0 flex w-[280px] flex-col bg-[#0c0c0e]">{brand}{nav}</aside>
         </div>
       )}
       <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-line bg-surface/90 px-3 backdrop-blur sm:px-5">
